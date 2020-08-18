@@ -1,0 +1,20 @@
+{
+    "name": "user-management",
+    "description": "Admin Panel User Management",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Insaf Zakariya",
+            "email": "insaf.zak@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "UserManage\\": "src/"
+        }
+    },
+    "require": {
+        "illuminate/support" : "~5"
+    }
+}

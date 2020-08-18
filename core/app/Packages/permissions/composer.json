@@ -1,0 +1,20 @@
+{
+    "name": "permissions",
+    "description": "Admin Panel Permission Management",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Insaf Zakariya",
+            "email": "insaf.zak@gmail"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "Permissions\\": "src/"
+        }
+    },
+    "require": {
+        "illuminate/support" : "~5"
+    }
+}

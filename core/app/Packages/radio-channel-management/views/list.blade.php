@@ -1,0 +1,151 @@
+@extends('layouts.back.master') @section('current_title','RADIO CHANNEL/View')
+@section('css')
+    <style type="text/css">
+        #floating-button{
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            background: #db4437;
+            position: fixed;
+            bottom: 50px;
+            right: 30px;
+            cursor: pointer;
+            box-shadow: 0px 2px 5px #666;
+            z-index:2
+        }
+        .btn.btn-secondary{
+            margin: 0 2px 0 2px;
+        }
+        .plus{
+            color: white;
+            position: absolute;
+            top: 0;
+            display: block;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            text-align: center;
+            padding: 0;
+            margin: 0;
+            line-height: 55px;
+            font-size: 38px;
+            font-family: 'Roboto';
+            font-weight: 300;
+            animation: plus-out 0.3s;
+            transition: all 0.3s;
+        }
+        .btn.btn-primary.btn-sm.ad-view{
+            font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-weight: 600;
+            text-shadow: none;
+            font-size: 13px;
+        }
+
+        .row-highlight-clr{
+            /*background-color: rgba(244, 67, 54, 0.1)  !important;*/
+            background-color: rgba(0, 0, 0, 0.5) !important;
+            color: #fff !important;
+        }
+    </style>
+
+@stop
+@section('page_header')
+    <div class="col-lg-9">
+        <h2>Radio Channel Management</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="{{url('/')}}">Home</a>
+            </li>
+            <li class="active">
+                <strong>Radio Channel List</strong>
+            </li>
+        </ol>
+    </div>
+@stop
+@section('content')
+    @if(\Sentinel::getUser()->hasAnyAccess(['admin.radio-channels.show', 'admin']))
+        <div id="floating-button" data-toggle="tooltip" data-placement="left" data-original-title="Create" onclick="location.href = '{{route('admin.radio-channels.create')}}';">
+            <p class="plus">+</p>
+        </div>
+    @endif
+    <div class="row">
+        <div class="col-lg-12 margins">
+            <div class="ibox-content">
+                <div class="panel-body">
+                    <table id="example1" class="table table-striped table-bordered table-hover" width="100%">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Channel Name</th>
+                            <th>Status</th>
+                            <th width="1%">Active/ Deactivate</th>
+                            <th width="1%">Edit</th>
+
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+@stop
+@section('js')
+
+    <script type="text/javascript">
+        let table;
+        $(document).ready(function(){
+            table=$('#example1').dataTable( {
+                "ajax": '{{route('admin.radio-channels.index.list')}}',
+                "columns": [
+                    { "data": "id" },
+                    { "data": "name" },
+                    { "data": "status" },
+                    { "data": "toggle-status" },
+                    { "data": "edit" }
+                ],
+                processing: true,
+                serverSide: true,
+                dom: "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>tp",
+                "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+                buttons: [
+                    {extend: 'copy',className: 'btn-sm'},
+                    {extend: 'csv',title: 'Menu List', className: 'btn-sm'},
+                    {extend: 'pdf', title: 'Menu List', className: 'btn-sm'},
+                    {extend: 'print',className: 'btn-sm'}
+                ],
+                "autoWidth": false,
+                "columnDefs": [
+                    { "orderable": false, "targets": [3,4] }
+                ],
+                "order": [[ 0, "desc" ]]
+            });
+
+            table.on( 'draw.dt', function () {
+                $('.radio-channels-status-toggle').click(function(e){
+                    e.preventDefault();
+                    id = $(this).data('id');
+                    confirmStatus(id);
+
+                });
+
+            });
+
+
+
+        });
+
+        function confirmStatusAction(id){
+            let url = '{!! route('admin.radio-channels.status.toggle')!!}';
+            $.ajax({
+                method: "POST",
+                url: url.replace('%7Bradio_channels%7D', id),
+            })
+                .done(function( msg ) {
+                    table.fnReloadAjax();
+                });
+
+        }
+
+
+    </script>
+@stop

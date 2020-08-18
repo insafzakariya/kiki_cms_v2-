@@ -1,0 +1,351 @@
+/* Classifieds Colors
+            ------------------------------------------------------------- */
+            /* header bg color and dropdowns bg color - - - */
+            .navigation .navbar-default .navbar-collapse .open > .dropdown-menu li,
+            .navigation .navbar-default .navbar-collapse .dropdown-menu li,
+            .navigation {
+            background-color: #ede0cc;
+            }
+            /* navigation font colors - - - */
+            .navigation .navbar-default .navbar-collapse ul li a {
+            color: #404040;
+            }
+            /* - hover & active - */
+            .woocommerce .col-md-9 + .col-md-3 .widget.woocommerce.widget_price_filter form .price_slider_wrapper .ui-widget-content .ui-slider-handle,
+            .woocommerce .col-md-9 + .col-md-3 .widget.woocommerce.widget_price_filter form .price_slider_wrapper .ui-widget-content .ui-slider-range,
+            .navigation .navbar-default .navbar-collapse ul li:not(.submit-add) a:hover,
+            .navigation .navbar-default .navbar-collapse ul li a:hover,
+            .navigation .navbar-default .navbar-collapse ul li.current-menu-item > a,
+            .navigation .navbar-default .navbar-collapse ul li a.login-action {
+            color: #712b2f;
+            }
+            /* submit ad button - - - */
+            
+            /* - bg & font color -*/
+            .navigation .navbar-default .navbar-collapse ul li a.btn {
+            background-color: #712b2f;
+            }
+            .navigation .navbar-default .navbar-collapse ul li a.btn {
+            color: #ffffff;
+            }
+            /* - on hover - */
+            .navigation .navbar-default .navbar-collapse ul li a.btn:hover,
+            .navigation .navbar-default .navbar-collapse ul li a.btn:active,
+            .navigation .navbar-default .navbar-collapse ul li a.btn:focus {
+            background-color: #712b2f;
+            }
+            .navigation .navbar-default .navbar-collapse ul li a.btn:hover,
+            .navigation .navbar-default .navbar-collapse ul li a.btn:active,
+            .navigation .navbar-default .navbar-collapse ul li a.btn:focus {
+            color: #ffffff;
+            }
+            /* footer bg color - - - */
+            .widget-footer {
+            background-color: #712b2f;
+            }
+            /* footer font color - - - */
+            .widget-footer,
+            .widget-footer p,
+            .widget-footer .widget_classifieds_logo_text p,
+            .widget-footer .widget h4,
+            .widget-footer ul li {
+            color: #ffffff;
+            }
+            /* footer link color - - - */
+            .widget-footer .widget_classifieds_follow_us .widget-social a,
+            .widget-footer ul li a {
+            color: #ffffff;
+            }
+            /* - on hover -*/
+            .widget-footer .widget_classifieds_follow_us .widget-social a:hover,
+            .widget-footer ul li a:hover {
+            color: #f5f5f5;
+            }
+            /* footer link that are same on static and on hover - - - */
+            .widget-footer a,
+            .widget-footer p a,
+            .widget-footer a:hover,
+            .widget-footer p a:hover {
+            color: #f5f5f5;
+            }
+            /* Copyrights - - - - - */
+            /* copyrights bg color*/
+            .footer {
+            background-color: #1d2a34;
+            }
+            /* copyrights font color - - - */
+            .footer {
+            color: #49535b;
+            }
+            /* copyrights link color - - - */
+            .footer a {
+            color: #ffffff;
+            }
+            /* - on hover - */
+            .footer a:hover {
+            color: #59b453;
+            }
+            /* Button 1 - - - - - */
+            /* background - - - */
+            .woocommerce-account .white-block .white-block-content .page-content .woocommerce form .form-row input.button,
+            .woocommerce-cart .woocommerce table.cart tbody input[name="apply_coupon"],
+            .woocommerce-cart .woocommerce table.cart tbody input[name="update_cart"],
+            .woocommerce.single #respond input#submit.alt,
+            .woocommerce.single a.button.alt,
+            .woocommerce.single button.button.alt,
+            .woocommerce.single input.button.alt .single_add_to_cart_button.button.alt,
+            .woocommerce .container .woocommerce-message a.wc-forward,
+            .woocommerce .col-md-9 + .col-md-3 .widget.woocommerce.widget_shopping_cart .widget_shopping_cart_content .buttons a,
+            .woocommerce .col-md-9 + .col-md-3 .widget.woocommerce.widget_product_search form input[type="submit"],
+            .woocommerce-account.woocommerce-edit-address .white-block .white-block-content .page-content .woocommerce p input[type="submit"],
+            .woocommerce-account.woocommerce-edit-account .white-block .white-block-content .page-content .woocommerce p input[type="submit"],
+            .woocommerce .col-md-9 + .col-md-3 .widget.woocommerce.widget_price_filter form .price_slider_wrapper .price_slider_amount button,
+            .woocommerce ul.products li.product a.button,
+            .woocommerce ul.products li.product a.wc-forward,
+            .btn,
+            .page-template-page-tpl_my_profile .tab-content .tab-pane a.submit-form, .archive.author .tab-content .tab-pane a.submit-form,
+            .checkbox input[type="checkbox"]:checked + label::after,
+            .clients-bar{
+            background-color: #59b453;
+            }
+            .checkbox label::before{
+            border-color: #ffad33;
+            }
+            .button-reset{
+              background-color: #bdbdbd;    
+            }
+            .button-reset:hover{
+              background-color: #a5a5a5!important;    
+            }
+            /* - bg on hover */
+            .woocommerce-account .white-block .white-block-content .page-content .woocommerce form .form-row input.button:hover,
+            .woocommerce-cart .woocommerce table.cart tbody input[name="apply_coupon"]:hover,
+            .woocommerce-cart .woocommerce table.cart tbody input[name="update_cart"]:hover,
+            .woocommerce.single #respond input#submit.alt:hover,
+            .woocommerce.single a.button.alt:hover,
+            .woocommerce.single button.button.alt:hover,
+            .woocommerce.single input.button.alt .single_add_to_cart_button.button.alt:hover,
+            .woocommerce .container .woocommerce-message a.wc-forward:hover,
+            .woocommerce .col-md-9 + .col-md-3 .widget.woocommerce.widget_shopping_cart .widget_shopping_cart_content .buttons a:hover,
+            .woocommerce .col-md-9 + .col-md-3 .widget.woocommerce.widget_product_search form input[type="submit"]:hover,
+            .woocommerce-account.woocommerce-edit-address .white-block .white-block-content .page-content .woocommerce p input[type="submit"]:hover,
+            .woocommerce-account.woocommerce-edit-account .white-block .white-block-content .page-content .woocommerce p input[type="submit"]:hover,
+            .woocommerce .col-md-9 + .col-md-3 .widget.woocommerce.widget_price_filter form .price_slider_wrapper .price_slider_amount button:hover,
+            .woocommerce ul.products li.product a.button:hover,
+            .woocommerce ul.products li.product a.wc-forward:hover,
+            .btn:hover,
+            .btn:active,
+            .btn:focus,
+            .page-template-page-tpl_my_profile .tab-content .tab-pane a.submit-form:hover, .archive.author .tab-content .tab-pane a.submit-form:hover{
+            background-color: #4ca247;
+            }
+            /* font color - */
+            .woocommerce-account .white-block .white-block-content .page-content .woocommerce form .form-row input.button,
+            .woocommerce-cart .woocommerce table.cart tbody input[name="apply_coupon"],
+            .woocommerce-cart .woocommerce table.cart tbody input[name="update_cart"],
+            .woocommerce.single #respond input#submit.alt,
+            .woocommerce.single a.button.alt,
+            .woocommerce.single button.button.alt,
+            .woocommerce.single input.button.alt .single_add_to_cart_button.button.alt,
+            .woocommerce .container .woocommerce-message a.wc-forward,
+            .woocommerce .col-md-9 + .col-md-3 .widget.woocommerce.widget_shopping_cart .widget_shopping_cart_content .buttons a,
+            .woocommerce-account.woocommerce-edit-address .white-block .white-block-content .page-content .woocommerce p input[type="submit"],
+            .woocommerce-account.woocommerce-edit-account .white-block .white-block-content .page-content .woocommerce p input[type="submit"],
+            .woocommerce .col-md-9 + .col-md-3 .widget.woocommerce.widget_product_search form input[type="submit"],
+            .woocommerce .col-md-9 + .col-md-3 .widget.woocommerce.widget_price_filter form .price_slider_wrapper .price_slider_amount button,
+            .woocommerce ul.products li.product a.button,
+            .woocommerce ul.products li.product a.wc-forward,
+            .btn,
+            .page-template-page-tpl_my_profile .tab-content .tab-pane a.submit-form, .archive.author .tab-content .tab-pane a.submit-form{
+            color: #ffffff;
+            }
+            /* font color on hover - */
+            .woocommerce-account .white-block .white-block-content .page-content .woocommerce form .form-row input.button:hover,
+            .woocommerce-cart .woocommerce table.cart tbody input[name="apply_coupon"]:hover,
+            .woocommerce-cart .woocommerce table.cart tbody input[name="update_cart"]:hover,
+            .woocommerce.single #respond input#submit.alt:hover,
+            .woocommerce.single a.button.alt:hover,
+            .woocommerce.single button.button.alt:hover,
+            .woocommerce.single input.button.alt .single_add_to_cart_button.button.alt:hover,
+            .woocommerce .container .woocommerce-message a.wc-forward:hover,
+            .woocommerce .col-md-9 + .col-md-3 .widget.woocommerce.widget_shopping_cart .widget_shopping_cart_content .buttons a:hover,
+            .woocommerce .col-md-9 + .col-md-3 .widget.woocommerce.widget_product_search form input[type="submit"]:hover,
+            .woocommerce-account.woocommerce-edit-address .white-block .white-block-content .page-content .woocommerce p input[type="submit"]:hover,
+            .woocommerce-account.woocommerce-edit-account .white-block .white-block-content .page-content .woocommerce p input[type="submit"]:hover,
+            .woocommerce .col-md-9 + .col-md-3 .widget.woocommerce.widget_price_filter form .price_slider_wrapper .price_slider_amount button:hover,
+            .woocommerce ul.products li.product a.button:hover,
+            .woocommerce ul.products li.product a.wc-forward:hover,
+            .btn:hover,
+            .btn:active,
+            .btn:focus,
+            .page-template-page-tpl_my_profile .tab-content .tab-pane a.submit-form:hover, .archive.author .tab-content .tab-pane a.submit-form:hover{
+            color: #ffffff;
+            }
+            /* Button 2 - - - - - */
+            /* background - - - */
+            a.btn.register-corporate-login,
+            .form-register a.btn,
+            #login .form-login .submit-form-ajax,
+            .contact-page .white-block-content form a,
+            #commentform .form-submit input,
+            .blog .load-more,
+            .col-md-6:first-child .pricing-box .pricing-info a,
+            .hiw .col-md-6 a.btn,
+            .col-md-6:first-child .pricing-box .pricing-info a,
+            .section-banner .banner-content .btn,
+            .home .all-ads a{
+            background-color: #712b2f;
+            }
+            /* - bg on hover - */
+            .form-register a.btn:hover,
+            #login .form-login .submit-form-ajax:hover,
+            .contact-page .white-block-content form a:hover,
+            #commentform .form-submit input:hover,
+            .blog .load-more:hover,
+            .col-md-6:first-child .pricing-box .pricing-info a:hover,
+            .hiw .col-md-6 a.btn:hover,
+            .col-md-6:first-child .pricing-box .pricing-info a:hover,
+            .section-banner .banner-content .btn:hover,
+            .home .all-ads a:hover 
+            {
+            background-color: #ad5d42;
+            }
+            /* font color - */
+            .form-register a.btn,
+            a.btn.register-corporate-login,
+            #login .form-login .submit-form-ajax,
+            .contact-page .white-block-content form a,
+            #commentform .form-submit input,
+            .blog .load-more,
+            .col-md-6:first-child .pricing-box .pricing-info a,
+            .hiw .col-md-6 a.btn,
+            .col-md-6:first-child .pricing-box .pricing-info a,
+            .section-banner .banner-content .btn,
+            .home .all-ads a {
+            color: white;
+            background-color:#712b2f;
+            }
+            /* font color on hover - */
+            .form-register a.btn:hover,
+            #login .form-login .submit-form-ajax:hover,
+            .contact-page .white-block-content form a:hover,
+            #commentform .form-submit input:hover,
+            .blog .load-more:hover,
+            .col-md-6:first-child .pricing-box .pricing-info a:hover,
+            .hiw .col-md-6 a.btn:hover,
+            .col-md-6:first-child .pricing-box .pricing-info a:hover,
+            .section-banner .banner-content .btn:hover,
+            .home .all-ads a:hover {
+            color: #712b2f;
+            background-color: #e6e6e6;
+            }
+            .page-template-page-tpl_my_profile .col-md-4 .widget .media ~ ul li.active:after, .page-template-page-tpl_my_profile .col-md-8 + .col-md-4 .widget .media ~ ul li.active:after, .archive.author .col-md-4 .widget .media ~ ul li.active:after, .archive.author .col-md-8 + .col-md-4 .widget .media ~ ul li.active:after{
+            color: #712b2f}
+            .home .nav.nav-tabs li.active a,
+            .woocommerce nav.woocommerce-pagination ul.page-numbers li.active > a, .woocommerce nav.woocommerce-pagination ul.page-numbers li.active > a:focus, .woocommerce nav.woocommerce-pagination ul.page-numbers li.active > a:hover, .woocommerce nav.woocommerce-pagination ul.page-numbers li.active > span, .woocommerce nav.woocommerce-pagination ul.page-numbers li.active > span:focus, .woocommerce nav.woocommerce-pagination ul.page-numbers li.active > span:hover, .woocommerce nav.woocommerce-pagination ul.page-numbers li:first-child.active > a, .woocommerce nav.woocommerce-pagination ul.page-numbers li:first-child.active > a:focus, .woocommerce nav.woocommerce-pagination ul.page-numbers li:first-child.active > a:hover, .woocommerce nav.woocommerce-pagination ul.page-numbers li:first-child.active > span, .woocommerce nav.woocommerce-pagination ul.page-numbers li:first-child.active > span:focus, .woocommerce nav.woocommerce-pagination ul.page-numbers li:first-child.active > span:hover, .woocommerce nav.woocommerce-pagination ul.page-numbers li:first-child > span.active > a, .woocommerce nav.woocommerce-pagination ul.page-numbers li:first-child > span.active > a:focus, .woocommerce nav.woocommerce-pagination ul.page-numbers li:first-child > span.active > a:hover, .woocommerce nav.woocommerce-pagination ul.page-numbers li:first-child > span.active > span, .woocommerce nav.woocommerce-pagination ul.page-numbers li:first-child > span.active > span:focus, .woocommerce nav.woocommerce-pagination ul.page-numbers li:first-child > span.active > span:hover, .woocommerce nav.woocommerce-pagination ul.page-numbers li:last-child.active > a, .woocommerce nav.woocommerce-pagination ul.page-numbers li:last-child.active > a:focus, .woocommerce nav.woocommerce-pagination ul.page-numbers li:last-child.active > a:hover, .woocommerce nav.woocommerce-pagination ul.page-numbers li:last-child.active > span, .woocommerce nav.woocommerce-pagination ul.page-numbers li:last-child.active > span:focus, .woocommerce nav.woocommerce-pagination ul.page-numbers li:last-child.active > span:hover, .woocommerce nav.woocommerce-pagination ul.page-numbers li:last-child > span.active > a, .woocommerce nav.woocommerce-pagination ul.page-numbers li:last-child > span.active > a:focus, .woocommerce nav.woocommerce-pagination ul.page-numbers li:last-child > span.active > a:hover, .woocommerce nav.woocommerce-pagination ul.page-numbers li:last-child > span.active > span, .woocommerce nav.woocommerce-pagination ul.page-numbers li:last-child > span.active > span:focus, .woocommerce nav.woocommerce-pagination ul.page-numbers li:last-child > span.active > span:hover, .pagination li.active > a, .pagination li.active > a:focus, .pagination li.active > a:hover, .pagination li.active > span, .pagination li.active > span:focus, .pagination li.active > span:hover, .pagination li:first-child.active > a, .pagination li:first-child.active > a:focus, .pagination li:first-child.active > a:hover, .pagination li:first-child.active > span, .pagination li:first-child.active > span:focus, .pagination li:first-child.active > span:hover, .pagination li:first-child > span.active > a, .pagination li:first-child > span.active > a:focus, .pagination li:first-child > span.active > a:hover, .pagination li:first-child > span.active > span, .pagination li:first-child > span.active > span:focus, .pagination li:first-child > span.active > span:hover, .pagination li:last-child.active > a, .pagination li:last-child.active > a:focus, .pagination li:last-child.active > a:hover, .pagination li:last-child.active > span, .pagination li:last-child.active > span:focus, .pagination li:last-child.active > span:hover, .pagination li:last-child > span.active > a, .pagination li:last-child > span.active > a:focus, .pagination li:last-child > span.active > a:hover, .pagination li:last-child > span.active > span, .pagination li:last-child > span.active > span:focus, .pagination li:last-child > span.active > span:hover{
+            background-color: #712b2f;
+            color: #ffffff;
+            }
+            /* body links */
+            .blog .white-block-content h3:hover,
+            .white-block.ad-box-alt .media .media-body p + a,
+            .widget ul li a:hover{
+            color: #ad5d42;
+            }
+            /*AD BADGES*/
+            .white-block.ad-box-alt .media .expire-badge{
+            background: #ebb243;
+            color: #ffffff;
+            }
+            .white-block.ad-box-alt .media .expire-badge.pending-badge{
+            background: #49a3eb;
+            color: #ffffff;
+            }
+            .white-block.ad-box-alt .media .expire-badge.time-badge{
+            background: #78c273;
+            color: #ffffff;
+            }
+            .white-block.ad-box-alt .media .expire-badge.pending-payment{
+            background: #f66a45;
+            color: #ffffff;
+            }
+            .white-block.ad-box-alt .media .expire-badge.off-badge{
+            background: #bbc4cb;
+            color: #ffffff;
+            }
+            /* AD FORM BUTTONS */
+            .page-template-page-tpl_my_profile .tab-content .tab-pane .image-wrap + a, .archive.author .tab-content .tab-pane .image-wrap + a,
+            .page-template-page-tpl_my_profile .tab-content .ad-images, .page-template-page-tpl_my_profile .tab-content .ad-videos, .archive.author .tab-content .ad-images, .archive.author .tab-content .ad-videos{
+            background: #7dcffb;
+            color: #ffffff;
+            }
+            .page-template-page-tpl_my_profile .tab-content .tab-pane .image-wrap + a:hover,
+            .archive.author .tab-content .tab-pane .image-wrap + a:hover,
+            .page-template-page-tpl_my_profile .tab-content .ad-images:hover,
+            .page-template-page-tpl_my_profile .tab-content .ad-videos:hover,
+            .archive.author .tab-content .ad-images:hover,
+            .archive.author .tab-content .ad-videos:hover,
+            .page-template-page-tpl_my_profile .tab-content .tab-pane .image-wrap + a:hover, .page-template-page-tpl_my_profile .tab-content .tab-pane .image-wrap + a:active, .page-template-page-tpl_my_profile .tab-content .tab-pane .image-wrap + a:focus, .archive.author .tab-content .tab-pane .image-wrap + a:hover, .archive.author .tab-content .tab-pane .image-wrap + a:active, .archive.author .tab-content .tab-pane .image-wrap + a:focus,
+            .page-template-page-tpl_my_profile .tab-content .ad-images:hover, .page-template-page-tpl_my_profile .tab-content .ad-images:active, .page-template-page-tpl_my_profile .tab-content .ad-images:focus, .page-template-page-tpl_my_profile .tab-content .ad-videos:hover, .page-template-page-tpl_my_profile .tab-content .ad-videos:active, .page-template-page-tpl_my_profile .tab-content .ad-videos:focus, .archive.author .tab-content .ad-images:hover, .archive.author .tab-content .ad-images:active, .archive.author .tab-content .ad-images:focus, .archive.author .tab-content .ad-videos:hover, .archive.author .tab-content .ad-videos:active, .archive.author .tab-content .ad-videos:focus{
+            background: #5fc4fa;
+            color: #ffffff;
+            }
+            /* SINGLE AD PRICE FONT SIZE */
+            .widget.single-ad-author .price-block .ad-pricing span.free-price,
+            .widget.single-ad-author .price-block .ad-pricing span.call-price,
+            .widget.single-ad-author .price-block .ad-pricing {
+            font-size: 26px;
+            }
+            /* FONT */
+            body,
+            h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            h6,
+            p,
+            .pac-container,
+            .select2-display-none .select2-search input,
+            #select2-drop .select2-search input,
+            .white-block.ad-box .white-block-content p,
+            .pricing-box .pricing-value,
+            .footer,
+            #login .form-login .forgot-password,
+            #login .form-login .checkbox label,
+            #commentform .form-submit input,
+            .widget ul li,
+            .search-block .white-block-content p,
+            .search-block .white-block-content .col-md-3 .save-search,
+            .search-block .white-block-content .col-md-3 .reset-search,
+            .header-map #map .infoBox .info-window .info-details a,
+            .header-map #map .infoBox .info-window .info-details p a,
+            .woocommerce-checkout .white-block .checkout_coupon .form-row input[type="submit"],
+            .woocommerce-checkout .white-block .woocommerce-billing-fields p label,
+            .woocommerce-checkout .white-block .woocommerce-shipping-fields p label,
+            .woocommerce.single div.product .woocommerce-tabs .panel.wc-tab #reviews .comment-reply-title,
+            .woocommerce.single div.product .woocommerce-tabs .panel.wc-tab .comment-form p label,
+            .woocommerce-account .white-block .white-block-content .page-content .woocommerce form .form-row label,
+            .woocommerce-account .white-block .white-block-content .page-content .woocommerce .address a,
+            .woocommerce-account .white-block .white-block-content .page-content .woocommerce .address address,
+            .woocommerce-account.woocommerce-edit-address .white-block .white-block-content .page-content .woocommerce p input[type="submit"],
+            .woocommerce-account.woocommerce-edit-account .white-block .white-block-content .page-content .woocommerce p input[type="submit"],
+            .woocommerce #reviews #comments ol.commentlist li.comment .comment-text p.meta,
+            .woocommerce-cart .woocommerce .cart_totals table tbody tr.cart-subtotal,
+            .woocommerce-cart .woocommerce .cart_totals table tbody tr.order-total,
+            .single-ad .col-md-8 .white-block .white-block-content .ad-details .list-2-col,
+            .single-ad .col-md-8 + .col-md-4 .widget .media .media-body ul li,
+            .page-template-page-tpl_my_profile .col-md-4 .widget .media .media-body ul li,
+            .page-template-page-tpl_my_profile .col-md-8 + .col-md-4 .widget .media .media-body ul li,
+            .archive.author .col-md-4 .widget .media .media-body ul li,
+            .archive.author .col-md-8 + .col-md-4 .widget .media .media-body ul li,
+            .page-template-page-tpl_my_profile .col-md-4 .widget .media ~ ul.my-networks li:first-child,
+            .page-template-page-tpl_my_profile .col-md-8 + .col-md-4 .widget .media ~ ul.my-networks li:first-child,
+            .archive.author .col-md-4 .widget .media ~ ul.my-networks li:first-child,
+            .archive.author .col-md-8 + .col-md-4 .widget .media ~ ul.my-networks li:first-child{
+            font-family: "Muli", Helvetica, Arial, sans-serif;
+            }
+            .site-logo{
+            display: block;
+            padding: ;
+            }

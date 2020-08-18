@@ -1,0 +1,20 @@
+{
+    "name": "user-roles",
+    "description": "Admin Panel User Roles Management",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Insaf Zakariya",
+            "email": "insaf.zak@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "UserRoles\\": "src/"
+        }
+    },
+    "require": {
+        "illuminate/support" : "~5"
+    }
+}
