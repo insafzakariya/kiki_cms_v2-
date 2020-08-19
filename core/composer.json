@@ -57,7 +57,8 @@
       "ProductManage\\": "app/Packages/product-management/src/",
       "ProjectManage\\": "app/Packages/project-management/src/",
       "SongManage\\": "app/Packages/song-management/src/",
-      "PlaylistManage\\": "app/Packages/playlist-management/src/"
+      "PlaylistManage\\": "app/Packages/playlist-management/src/",
+      "NotificationManage\\": "app/Packages/notification-management/src/"
     }
   },
   "autoload-dev": {

@@ -162,6 +162,7 @@ return [
 		'ProjectManage\ProjectManageServiceProvider',
 		'SongManage\SongManageServiceProvider',
 		'PlaylistManage\PlaylistManageServiceProvider',
+		'NotificationManage\NotificationManageServiceProvider',
 
 
 
