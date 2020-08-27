@@ -17,6 +17,7 @@ use Log;
 use PlaylistManage\Models\AudioPlaylist;
 use PlaylistManage\Models\AudioPlaylistSongs;
 use PlaylistManage\Models\PlaylistType;
+use SongManage\Models\Product;
 use Response;
 use Sentinel;
 use SongManage\Models\Songs;
@@ -637,6 +638,18 @@ class PlaylistController extends Controller {
         } catch (Exception $exception) {
             Log::error("product solr error " . $exception->getMessage());
         }
+    }
+
+    public function searchAlbum(Request $request){
+
+        $search = $request->get('term');
+        $album = [];
+        if($search){
+            $album =  Product::where('name', 'like', '%' . $search . '%')->where('status', 1)->where('type', 'Album')->limit(20)->orderBy('name', 'asc')->get();
+        }
+
+        return $album;
+
     }
 
 }

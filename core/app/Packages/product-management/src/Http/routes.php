@@ -16,4 +16,5 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin'], function()
     Route::post('product/song/remove', 'ProductManage\Http\Controllers\ProductController@removeSongFromProduct')->name('admin.products.remove-song');
 
     Route::get('products/view/{id}','ProductManage\Http\Controllers\ProductController@showEdit')->name('admin.products.add');
+    
 });

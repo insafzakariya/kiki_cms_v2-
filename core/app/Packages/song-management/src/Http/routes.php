@@ -66,5 +66,9 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'namespace' => 'Son
         'as' => 'song.index.list', 'uses' => 'SongController@editSong'
     ]);
 
+    Route::get('song/songsearch', [
+        'as' => 'song.searchcombo', 'uses' => 'SongController@songSearch'
+    ]);
+
 
 });

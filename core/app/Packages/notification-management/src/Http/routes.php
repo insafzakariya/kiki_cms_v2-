@@ -29,9 +29,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'namespace' => 'Not
     ]);
     Route::post('notification/changeState', [
         'as' => 'notification.index', 'uses' => 'NotificationController@changeStatus'
-    ]);
-
-    
+    ]);    
 
     /*Route::get('song/step-1/{id?}', [
         'as' => 'song.add', 'uses' => 'SongController@step1View'

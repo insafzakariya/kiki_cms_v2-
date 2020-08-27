@@ -1191,4 +1191,16 @@ class SongController extends Controller
         }
     }
 
+    public function songSearch(Request $request){
+
+        $search = $request->get('term');
+        $songs = [];
+        if($search){
+            $songs =  Songs::where('name', 'like', '%' . $search . '%')->where('status', 1)->limit(20)->orderBy('name', 'asc')->get();
+        }
+
+        return $songs;
+
+    }
+
 }

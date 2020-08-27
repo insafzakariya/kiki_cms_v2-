@@ -18,7 +18,7 @@ class CreateNotificationTable extends Migration
             $table->string('section');
             $table->string('content_type');
             $table->string('content_id');
-            $table->timestamps('notification_time');
+            $table->date('notification_time');
             $table->boolean('all_audiance');
             $table->string('language');
             $table->string('english_title');
@@ -42,6 +42,6 @@ class CreateNotificationTable extends Migration
      */
     public function down()
     {
-        Schema::drop('user_groups');
+        Schema::drop('fcm_notification');
     }
 }

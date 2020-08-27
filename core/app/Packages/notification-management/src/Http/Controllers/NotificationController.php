@@ -134,4 +134,5 @@ class NotificationController extends Controller
     {
         return view('NotificationManage::notification-add');
     }
+
 }

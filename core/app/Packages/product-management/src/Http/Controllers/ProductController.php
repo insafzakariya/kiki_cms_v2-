@@ -609,4 +609,6 @@ class ProductController extends Controller {
             Log::error("product solr error " . $exception->getMessage());
         }
     }
+
+    
 }

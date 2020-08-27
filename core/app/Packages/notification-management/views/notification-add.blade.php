@@ -107,9 +107,7 @@
                             <label class="col-sm-2 control-label">Program</label>
                             <div class="col-sm-7">
                                 <select id="program" name="program" class="form-control select-simple">
-                                    <option value="GENERAL" selected>General</option>
-                                    <option value="MUSIC" >Music</option>
-                                    <option value="VIDEO" >Video</option>
+                                    
                                 </select>
                             </div>
                         </div>
@@ -117,9 +115,7 @@
                             <label class="col-sm-2 control-label">Episode</label>
                             <div class="col-sm-7">
                                 <select id="episode" name="episode" class="form-control select-simple">
-                                    <option value="MUSIC" selected>Music</option>
-                                    <option value="VIDEO" >Video</option>
-                                    <option value="GENERAL" >General</option>
+                                    
                                 </select>
                             </div>
                         </div>
@@ -140,8 +136,7 @@
                             <label class="col-sm-2 control-label">Song</label>
                             <div class="col-sm-7">
                                 <select id="song" name="song" class="form-control select-simple">
-                                    <option value="SONG" selected>Song</option>
-                                    <option value="ALBUM" >Album</option>
+                                   
                                 </select>
                             </div>
                         </div>
@@ -149,8 +144,7 @@
                             <label class="col-sm-2 control-label">Album</label>
                             <div class="col-sm-7">
                                 <select id="album" name="album" class="form-control select-simple">
-                                    <option value="SONG" selected>Song</option>
-                                    <option value="ALBUM" >Album</option>
+                                    
                                 </select>
                             </div>
                         </div>
@@ -471,7 +465,69 @@
         });
 
 
+        let url1 = '{{url('admin/song/songsearch')}}';
+        $('#song').select2({
+            placeholder: "Please select a song",
+            tokenSeparators: [','],
+            tags: true,
+            minimumInputLength: 3,
+            multiple: false,
+            ajax: {
+                type: "GET",
+                url: url1,
+                dataType: 'json',
+                contentType: "application/json",
+                delay: 250,
+                data: function (params) {
+                    return  'term='+params.term; /*JSON.stringify({
+                        term: params.term
+                    });*/
+                },
+                processResults: function (data) {
+                    return {
+                        results: $.map(data, function (item, i) {
+                            return {
+                                text: item.name,
+                                id: item.songId
+                            }
+                        })
+                    };
+                },
+                cache: true
+            },
+        });
 
+        let url2 = '{{url('admin/playlist/searchalbum')}}';
+        $('#album').select2({
+            placeholder: "Please select a album",
+            tokenSeparators: [','],
+            tags: true,
+            minimumInputLength: 3,
+            multiple: false,
+            ajax: {
+                type: "GET",
+                url: url2,
+                dataType: 'json',
+                contentType: "application/json",
+                delay: 250,
+                data: function (params) {
+                    return  'term='+params.term; /*JSON.stringify({
+                        term: params.term
+                    });*/
+                },
+                processResults: function (data) {
+                    return {
+                        results: $.map(data, function (item, i) {
+                            return {
+                                text: item.name,
+                                id: item.id
+                            }
+                        })
+                    };
+                },
+                cache: true
+            },
+        });
 
     </script>
 @stop
