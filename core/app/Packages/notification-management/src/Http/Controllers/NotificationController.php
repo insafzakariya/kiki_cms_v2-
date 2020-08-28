@@ -21,6 +21,9 @@ use Illuminate\Support\Facades\Validator;
 use NotificationManage\Models\UserGroup;
 use NotificationManage\Models\UserGroupsViewer;
 use NotificationManage\Models\FcmNotification;
+use NotificationManage\Models\Program;
+use NotificationManage\Models\Episode;
+
 
 
 class NotificationController extends Controller
@@ -133,6 +136,45 @@ class NotificationController extends Controller
     public function addView(Request $request)
     {
         return view('NotificationManage::notification-add');
+    }
+
+
+    public function searchprogram(Request $request){
+
+        $search = $request->get('term');
+        $program = [];
+        if($search){
+            $program =  Program::where('programName', 'like', '%' . $search . '%')->where('status', 1)->limit(20)->orderBy('programName', 'asc')->get();
+        }
+
+        return $program;
+
+    }
+
+    public function searchepisode(Request $request){
+
+        $search = $request->get('term');
+        $programId = $request->get('programId');
+        $episode = [];
+        if($search){
+            $episode =  Episode::where('episodeName', 'like', '%' . $search . '%')->where('status', 1)->where('programId', $programId)->limit(20)->orderBy('episodeName', 'asc')->get();
+        }
+
+        return $episode;
+
+    }
+    
+
+    public function searchuser(Request $request){
+
+        $search = $request->get('term');
+        $user = [];
+        if($search){
+            $user =  UserGroup::where('name', 'like', '%' . $search . '%')->where('status', 1)->limit(20)->orderBy('name', 'asc')->get();
+        }
+
+        return $user;
+
     }
 
 }

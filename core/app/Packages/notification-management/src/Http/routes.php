@@ -30,6 +30,19 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'namespace' => 'Not
     Route::post('notification/changeState', [
         'as' => 'notification.index', 'uses' => 'NotificationController@changeStatus'
     ]);    
+    Route::get('notification/searchprogram', [
+        'as' => 'notification.index', 'uses' => 'NotificationController@searchprogram'
+    ]);
+    Route::get('notification/searchepisode', [
+        'as' => 'notification.index', 'uses' => 'NotificationController@searchepisode'
+    ]);
+    Route::get('notification/searchuser', [
+        'as' => 'notification.index', 'uses' => 'NotificationController@searchuser'
+    ]);
+    
+
+    
+
 
     /*Route::get('song/step-1/{id?}', [
         'as' => 'song.add', 'uses' => 'SongController@step1View'

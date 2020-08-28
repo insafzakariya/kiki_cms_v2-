@@ -172,8 +172,7 @@
                         <label class="col-sm-2 control-label">User Group</label>
                         <div class="add-padding  col-sm-7">
                             <select id="user-group" name="user-group" class="form-control select-simple" required>
-                                <option value="SONG" selected>Song</option>
-                                <option value="ALBUM" >Album</option>
+                         
                             </select>
                         </div>
                     </div>
@@ -529,5 +528,108 @@
             },
         });
 
+        let url3 = '{{url('admin/notification/searchprogram')}}';
+        $('#program').select2({
+            placeholder: "Please select a program",
+            tokenSeparators: [','],
+            tags: true,
+            minimumInputLength: 3,
+            multiple: false,
+            ajax: {
+                type: "GET",
+                url: url3,
+                dataType: 'json',
+                contentType: "application/json",
+                delay: 250,
+                data: function (params) {
+                    return  'term='+params.term;
+                     /*JSON.stringify({
+                        term: params.term
+                    });*/
+                },
+                processResults: function (data) {
+                    return {
+                        results: $.map(data, function (item, i) {
+                            return {
+                                text: item.programName,
+                                id: item.programId
+                            }
+                        })
+                    };
+                },
+                cache: true
+            },
+        });
+
+
+        let url4 = '{{url('admin/notification/searchepisode')}}';
+        $('#episode').select2({
+            placeholder: "Please select a episode",
+            tokenSeparators: [','],
+            tags: true,
+            minimumInputLength: 3,
+            multiple: false,
+            ajax: {
+                type: "GET",
+                url: url4,
+                dataType: 'json',
+                contentType: "application/json",
+                delay: 250,
+                data: function (params) {
+                    return  'term='+params.term +'&programId='+$("#program").val();
+                
+                     /*JSON.stringify({
+                        term: params.term
+                    });*/
+                },
+                processResults: function (data) {
+                    return {
+                        results: $.map(data, function (item, i) {
+                            return {
+                                text: item.episodeName,
+                                id: item.episodeId
+                            }
+                        })
+                    };
+                },
+                cache: true
+            },
+        });
+
+
+
+        let url5 = '{{url('admin/notification/searchuser')}}';
+        $('#user-group').select2({
+            placeholder: "Please select a user",
+            tokenSeparators: [','],
+            tags: true,
+            minimumInputLength: 3,
+            multiple: false,
+            ajax: {
+                type: "GET",
+                url: url5,
+                dataType: 'json',
+                contentType: "application/json",
+                delay: 250,
+                data: function (params) {
+                    return  'term='+params.term;
+                
+                     /*JSON.stringify({
+                        term: params.term
+                    });*/
+                },
+                processResults: function (data) {
+                    return {
+                        results: $.map(data, function (item, i) {
+                            return {
+                                text: item.name,
+                                id: item.id
+                            }
+                        })
+                    };
+                },
+                cache: true
+            },
+        });
     </script>
 @stop
