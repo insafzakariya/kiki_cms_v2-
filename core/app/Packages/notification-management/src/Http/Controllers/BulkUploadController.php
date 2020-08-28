@@ -168,7 +168,6 @@ class BulkUploadController extends Controller
                 }
             }
 
-
             $dataTables = Datatables::eloquent($dataQuery)
 
                 ->addColumn('action', function ($value) {
@@ -316,6 +315,13 @@ class BulkUploadController extends Controller
         //     "recordsFiltered" => intval($totalFiltered),
         // ));
     }
+
+
+
+
+
+
+
 
     public function changeStatus(Request $request)
     {
