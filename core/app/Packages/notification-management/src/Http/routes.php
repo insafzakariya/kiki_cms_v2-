@@ -39,6 +39,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'namespace' => 'Not
     Route::get('notification/searchuser', [
         'as' => 'notification.index', 'uses' => 'NotificationController@searchuser'
     ]);
+
+    Route::post('notification/notification-add', 'NotificationController@addNotification');
     
 
     
