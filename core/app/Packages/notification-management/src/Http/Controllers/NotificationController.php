@@ -202,25 +202,50 @@ class NotificationController extends Controller
                 'status' => $request['status'],
 
             ]);
-            Log::info($fcm_notification);
-             $sql = "SELECT * FROM susila_db.user_groups_viewers where user_group_id='$usergrp'";
-            // $data = DB::select($sql);
+            
+            $sql = "SELECT viewer_id FROM susila_db.user_groups_viewers where user_group_id='$usergrp'";
+            $viewer_ids = DB::select($sql);
+            Log::info($viewer_ids);
             // //get viewer ids to arry
             // //want to get viewer table -> devise id to arry
+            $devices =array();
+            foreach ($viewer_ids as $viewer_id_ob) {
+                $viewer_id = $viewer_id_ob->viewer_id;
+                $sql = "SELECT DeviceID FROM susila_db.viewers where ViewerID='$viewer_id'";
+                $device_ids = DB::select($sql);
+                Log::info($device_ids);
+                foreach ($device_ids as $device_id_ob) {
+                    Log::info($device_id_ob->DeviceID);
+                    
+                    array_push($devices, $device_id_ob->DeviceID);
+                }
+            }
+            Log::info($devices);
+            $image=null;
+            if($request['english_image']!=null){
+                    $image=$request['english_image'];
+            }
+            if($request['sinhala_image']!=null){
+                $image=$request['sinhala_image'];
+            }
+            if($request['tamil_image']!=null){
+                $image=$request['tamil_image'];
+            }
 
-            // $body = '{
-            //     "deviceid" : ,
-            //     "title" : ,
-            //     "image_url" : ,
-            //     "type" : ,
-            //     "content_type" : ,
-            //     "content_id" : ,
-            //     "date_time" : 
-            // }';
+            $body = '{
+                "deviceid" : '. $devices .',
+                "title" : '.$request['section'].',
+                "image_url" :'.$image.' ,
+                "type" :0 ,
+                "content_type" :'.$request['content_type'].',
+                "content_id" : '. $request['content_id'].',
+                "date_time" : '.$request['notification_time'].'
+            }';
 
             // $res = $client->request('POST', 'http://35.200.234.252:3000/fcm/v1/message', [
             //     'body' => $body
             // ]);
+            Log::info($res);
     }
 
 }
