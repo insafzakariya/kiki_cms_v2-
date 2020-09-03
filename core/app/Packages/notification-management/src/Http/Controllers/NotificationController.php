@@ -23,11 +23,22 @@ use NotificationManage\Models\UserGroupsViewer;
 use NotificationManage\Models\FcmNotification;
 use NotificationManage\Models\Program;
 use NotificationManage\Models\Episode;
+use GuzzleHttp\Client as GuzzleClient;
+use App\Http\Controllers\ImageController;
+
 
 
 
 class NotificationController extends Controller
 {
+    private $client;
+    private $imagePath;
+
+    public function __construct()
+    {
+        $this->client = new \GuzzleHttp\Client();
+    }
+
     public function listView()
     {
         return view('NotificationManage::notification-list');
@@ -181,6 +192,10 @@ class NotificationController extends Controller
             Log::info('php');
             $usergrp= $request['user_group'];
             Log::info($usergrp);
+            $contentType= $request['content_type'];
+            $contentid= $request['content_id'];
+            $type=$request['section'];
+            $notifydate=$request['notification_time'];
 
             $fcm_notification = FcmNotification::create([
                 'user_group' => $request['user_group'],
@@ -202,6 +217,9 @@ class NotificationController extends Controller
                 'status' => $request['status'],
 
             ]);
+
+
+           
             
             $sql = "SELECT viewer_id FROM susila_db.user_groups_viewers where user_group_id='$usergrp'";
             $viewer_ids = DB::select($sql);
@@ -222,30 +240,86 @@ class NotificationController extends Controller
             }
             Log::info($devices);
             $image=null;
+            $description=null;
+            $title=null;
             if($request['english_image']!=null){
-                    $image=$request['english_image'];
+                $image=$request['english_image'];
+                $description=$request['english_description'];
+                $title=$request['english_title'];
             }
             if($request['sinhala_image']!=null){
                 $image=$request['sinhala_image'];
+                $description=$request['sinhala_description'];
+                $title=$request['sinhala_title'];
             }
             if($request['tamil_image']!=null){
                 $image=$request['tamil_image'];
+                $description=$request['tamil_description'];
+                $title=$request['tamil_title'];
             }
 
-            $body = '{
-                "deviceid" : '. $devices .',
-                "title" : '.$request['section'].',
-                "image_url" :'.$image.' ,
-                "type" :0 ,
-                "content_type" :'.$request['content_type'].',
-                "content_id" : '. $request['content_id'].',
-                "date_time" : '.$request['notification_time'].'
-            }';
+            // $imageController = new ImageController();
+            // $aImage = $request->file('image');
 
-            // $res = $client->request('POST', 'http://35.200.234.252:3000/fcm/v1/message', [
-            //     'body' => $body
+            // $ext = $aImage->getClientOriginalExtension();
+            // $fileName = 'image-' . rand(0, 999999) . '-' . date('YmdHis') . '.' . $ext;
+            // $path = $image->upload('notificationImage', $aImage, $fileName, $artist->artistId);
+
+           
+
+            // $artist->update([
+            //     'image' => $fileName
             // ]);
-            Log::info($res);
+
+            // $artist->similarArtists()->saveMany($similarArtists);
+            // $this->artistSolr($artist->artistId);
+
+            // $body = '{
+            //     "deviceid" : '. $devices .',
+            //     "title" : '.$request['section'].',
+            //     "image_url" :'.$image.' ,
+            //     "type" :0 ,
+            //     "content_type" :'.$request['content_type'].',
+            //     "content_id" : '. $request['content_id'].',
+            //     "date_time" : '.$request['notification_time'].'
+            // }';
+
+            // $finel_array=array(
+            //     "deviceid" =>$devices,
+            //     "title"  =>$titile,
+            //     "image_url" =>$image,
+            //     "type" => $request['section'],
+            //     "body" => $description,
+            //     "content_type" => $request['content_type'],
+	        //     "content_id" =>  $request['content_id'],
+            //     "date_time" =>$request['notification_time']
+            // );
+
+            $finel_array=array(
+                "deviceid" =>$devices,
+                "title"  =>$title,
+                "image_url" =>$image,
+                "type" => $type,
+                "body" => $description,
+                "content_type" => $contentType,
+	            "content_id" =>  $contentid,
+                "date_time" =>$notifydate
+            );
+            
+
+            $response =  $this->client->request('POST', 'http://localhost:3000/fcm/v1/message', [
+                'headers' => [
+                   
+                    'Accept' => 'application/json',
+                ], 'json' => $finel_array,
+            ]);
+            $contents = $response->getBody();
+            $contents = json_decode($contents);
+            return $contents;
+    
+
+
+          
     }
 
 }

@@ -179,7 +179,7 @@
                     <div class="form-group">
                         <label class="col-sm-2 control-label">All Audience</label>
                         <div class="add-padding  col-sm-7">
-                            <input type="checkbox" name="all-audiance" value="check" id="all-audiance">
+                            <input type="checkbox" name="all-audiance" value="check"  checked="checked" id="all-audiance" disabled>
                         </div>
                     </div>
 
@@ -387,7 +387,8 @@
             }
         });
 
-        $("#all-audiance").click(function() {
+        $(document).ready(function () {
+            // alert(document.getElementById('all-audiance').value);
             if ($('#all-audiance').prop('checked')){
                 $("#language").prop( "disabled", false );
 
@@ -413,7 +414,37 @@
                 $("#ta-description").prop( "disabled", false );
                 $("#ta-image").prop( "disabled", false );
             }
+
         });
+
+        // $("#all-audiance").click(function() {
+        //     if ($('#all-audiance').prop('checked')){
+        //         $("#language").prop( "disabled", false );
+
+        //         $("#ta-title").prop( "disabled", true );
+        //         $("#ta-description").prop( "disabled", true );
+        //         $("#ta-image").prop( "disabled", true );
+
+        //         $("#en-title").prop( "disabled", true );
+        //         $("#en-description").prop( "disabled", true );
+        //         $("#en-image").prop( "disabled", true );
+        //     } else{
+        //         $("#language").prop( "disabled", true );
+                
+        //         $("#si-title").prop( "disabled", false );
+        //         $("#si-description").prop( "disabled", false );
+        //         $("#si-image").prop( "disabled", false );
+
+        //         $("#en-title").prop( "disabled", false );
+        //         $("#en-description").prop( "disabled", false );
+        //         $("#en-image").prop( "disabled", false );
+
+        //         $("#ta-title").prop( "disabled", false );
+        //         $("#ta-description").prop( "disabled", false );
+        //         $("#ta-image").prop( "disabled", false );
+        //     }
+        // });
+
 
         $('#language').change(function(){
             var val = $("#language").val();
@@ -637,6 +668,10 @@
             
        
             $("#submit-upload").click(function () { 
+
+                if(document.getElementById('section').value){
+
+                }
                 
 
                 let section=document.getElementById('section');
@@ -674,7 +709,7 @@
                 let dtime=document.getElementById('notificatio-time');
                 let usergroup=document.getElementById('user-group');
 
-                alert(usergroup.value);            
+            
                 let all_audiance=document.getElementById('all-audiance');
                 //ddate + dtime
                 let notifiactiontime=ddate.value + ' ' + dtime.value;
@@ -729,7 +764,7 @@
                     'tamil_title' : tamiltittle== undefined ? null : tamiltittle.value,
                     'tamil_description' :tamildescription == undefined ? null : tamildescription.value,
                     'tamil_image' :tamilimage== undefined ? null : tamilimage.value,
-                    'status' :'Success',
+                    'status' :1,
                     "_token": "{{ csrf_token() }}"
                  
                     
@@ -752,7 +787,8 @@
                     if (resp.status == 401) {
                         $.ajax(this);
                     }
-                    xdialog.alert('Failed!'); 
+                    
+                    alert("Fail!");
                 }
       });
 
