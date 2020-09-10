@@ -189,6 +189,14 @@ class NotificationController extends Controller
     }
 
     public function addNotification(Request $request){
+
+        // return $request['section'];
+          $si_filename =$request->file('si-image');
+          $si_filename->getClientOriginalExtension();;
+          $en_filename = $_FILES['en-image']['name'];
+          $ta_filename = $_FILES['ta-image']['name'];
+          $aImage = $request->file('image');
+
             Log::info('php');
             $usergrp= $request['user_group'];
             Log::info($usergrp);
@@ -196,6 +204,7 @@ class NotificationController extends Controller
             $contentid= $request['content_id'];
             $type=$request['section'];
             $notifydate=$request['notification_time'];
+
 
             $fcm_notification = FcmNotification::create([
                 'user_group' => $request['user_group'],
@@ -206,20 +215,52 @@ class NotificationController extends Controller
                 'all_audiance' => $request['all_audiance'],
                 'language' =>  $request['language'],
                 'english_title' =>  $request['english_title'],
-                'english_description' =>  $request['english_description'],
-                'english_image' => $request['english_image'],
+                'english_description' =>  $request['english_description'],              
                 'sinhala_title' =>  $request['sinhala_title'],
-                'sinhala_description' =>  $request['sinhala_description'],
-                'sinhala_image' =>  $request['sinhala_image'],
+                'sinhala_description' =>  $request['sinhala_description'],               
                 'tamil_title' =>  $request['tamil_title'],
                 'tamil_description' =>  $request['tamil_description'],
-                'tamil_image' => $request['tamil_image'],
                 'status' => $request['status'],
 
             ]);
 
 
-           
+            $imageup = new ImageController();
+            $ext=null;
+            $fileName=null;
+            $path=null;
+
+             if($request->hasFile('si-image')){
+                $aImage = $si_filename;
+                $ext = $aImage->getClientOriginalExtension();
+                $fileName = 'notification-image-' . rand(0, 999999) . '-' . date('YmdHis') . '.' . $ext;
+                $path = $imageup->upload('notification', $aImage, $fileName,$fcm_notification->id );
+
+                $fcm_notification->update([
+                    'english_image' => $fileName
+                ]);
+             }
+             if($request->hasFile('en-image')){
+                $aImage = $si_filename;
+                $ext = $aImage->getClientOriginalExtension();
+                $fileName = 'notification-image-' . rand(0, 999999) . '-' . date('YmdHis') . '.' . $ext;
+                $path = $imageup->upload('notification', $aImage, $fileName,$fcm_notification->id );
+
+                $fcm_notification->update([
+                    'english_image' => $fileName
+                ]);
+             }
+             if($request->hasFile('en-image')){
+                $aImage = $si_filename;
+                $ext = $aImage->getClientOriginalExtension();
+                $fileName = 'notification-image-' . rand(0, 999999) . '-' . date('YmdHis') . '.' . $ext;
+                $path = $imageup->upload('notification', $aImage, $fileName,$fcm_notification->id );
+
+                $fcm_notification->update([
+                    'english_image' => $fileName
+                ]);
+             }
+
             
             $sql = "SELECT viewer_id FROM susila_db.user_groups_viewers where user_group_id='$usergrp'";
             $viewer_ids = DB::select($sql);
@@ -258,42 +299,6 @@ class NotificationController extends Controller
                 $title=$request['tamil_title'];
             }
 
-            // $imageController = new ImageController();
-            // $aImage = $request->file('image');
-
-            // $ext = $aImage->getClientOriginalExtension();
-            // $fileName = 'image-' . rand(0, 999999) . '-' . date('YmdHis') . '.' . $ext;
-            // $path = $image->upload('notificationImage', $aImage, $fileName, $artist->artistId);
-
-           
-
-            // $artist->update([
-            //     'image' => $fileName
-            // ]);
-
-            // $artist->similarArtists()->saveMany($similarArtists);
-            // $this->artistSolr($artist->artistId);
-
-            // $body = '{
-            //     "deviceid" : '. $devices .',
-            //     "title" : '.$request['section'].',
-            //     "image_url" :'.$image.' ,
-            //     "type" :0 ,
-            //     "content_type" :'.$request['content_type'].',
-            //     "content_id" : '. $request['content_id'].',
-            //     "date_time" : '.$request['notification_time'].'
-            // }';
-
-            // $finel_array=array(
-            //     "deviceid" =>$devices,
-            //     "title"  =>$titile,
-            //     "image_url" =>$image,
-            //     "type" => $request['section'],
-            //     "body" => $description,
-            //     "content_type" => $request['content_type'],
-	        //     "content_id" =>  $request['content_id'],
-            //     "date_time" =>$request['notification_time']
-            // );
 
             $finel_array=array(
                 "deviceid" =>$devices,

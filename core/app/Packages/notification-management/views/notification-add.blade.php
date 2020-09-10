@@ -89,7 +89,7 @@
     <div class="row">
         <div class="col-lg-12 margins">
             <div class="ibox-content">
-                <div  class="form-horizontal" id="form" >
+                <form  class="form-horizontal" id="form" enctype="multipart/form-data" >
                     {!!Form::token()!!}
 
                     <div class="form-group">
@@ -293,11 +293,11 @@
                     <div class="form-group">
                         <div class="col-sm-8 col-sm-offset-2">
                             <button class="btn btn-default" type="button" onclick="location.reload();">Cancel</button>
-                            <button class="btn btn-primary submitFormBtn" id="submit-upload" type="submit">Done</button>
+                            <button class="btn btn-primary submitFormBtn" onclick="submitForm()" id="submit-upload" type="button">Done</button>
                         </div>
                     </div>
 
-                </div>
+                </form>
 
 
                 <div id="canvas" style="background:#F7F7F7;">
@@ -318,7 +318,137 @@
     <script src="{{asset('assets/front/js/datepicker/bootstrap-datepicker.min.js')}}"></script>
     <script src="{{asset('assets/back/js/jquery-validation-extension.js')}}"></script>
     <script type="text/javascript">
+
+    function  submitForm(){
+        var fd = new FormData();
+        var files_si = $('#si-image')[0].files[0];
+        var files_en = $('#en-image')[0].files[0];
+        var files_ta = $('#ta-image')[0].files[0];
+        var file=null;
+       
+
+        if(files_si!=null){
+            file=files_si;
+            fd.append('si-image',file);
+
+        }
+        
+        if(files_en!=null){
+            file=files_en;
+            fd.append('en-image',file);
+
+        }
+        
+        if(files_ta!=null){
+            file=files_ta;
+            fd.append('ta-image',file);
+
+        }
+        
+                let section=document.getElementById('section');
+                let contenttype=null;
+                let contentid=null;
+                let englishtittle=null;
+                let englishdescription=null;
+                let englishimage=null;
+                let sinhalatittle=null;
+                let sinhaladescription=null;
+                let sinhalaimage=null;
+                let tamiltittle=null;
+                let tamildescription=null;
+                let tamilimage=null;
+
+
+
+                if(section.value === 'MUSIC'){
+                    contenttype=document.getElementById('music');
+
+                    if(music.value === 'ALBUM'){
+                        contentid=document.getElementById('album');
+                    }else{                    
+                        contentid=document.getElementById('song');
+                    }
+                }
+
+                if(section.value === 'VIDEO'){
+                  contenttype=document.getElementById('program');
+                  contentid=document.getElementById('episode');
+                  
+                }
+                
+                let ddate=document.getElementById('notificatio-date');
+                let dtime=document.getElementById('notificatio-time');
+                let usergroup=document.getElementById('user-group');
+
+            
+                let all_audiance=document.getElementById('all-audiance');
+                //ddate + dtime
+                let notifiactiontime=ddate.value + ' ' + dtime.value;
+        
+                let language=document.getElementById('language');
+
+                var selected=$('input[name="all-audiance"]:checked').val();
+
+               if(selected === 'check'){
+                   if(language.value === 'SINHALA'){
+                    sinhalatittle=document.getElementById('si-title');
+                    sinhaladescription=document.getElementById('si-description');
+                    sinhalaimage=document.getElementById('si-image');
+                   }
+                   if(language.value === 'ENGLISH'){
+                    englishtittle=document.getElementById('en-title');
+                    englishdescription=document.getElementById('en-description');
+                    englishimage=document.getElementById('en-image');
+                   }
+                   if(language.value === 'TAMIL'){
+                    tamiltittle=document.getElementById('ta-title');
+                    tamildescription=document.getElementById('ta-description');
+                    tamilimage=document.getElementById('ta-image');
+                   }
+
+               }else{
+                    sinhalatittle=document.getElementById('si-title');
+                    sinhaladescription=document.getElementById('si-description');
+                    sinhalaimage=document.getElementById('si-image');
+               }
+                
+                let status=null;
+
+
+
+                fd.append( 'user_group',usergroup.value);
+                fd.append( 'section',section.value);
+                fd.append( 'content_type',contenttype == undefined ? null : contenttype.value);
+                fd.append( 'content_id',contentid == undefined ? null : contentid.value);
+                fd.append( 'notification_time',notifiactiontime);
+                fd.append( 'all_audiance',all_audiance.value);
+                fd.append( 'language',language.value);
+                fd.append( 'english_title',englishtittle == undefined ? null :englishtittle.value);
+                fd.append( 'english_description', englishdescription== undefined ? null : englishdescription.value);
+                fd.append( 'english_image',englishimage == undefined ? null : file);
+                fd.append( 'sinhala_title',sinhalatittle== undefined ? null : sinhalatittle.value);
+                fd.append( 'sinhala_description',sinhaladescription== undefined ? null : sinhaladescription.value);
+                fd.append( 'sinhala_image',sinhalaimage== undefined ? null : file);
+                fd.append( 'tamil_title', tamiltittle== undefined ? null : tamiltittle.value);
+                fd.append( 'tamil_description',tamildescription == undefined ? null : tamildescription.value);
+                fd.append( 'tamil_image',tamilimage== undefined ? null : file);
+                fd.append( 'status',1);
+
+        $.ajax({
+            url: '{{ url('admin/notification/notification-add')}}',
+            type: 'post',
+            data: fd,
+            contentType: false,
+            processData: false,
+            success: function(response){
+               
+            },
+        });
+
+      
+    }
         $(document).ready(function () {
+
 
             $("#div-video").addClass('hide');
             $("#div-music").addClass('hide');
@@ -663,137 +793,164 @@
             },
         });
 
+        
 
-        $(document).ready(function () {
+        $('#form').on('submit',(function(e) {
+            e.preventDefault();
+               
+                $.ajax({
+                    url: '{{ url('admin/notification/notification-add')}}',
+                    method: "POST",
+                    data: new FormData(this),
+                    success: function (resp) {
+
+                        alert("Done!");
+                    },
+                    error: function (resp) {
+                        if (resp.status == 401) {
+                            $.ajax(this);
+                        }
+                    
+                        alert("Fail!");
+                    }
+                });
+
+        }));
+
+        // $(document).ready(function () {
             
        
-            $("#submit-upload").click(function () { 
+        //     $("#submit-upload").click(function () { 
+          
+             
+        //         if(document.getElementById('section').value){
 
-                if(document.getElementById('section').value){
-
-                }
+        //         }
                 
 
-                let section=document.getElementById('section');
-                let contenttype=null;
-                let contentid=null;
-                let englishtittle=null;
-                let englishdescription=null;
-                let englishimage=null;
-                let sinhalatittle=null;
-                let sinhaladescription=null;
-                let sinhalaimage=null;
-                let tamiltittle=null;
-                let tamildescription=null;
-                let tamilimage=null;
+        //         let section=document.getElementById('section');
+        //         let contenttype=null;
+        //         let contentid=null;
+        //         let englishtittle=null;
+        //         let englishdescription=null;
+        //         let englishimage=null;
+        //         let sinhalatittle=null;
+        //         let sinhaladescription=null;
+        //         let sinhalaimage=null;
+        //         let tamiltittle=null;
+        //         let tamildescription=null;
+        //         let tamilimage=null;
 
 
 
-                if(section.value === 'MUSIC'){
-                    contenttype=document.getElementById('music');
+        //         if(section.value === 'MUSIC'){
+        //             contenttype=document.getElementById('music');
 
-                    if(music.value === 'ALBUM'){
-                        contentid=document.getElementById('album');
-                    }else{                    
-                        contentid=document.getElementById('song');
-                    }
-                }
+        //             if(music.value === 'ALBUM'){
+        //                 contentid=document.getElementById('album');
+        //             }else{                    
+        //                 contentid=document.getElementById('song');
+        //             }
+        //         }
 
-                if(section.value === 'VIDEO'){
-                  contenttype=document.getElementById('program');
-                  contentid=document.getElementById('episode');
+        //         if(section.value === 'VIDEO'){
+        //           contenttype=document.getElementById('program');
+        //           contentid=document.getElementById('episode');
                   
-                }
+        //         }
                 
-                let ddate=document.getElementById('notificatio-date');
-                let dtime=document.getElementById('notificatio-time');
-                let usergroup=document.getElementById('user-group');
+        //         let ddate=document.getElementById('notificatio-date');
+        //         let dtime=document.getElementById('notificatio-time');
+        //         let usergroup=document.getElementById('user-group');
 
             
-                let all_audiance=document.getElementById('all-audiance');
-                //ddate + dtime
-                let notifiactiontime=ddate.value + ' ' + dtime.value;
+        //         let all_audiance=document.getElementById('all-audiance');
+        //         //ddate + dtime
+        //         let notifiactiontime=ddate.value + ' ' + dtime.value;
         
-                let language=document.getElementById('language');
+        //         let language=document.getElementById('language');
 
-                var selected=$('input[name="all-audiance"]:checked').val();
+        //         var selected=$('input[name="all-audiance"]:checked').val();
 
-               if(selected === 'check'){
-                   if(language.value === 'SINHALA'){
-                    sinhalatittle=document.getElementById('si-title');
-                    sinhaladescription=document.getElementById('si-description');
-                    sinhalaimage=document.getElementById('si-image');
-                   }
-                   if(language.value === 'ENGLISH'){
-                    englishtittle=document.getElementById('en-title');
-                    englishdescription=document.getElementById('en-description');
-                    englishimage=document.getElementById('en-image');
-                   }
-                   if(language.value === 'TAMIL'){
-                    tamiltittle=document.getElementById('ta-title');
-                    tamildescription=document.getElementById('ta-description');
-                    tamilimage=document.getElementById('ta-image');
-                   }
+        //        if(selected === 'check'){
+        //            if(language.value === 'SINHALA'){
+        //             sinhalatittle=document.getElementById('si-title');
+        //             sinhaladescription=document.getElementById('si-description');
+        //             sinhalaimage=document.getElementById('si-image');
+        //            }
+        //            if(language.value === 'ENGLISH'){
+        //             englishtittle=document.getElementById('en-title');
+        //             englishdescription=document.getElementById('en-description');
+        //             englishimage=document.getElementById('en-image');
+        //            }
+        //            if(language.value === 'TAMIL'){
+        //             tamiltittle=document.getElementById('ta-title');
+        //             tamildescription=document.getElementById('ta-description');
+        //             tamilimage=document.getElementById('ta-image');
+        //            }
 
-               }else{
-                    sinhalatittle=document.getElementById('si-title');
-                    sinhaladescription=document.getElementById('si-description');
-                    sinhalaimage=document.getElementById('si-image');
-               }
+        //        }else{
+        //             sinhalatittle=document.getElementById('si-title');
+        //             sinhaladescription=document.getElementById('si-description');
+        //             sinhalaimage=document.getElementById('si-image');
+        //        }
                 
-                let status=null;
+        //         let status=null;
 
 
-                let data = {};
+        //         let data = {};
+        //         // let myForm = document.getElementById(this);
+        //         var formData = new FormData(this);
 
-                data={
+        //         data={
 
-                    'user_group':usergroup.value,
-                    'section' :section.value,
-                    'content_type' : contenttype == undefined ? null : contenttype.value,
-                    'content_id':contentid == undefined ? null : contentid.value,
-                    'notification_time' :notifiactiontime,
-                    'all_audiance' : all_audiance.value,
-                    'language' :language.value,
-                    'english_title' :englishtittle == undefined ? null :englishtittle.value,
-                    'english_description' : englishdescription== undefined ? null : englishdescription.value,
-                    'english_image' :englishimage == undefined ? null : englishimage.value,
-                    'sinhala_title' :sinhalatittle== undefined ? null : sinhalatittle.value,
-                    'sinhala_description' :sinhaladescription== undefined ? null : sinhaladescription.value,
-                    'sinhala_image' :sinhalaimage== undefined ? null : sinhalaimage.value,
-                    'tamil_title' : tamiltittle== undefined ? null : tamiltittle.value,
-                    'tamil_description' :tamildescription == undefined ? null : tamildescription.value,
-                    'tamil_image' :tamilimage== undefined ? null : tamilimage.value,
-                    'status' :1,
-                    "_token": "{{ csrf_token() }}"
+        //             'user_group':usergroup.value,
+        //             'section' :section.value,
+        //             'content_type' : contenttype == undefined ? null : contenttype.value,
+        //             'content_id':contentid == undefined ? null : contentid.value,
+        //             'notification_time' :notifiactiontime,
+        //             'all_audiance' : all_audiance.value,
+        //             'language' :language.value,
+        //             'english_title' :englishtittle == undefined ? null :englishtittle.value,
+        //             'english_description' : englishdescription== undefined ? null : englishdescription.value,
+        //             'english_image' :englishimage == undefined ? null : englishimage.value,
+        //             'sinhala_title' :sinhalatittle== undefined ? null : sinhalatittle.value,
+        //             'sinhala_description' :sinhaladescription== undefined ? null : sinhaladescription.value,
+        //             'sinhala_image' :sinhalaimage== undefined ? null : sinhalaimage.value,
+        //             'tamil_title' : tamiltittle== undefined ? null : tamiltittle.value,
+        //             'tamil_description' :tamildescription == undefined ? null : tamildescription.value,
+        //             'tamil_image' :tamilimage== undefined ? null : tamilimage.value,
+        //             'status' :1,
+        //             'formData':formData,
+        //             "_token": "{{ csrf_token() }}"
                  
                     
-                }
+        //         }
 
-                console.log(data);
+        //         console.log(data);
+               
+        //         $.ajax({
+        //             url: '{{ url('admin/notification/notification-add')}}',
+        //             method: "POST",
+        //             async: true,
+        //             data: data,
+        //             tryCount: 0,
+        //             retryLimit: 3,
+        //             success: function (resp) {
 
-                $.ajax({
-                url: '{{ url('admin/notification/notification-add')}}',
-                method: "POST",
-                async: true,
-                data: data,
-                tryCount: 0,
-                retryLimit: 3,
-                success: function (resp) {
+        //                 alert("Done!");
+        //             },
+        //             error: function (resp) {
+        //                 if (resp.status == 401) {
+        //                     $.ajax(this);
+        //                 }
+                        
+        //                 alert("Fail!");
+        //             }
+        //         });
 
-                    alert("Done!");
-                },
-                error: function (resp) {
-                    if (resp.status == 401) {
-                        $.ajax(this);
-                    }
-                    
-                    alert("Fail!");
-                }
-      });
-
-            });
-        });
+        //     });
+        // });
 
 
 
