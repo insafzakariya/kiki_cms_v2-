@@ -329,19 +329,19 @@
 
         if(files_si!=null){
             file=files_si;
-            fd.append('si-image',file);
+            fd.append('image_upload',file);
 
         }
         
         if(files_en!=null){
             file=files_en;
-            fd.append('en-image',file);
+            fd.append('image_upload',file);
 
         }
         
         if(files_ta!=null){
             file=files_ta;
-            fd.append('ta-image',file);
+            fd.append('image_upload',file);
 
         }
         
@@ -357,6 +357,7 @@
                 let tamiltittle=null;
                 let tamildescription=null;
                 let tamilimage=null;
+                let uploadImage=null;
 
 
 
@@ -389,27 +390,33 @@
 
                 var selected=$('input[name="all-audiance"]:checked').val();
 
+
+
                if(selected === 'check'){
                    if(language.value === 'SINHALA'){
                     sinhalatittle=document.getElementById('si-title');
                     sinhaladescription=document.getElementById('si-description');
                     sinhalaimage=document.getElementById('si-image');
+                   
                    }
                    if(language.value === 'ENGLISH'){
                     englishtittle=document.getElementById('en-title');
                     englishdescription=document.getElementById('en-description');
                     englishimage=document.getElementById('en-image');
+                  
                    }
                    if(language.value === 'TAMIL'){
                     tamiltittle=document.getElementById('ta-title');
                     tamildescription=document.getElementById('ta-description');
                     tamilimage=document.getElementById('ta-image');
+                  
                    }
 
                }else{
                     sinhalatittle=document.getElementById('si-title');
                     sinhaladescription=document.getElementById('si-description');
                     sinhalaimage=document.getElementById('si-image');
+                   
                }
                 
                 let status=null;
@@ -425,13 +432,13 @@
                 fd.append( 'language',language.value);
                 fd.append( 'english_title',englishtittle == undefined ? null :englishtittle.value);
                 fd.append( 'english_description', englishdescription== undefined ? null : englishdescription.value);
-                fd.append( 'english_image',englishimage == undefined ? null : file);
+                fd.append( 'image_upload',file);
                 fd.append( 'sinhala_title',sinhalatittle== undefined ? null : sinhalatittle.value);
                 fd.append( 'sinhala_description',sinhaladescription== undefined ? null : sinhaladescription.value);
-                fd.append( 'sinhala_image',sinhalaimage== undefined ? null : file);
+              
                 fd.append( 'tamil_title', tamiltittle== undefined ? null : tamiltittle.value);
                 fd.append( 'tamil_description',tamildescription == undefined ? null : tamildescription.value);
-                fd.append( 'tamil_image',tamilimage== undefined ? null : file);
+                
                 fd.append( 'status',1);
 
         $.ajax({

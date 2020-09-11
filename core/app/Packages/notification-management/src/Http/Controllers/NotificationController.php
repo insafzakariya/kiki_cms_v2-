@@ -33,10 +33,12 @@ class NotificationController extends Controller
 {
     private $client;
     private $imagePath;
+    private  $URL;
 
     public function __construct()
     {
         $this->client = new \GuzzleHttp\Client();
+        $this->URL =env('APP_URL');
     }
 
     public function listView()
@@ -189,22 +191,22 @@ class NotificationController extends Controller
     }
 
     public function addNotification(Request $request){
-
+        $URL=env('APP_URL');
+            //  return $request->all();
+            // return $filename = $_FILES['file']['name'];
         // return $request['section'];
-          $si_filename =$request->file('si-image');
-          $si_filename->getClientOriginalExtension();;
-          $en_filename = $_FILES['en-image']['name'];
-          $ta_filename = $_FILES['ta-image']['name'];
-          $aImage = $request->file('image');
-
-            Log::info('php');
+       //   $si_filename =$request->file('si-image');
+          $image_filename =$request->file('image_upload');    
+        //    return $image_filename;
             $usergrp= $request['user_group'];
-            Log::info($usergrp);
             $contentType= $request['content_type'];
             $contentid= $request['content_id'];
             $type=$request['section'];
             $notifydate=$request['notification_time'];
-
+            
+            $en_image_path=null;
+            $si_image_path=null;
+            $ta_image_path=null;     
 
             $fcm_notification = FcmNotification::create([
                 'user_group' => $request['user_group'],
@@ -212,7 +214,7 @@ class NotificationController extends Controller
                 'content_type' =>  $request['content_type'],
                 'content_id' =>  $request['content_id'],
                 'notification_time' => $request['notification_time'],
-                'all_audiance' => $request['all_audiance'],
+                'all_audiance' => 1,
                 'language' =>  $request['language'],
                 'english_title' =>  $request['english_title'],
                 'english_description' =>  $request['english_description'],              
@@ -229,38 +231,53 @@ class NotificationController extends Controller
             $ext=null;
             $fileName=null;
             $path=null;
+            $image=null;
+            $description=null;
+            $title=null;
 
-             if($request->hasFile('si-image')){
-                $aImage = $si_filename;
+             if($request->hasFile('image_upload')){
+                $aImage = $image_filename;
                 $ext = $aImage->getClientOriginalExtension();
                 $fileName = 'notification-image-' . rand(0, 999999) . '-' . date('YmdHis') . '.' . $ext;
                 $path = $imageup->upload('notification', $aImage, $fileName,$fcm_notification->id );
-
-                $fcm_notification->update([
-                    'english_image' => $fileName
-                ]);
+               
+             
              }
-             if($request->hasFile('en-image')){
-                $aImage = $si_filename;
-                $ext = $aImage->getClientOriginalExtension();
-                $fileName = 'notification-image-' . rand(0, 999999) . '-' . date('YmdHis') . '.' . $ext;
-                $path = $imageup->upload('notification', $aImage, $fileName,$fcm_notification->id );
+            
+             
+             if($request['english_title']!="null"){
 
+                $en_image_path= $fileName;
+                $description=$request['english_description'];
+                $title=$request['english_title'];
                 $fcm_notification->update([
-                    'english_image' => $fileName
+                    'english_image' => $en_image_path
                 ]);
-             }
-             if($request->hasFile('en-image')){
-                $aImage = $si_filename;
-                $ext = $aImage->getClientOriginalExtension();
-                $fileName = 'notification-image-' . rand(0, 999999) . '-' . date('YmdHis') . '.' . $ext;
-                $path = $imageup->upload('notification', $aImage, $fileName,$fcm_notification->id );
+            }
+            if($request['sinhala_title']!="null"){
 
+                // return $request['sinhala_title'];
+
+                $si_image_path= $fileName;
+                $description=$request['sinhala_description'];
+                $title=$request['sinhala_title'];
                 $fcm_notification->update([
-                    'english_image' => $fileName
+                    'sinhala_image' => $si_image_path
                 ]);
-             }
+            }
+            if($request['tamil_title']!="null"){
 
+                // return $request['tamil_title'];
+
+                $ta_image_path= $fileName;
+                $description=$request['tamil_description'];
+                $title=$request['tamil_title'];
+                $fcm_notification->update([
+                    'tamil_image' => $ta_image_path
+                ]);
+            }
+
+             
             
             $sql = "SELECT viewer_id FROM susila_db.user_groups_viewers where user_group_id='$usergrp'";
             $viewer_ids = DB::select($sql);
@@ -280,39 +297,24 @@ class NotificationController extends Controller
                 }
             }
             Log::info($devices);
-            $image=null;
-            $description=null;
-            $title=null;
-            if($request['english_image']!=null){
-                $image=$request['english_image'];
-                $description=$request['english_description'];
-                $title=$request['english_title'];
-            }
-            if($request['sinhala_image']!=null){
-                $image=$request['sinhala_image'];
-                $description=$request['sinhala_description'];
-                $title=$request['sinhala_title'];
-            }
-            if($request['tamil_image']!=null){
-                $image=$request['tamil_image'];
-                $description=$request['tamil_description'];
-                $title=$request['tamil_title'];
-            }
-
+           
 
             $finel_array=array(
                 "deviceid" =>$devices,
                 "title"  =>$title,
-                "image_url" =>$image,
+                "image_url" =>$fileName,
                 "type" => $type,
                 "body" => $description,
                 "content_type" => $contentType,
 	            "content_id" =>  $contentid,
                 "date_time" =>$notifydate
             );
+
+       
+           
             
 
-            $response =  $this->client->request('POST', 'http://localhost:3000/fcm/v1/message', [
+            $response =  $this->client->request('POST', $URL , [
                 'headers' => [
                    
                     'Accept' => 'application/json',
@@ -322,8 +324,6 @@ class NotificationController extends Controller
             $contents = json_decode($contents);
             return $contents;
     
-
-
           
     }
 
