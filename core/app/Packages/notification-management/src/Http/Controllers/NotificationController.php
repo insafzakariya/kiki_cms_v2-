@@ -192,6 +192,7 @@ class NotificationController extends Controller
 
     public function addNotification(Request $request){
         $URL=env('APP_URL');
+        // return $request['content_type'];     
             //  return $request->all();
             // return $filename = $_FILES['file']['name'];
         // return $request['section'];
@@ -201,7 +202,8 @@ class NotificationController extends Controller
             $usergrp= $request['user_group'];
             $contentType= $request['content_type'];
             $contentid= $request['content_id'];
-            $type=$request['section'];
+            $typeDesc=$request['section'];
+            $type=null;
             $notifydate=$request['notification_time'];
             
             $en_image_path=null;
@@ -297,20 +299,63 @@ class NotificationController extends Controller
                 }
             }
             Log::info($devices);
+
+            if($typeDesc === "MUSIC"){
+                $type="1";
+                $contentType="songid";
+            }
+            if($typeDesc === "VIDEO"){
+                $type="0";
+                $contentType="episoid";
+            }
+            if($typeDesc === "GENERAL"){
+                $type="2";
+                $contentType="";
+            }
+            
            
+            // return  $devices;
+
+            // $finel_array=array(
+            //     "deviceid" =>[
+            //         "eDAy2mpQxVU:APA91bEsv0uFuoHaOUyXNW8X16QKuxiyqLR7f82-cWB3ZWaL083iuSqV2z1qU1SNA8xzOWsLEPt0vza4yGElZCNxt8g0QI1kaAjyDYHrtG-2qWQT7FQ2A-ram5L4TTcn_eMeBlM_LCLw"
+            //     ],
+            //     "title"  =>$title,
+            //     "body" => $description,
+            //     "image_url" =>$fileName,
+            //     "type" => $type,
+            //     "content_type" => $contentType,
+	        //     "content_id" =>  $contentid,
+            //     "date_time" =>$notifydate
+            // );
+
+            //get image url from bucket
+            $showimage = [];
+            $image_config = [];
+            if ($fileName) {
+                array_push($showimage, "<img style='height:190px' src='" . Config('constants.bucket.url') . Config('filePaths.front.notification') .$fileName . "'>");
+                // array_push($image_config, array(
+                //     'caption' => '',
+                //     'type' => 'image',
+                //     'key' => $artist->id,
+                //     'url' => url('admin/artists/image-delete'),
+                // ));
+            }
+            return $showimage;
+
 
             $finel_array=array(
                 "deviceid" =>$devices,
                 "title"  =>$title,
+                "body" => $description,
                 "image_url" =>$fileName,
                 "type" => $type,
-                "body" => $description,
                 "content_type" => $contentType,
 	            "content_id" =>  $contentid,
                 "date_time" =>$notifydate
             );
 
-       
+            //   return $finel_array;
            
             
 

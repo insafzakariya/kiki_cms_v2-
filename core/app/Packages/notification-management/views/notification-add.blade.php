@@ -358,11 +358,14 @@
                 let tamildescription=null;
                 let tamilimage=null;
                 let uploadImage=null;
+                
+                
 
 
 
                 if(section.value === 'MUSIC'){
                     contenttype=document.getElementById('music');
+                    
 
                     if(music.value === 'ALBUM'){
                         contentid=document.getElementById('album');
@@ -373,7 +376,9 @@
 
                 if(section.value === 'VIDEO'){
                   contenttype=document.getElementById('program');
+                //   alert(contenttype.value);
                   contentid=document.getElementById('episode');
+                //   alert(contentid.value);
                   
                 }
                 
