@@ -192,6 +192,9 @@ class NotificationController extends Controller
 
     public function addNotification(Request $request){
         $URL=env('APP_URL');
+        $ImageUpLoadPath=env('IMAGE_UPLOAD_PATH');
+        $folderName=env('FOLDER_NAME');
+       
         // return $request['content_type'];     
             //  return $request->all();
             // return $filename = $_FILES['file']['name'];
@@ -238,11 +241,11 @@ class NotificationController extends Controller
             $title=null;
 
              if($request->hasFile('image_upload')){
+                 
                 $aImage = $image_filename;
                 $ext = $aImage->getClientOriginalExtension();
                 $fileName = 'notification-image-' . rand(0, 999999) . '-' . date('YmdHis') . '.' . $ext;
-                $path = $imageup->upload('notification', $aImage, $fileName,$fcm_notification->id );
-               
+                $path = $imageup->upload('notification', $aImage, $fileName,$fcm_notification->id );               
              
              }
             
@@ -284,8 +287,7 @@ class NotificationController extends Controller
             $sql = "SELECT viewer_id FROM susila_db.user_groups_viewers where user_group_id='$usergrp'";
             $viewer_ids = DB::select($sql);
             Log::info($viewer_ids);
-            // //get viewer ids to arry
-            // //want to get viewer table -> devise id to arry
+
             $devices =array();
             foreach ($viewer_ids as $viewer_id_ob) {
                 $viewer_id = $viewer_id_ob->viewer_id;
@@ -314,48 +316,29 @@ class NotificationController extends Controller
             }
             
            
-            // return  $devices;
-
-            // $finel_array=array(
-            //     "deviceid" =>[
-            //         "eDAy2mpQxVU:APA91bEsv0uFuoHaOUyXNW8X16QKuxiyqLR7f82-cWB3ZWaL083iuSqV2z1qU1SNA8xzOWsLEPt0vza4yGElZCNxt8g0QI1kaAjyDYHrtG-2qWQT7FQ2A-ram5L4TTcn_eMeBlM_LCLw"
-            //     ],
-            //     "title"  =>$title,
-            //     "body" => $description,
-            //     "image_url" =>$fileName,
-            //     "type" => $type,
-            //     "content_type" => $contentType,
-	        //     "content_id" =>  $contentid,
-            //     "date_time" =>$notifydate
-            // );
-
-            //get image url from bucket
+            
             $showimage = [];
             $image_config = [];
+           
             if ($fileName) {
-                array_push($showimage, "<img style='height:190px' src='" . Config('constants.bucket.url') . Config('filePaths.front.notification') .$fileName . "'>");
-                // array_push($image_config, array(
-                //     'caption' => '',
-                //     'type' => 'image',
-                //     'key' => $artist->id,
-                //     'url' => url('admin/artists/image-delete'),
-                // ));
+                array_push($showimage, Config('constants.bucket.url') .$ImageUpLoadPath."/". $folderName ."/".$fileName );
+              
             }
-            return $showimage;
-
+            $first=$showimage[0];
+             //return $first;
 
             $finel_array=array(
                 "deviceid" =>$devices,
                 "title"  =>$title,
                 "body" => $description,
-                "image_url" =>$fileName,
+                "image_url" => $first,
                 "type" => $type,
                 "content_type" => $contentType,
 	            "content_id" =>  $contentid,
                 "date_time" =>$notifydate
             );
 
-            //   return $finel_array;
+            //return $finel_array;
            
             
 
@@ -367,7 +350,8 @@ class NotificationController extends Controller
             ]);
             $contents = $response->getBody();
             $contents = json_decode($contents);
-            return $contents;
+             return $contents;
+            // return view('notification-add');
     
           
     }
