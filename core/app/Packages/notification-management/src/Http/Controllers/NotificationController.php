@@ -191,6 +191,7 @@ class NotificationController extends Controller
     }
 
     public function addNotification(Request $request){
+       
         $URL=env('APP_URL');
         $ImageUpLoadPath=env('IMAGE_UPLOAD_PATH');
         $folderName=env('FOLDER_NAME');
@@ -350,7 +351,8 @@ class NotificationController extends Controller
             ]);
             $contents = $response->getBody();
             $contents = json_decode($contents);
-             return $contents;
+             Log::info($contents);
+             return view('NotificationManage::notification-add');
             // return view('notification-add');
     
           
