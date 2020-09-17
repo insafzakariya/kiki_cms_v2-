@@ -429,19 +429,12 @@
                 var sidv=si.value +' ';
                 var si_title_div = document.getElementById("si_title_validation");
                 var si_dec_div = document.getElementById("si_des_validation");
-                
-
-               
-               
         
                 let language=document.getElementById('language');
 
                 var selected=$('input[name="all-audiance"]:checked').val();
 
-                var divv = document.getElementById("en_div");
-                alert("aaaaa"+divv.value);
-                    
-                   
+                var divv = document.getElementById("en_div");       
 
                if(selected === 'check'){
                    if(language.value === 'SINHALA'){
@@ -674,6 +667,8 @@
                     $("#si-description").prop( "disabled", false );
                     $("#si-image").prop( "disabled", false );
                     $("#en_div").hide();
+                    $("#si_div").show();
+                    $("#ta_div").hide();
 
                     $("#en-title").prop( "disabled", true );
                     $("#en-description").prop( "disabled", true );
