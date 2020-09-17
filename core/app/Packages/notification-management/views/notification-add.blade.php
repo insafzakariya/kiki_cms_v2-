@@ -234,7 +234,7 @@
                             </div>
                         </div>
     
-                        <div class="form-group">
+                        <div class="form-group" id="si_div">
                             <label class="col-sm-2 control-label required">Image </label>
                             <div class="col-sm-6">
                                 <input id="si-image" name="si-image" type="file" class="image form-control after-error-placement" accept="image/*"  >
@@ -253,7 +253,7 @@
                         <label class="col-sm-3 control-label"><span style="font-weight: bold">English</span> </label>
                     </div>
 
-                    <div id="div-english">
+                    <div id="div-english" >
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Title</label>
                             <div class="col-sm-7">
@@ -267,7 +267,7 @@
                             </div>
                         </div>
     
-                        <div class="form-group" id="en_div"  style="display: block" >
+                        <div class="form-group" id="en_div" >
                             <label class="col-sm-2 control-label required">Image </label>
                             <div class="col-sm-6" >
                                 <input id="en-image" name="en-image" type="file" class="image form-control after-error-placement" accept="image/*"  >
@@ -298,7 +298,7 @@
                             </div>
                         </div>
     
-                        <div class="form-group">
+                        <div class="form-group" id="ta_div">
                             <label class="col-sm-2 control-label required">Image </label>
                             <div class="col-sm-6">
                                 <input id="ta-image" name="ta-image" type="file" class="image form-control after-error-placement" accept="image/*"  >
@@ -431,21 +431,7 @@
                 var si_dec_div = document.getElementById("si_des_validation");
                 
 
-                if(dt === " "){   
-                    datediv.style.display = "block";
-                }
-                if(tm === " "){
-                    timediv.style.display = "block";
-                }
-                if(usgp === " "){
-                    usergrpdiv.style.display = "block";
-                }
-                if(siv === " "){
-                    si_title_div.style.display = "block";  
-                }
-                if(sidv === " "){
-                    si_dec_div.style.display = "block";  
-                }
+               
                
         
                 let language=document.getElementById('language');
@@ -453,6 +439,7 @@
                 var selected=$('input[name="all-audiance"]:checked').val();
 
                 var divv = document.getElementById("en_div");
+                alert("aaaaa"+divv.value);
                     
                    
 
@@ -463,7 +450,23 @@
                     sinhalaimage=document.getElementById('si-image');
                     // document.getElementById("myBtn").disabled = true;
                     
-                   
+                    if(dt === " "){   
+                    datediv.style.display = "block";
+                    }
+                    if(tm === " "){
+                        timediv.style.display = "block";
+                    }
+                    if(usgp === " "){
+                        usergrpdiv.style.display = "block";
+                    }
+                    if(siv === " "){
+                        si_title_div.style.display = "block";  
+                    }
+                    if(sidv === " "){
+                        si_dec_div.style.display = "block";  
+                    }
+
+
                    }
                    if(language.value === 'ENGLISH'){
                     englishtittle=document.getElementById('en-title');
@@ -594,6 +597,7 @@
             // alert(document.getElementById('all-audiance').value);
             if ($('#all-audiance').prop('checked')){
                 $("#language").prop( "disabled", false );
+                
 
                 $("#ta-title").prop( "disabled", true );
                 $("#ta-description").prop( "disabled", true );
@@ -649,6 +653,19 @@
         // });
 
 
+            $(document).ready(function(){
+                $("#en_div").hide();
+            });
+            $(document).ready(function(){
+                $("#ta_div").hide();
+            });
+
+            // if(selected === 'check'){
+            //        if(language.value === 'ENGLISH'){
+            //         $("#en_div").show();
+            //        }
+            // }
+
         $('#language').change(function(){
             var val = $("#language").val();
             switch (val) {
@@ -656,7 +673,7 @@
                     $("#si-title").prop( "disabled", false );
                     $("#si-description").prop( "disabled", false );
                     $("#si-image").prop( "disabled", false );
-                    divv.style.display = "none";
+                    $("#en_div").hide();
 
                     $("#en-title").prop( "disabled", true );
                     $("#en-description").prop( "disabled", true );
@@ -670,6 +687,10 @@
                     $("#si-title").prop( "disabled", true );
                     $("#si-description").prop( "disabled", true );
                     $("#si-image").prop( "disabled", true );
+                    $("#en_div").show();
+                    $("#si_div").hide();
+                    $("#ta_div").hide();
+
 
                     $("#en-title").prop( "disabled", false );
                     $("#en-description").prop( "disabled", false );
@@ -683,6 +704,9 @@
                     $("#si-title").prop( "disabled", true );
                     $("#si-description").prop( "disabled", true );
                     $("#si-image").prop( "disabled", true );
+                    $("#en_div").hide();
+                    $("#si_div").hide();
+                    $("#ta_div").show();
 
                     $("#en-title").prop( "disabled", true );
                     $("#en-description").prop( "disabled", true );
@@ -691,6 +715,7 @@
                     $("#ta-title").prop( "disabled", false );
                     $("#ta-description").prop( "disabled", false );
                     $("#ta-image").prop( "disabled", false );
+                
                     break;
             
                 default:
