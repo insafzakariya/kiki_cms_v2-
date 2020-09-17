@@ -160,15 +160,20 @@
                             
                         </div>
                         <!-- <small id="emailHelp" class="form-text text-right">We'll never share your email with anyone else.</small> -->
-                        <p  id ="datevalidation" class="form-text" style="margin-left: 250px;color:red">hihihih</p>
+                       <div id ="datevalidation" style="display: none">
+                            <p   class="form-text" style="margin-left: 250px;color:#ed5565">Insert The Date</p>
+                        </div>
                     </div>
 
                     <div class="form-group">
                         <label class="col-sm-2 control-label">Time</label>
-                        <div class="add-padding col-sm-7">
+                        <div class="add-padding  col-sm-7">
                             <input type="time" class="form-control" id="notificatio-time" name="notificatio-time"  autocomplete="off" required>
-                          
+                            <div id ="timevalidation" style="display: none">
+                                <p   class="form-text" style="color:#ed5565">Insert The Time</p>
+                            </div>
                         </div>
+                        
                     </div>
 
                     <div class="form-group">
@@ -177,7 +182,11 @@
                             <select id="user-group" name="user-group" class="form-control select-simple" required>
                          
                             </select>
+                            <div id ="usergrpvalidation" style="display: none">
+                                <p   class="form-text" style="color:#ed5565">Insert The User Group</p>
+                            </div>
                         </div>
+                        
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">All Audience</label>
@@ -209,12 +218,19 @@
                             <label class="col-sm-2 control-label">Title</label>
                             <div class="col-sm-7">
                                 <input type="text" class="form-control" name="si-title"  id="si-title">
+                                <div id ="si_title_validation" style="display: none">
+                                    <p   class="form-text" style="color:#ed5565">Insert The Title</p>
+                                </div>
                             </div>
+                            
                         </div>
     
                         <div class="form-group"><label class="col-sm-2 control-label">Description</label>
                             <div class="col-sm-7">
                                 <textarea class="form-control" id="si-description" name="si-description"></textarea>
+                                <div id ="si_des_validation" style="display: none">
+                                    <p   class="form-text" style="color:#ed5565">Insert The Description</p>
+                                </div>
                             </div>
                         </div>
     
@@ -223,6 +239,9 @@
                             <div class="col-sm-6">
                                 <input id="si-image" name="si-image" type="file" class="image form-control after-error-placement" accept="image/*"  >
                                 <p class="nameError float-left"></p>
+                                <div id ="si_img_validation" style="display: none">
+                                    <p   class="form-text" style="color:#ed5565">Insert The Image</p>
+                                </div>
                                 <p class="text-danger pull-left" style="font-weight: 600; font-size: 13px;">image size
                                     should be 175px *175px</p>
                             </div>
@@ -248,9 +267,9 @@
                             </div>
                         </div>
     
-                        <div class="form-group">
+                        <div class="form-group" id="en_div"  style="display: block" >
                             <label class="col-sm-2 control-label required">Image </label>
-                            <div class="col-sm-6">
+                            <div class="col-sm-6" >
                                 <input id="en-image" name="en-image" type="file" class="image form-control after-error-placement" accept="image/*"  >
                                 <p class="nameError float-left"></p>
                                 <p class="text-danger pull-left" style="font-weight: 600; font-size: 13px;">image size
@@ -323,6 +342,8 @@
     <script type="text/javascript">
 
     function  submitForm(){
+        
+        
         var fd = new FormData();
         var files_si = $('#si-image')[0].files[0];
         var files_en = $('#en-image')[0].files[0];
@@ -334,6 +355,8 @@
             file=files_si;
             fd.append('image_upload',file);
 
+        }else{
+            si_img_validation.style.display = "block";
         }
         
         if(files_en!=null){
@@ -387,29 +410,59 @@
                 
                 let ddate=document.getElementById('notificatio-date');
 
-                // if(){
-
-                // }
-
                 let dtime=document.getElementById('notificatio-time');
                 let usergroup=document.getElementById('user-group');
 
             
                 let all_audiance=document.getElementById('all-audiance');
                 //ddate + dtime
+                let dt=ddate.value + ' ';
+                let tm=dtime.value + ' ';
+                let usgp=usergroup.value + ' ';
                 let notifiactiontime=ddate.value + ' ' + dtime.value;
+                var datediv = document.getElementById("datevalidation");
+                var timediv = document.getElementById("timevalidation");
+                var usergrpdiv = document.getElementById("usergrpvalidation");
+                var si=document.getElementById('si-title');
+                var siv=si.value +' ';
+                var sid=document.getElementById('si-description');
+                var sidv=si.value +' ';
+                var si_title_div = document.getElementById("si_title_validation");
+                var si_dec_div = document.getElementById("si_des_validation");
+                
+
+                if(dt === " "){   
+                    datediv.style.display = "block";
+                }
+                if(tm === " "){
+                    timediv.style.display = "block";
+                }
+                if(usgp === " "){
+                    usergrpdiv.style.display = "block";
+                }
+                if(siv === " "){
+                    si_title_div.style.display = "block";  
+                }
+                if(sidv === " "){
+                    si_dec_div.style.display = "block";  
+                }
+               
         
                 let language=document.getElementById('language');
 
                 var selected=$('input[name="all-audiance"]:checked').val();
 
-
+                var divv = document.getElementById("en_div");
+                    
+                   
 
                if(selected === 'check'){
                    if(language.value === 'SINHALA'){
                     sinhalatittle=document.getElementById('si-title');
                     sinhaladescription=document.getElementById('si-description');
                     sinhalaimage=document.getElementById('si-image');
+                    // document.getElementById("myBtn").disabled = true;
+                    
                    
                    }
                    if(language.value === 'ENGLISH'){
@@ -603,6 +656,7 @@
                     $("#si-title").prop( "disabled", false );
                     $("#si-description").prop( "disabled", false );
                     $("#si-image").prop( "disabled", false );
+                    divv.style.display = "none";
 
                     $("#en-title").prop( "disabled", true );
                     $("#en-description").prop( "disabled", true );
