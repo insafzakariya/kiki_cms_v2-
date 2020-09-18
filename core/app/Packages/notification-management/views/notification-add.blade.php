@@ -258,12 +258,18 @@
                             <label class="col-sm-2 control-label">Title</label>
                             <div class="col-sm-7">
                                 <input type="text" class="form-control" name="en-title"  id="en-title">
+                                <div id ="en_title_validation" style="display: none">
+                                    <p   class="form-text" style="color:#ed5565">Insert The Title</p>
+                                </div>
                             </div>
                         </div>
     
                         <div class="form-group"><label class="col-sm-2 control-label">Description</label>
                             <div class="col-sm-7">
                                 <textarea class="form-control" id="en-description" name="en-description"></textarea>
+                                <div id ="en_des_validation" style="display: none">
+                                    <p   class="form-text" style="color:#ed5565">Insert The Description</p>
+                                </div>
                             </div>
                         </div>
     
@@ -272,6 +278,9 @@
                             <div class="col-sm-6" >
                                 <input id="en-image" name="en-image" type="file" class="image form-control after-error-placement" accept="image/*"  >
                                 <p class="nameError float-left"></p>
+                                <div id ="en_img_validation" style="display: none">
+                                    <p   class="form-text" style="color:#ed5565">Insert The Image</p>
+                                </div>
                                 <p class="text-danger pull-left" style="font-weight: 600; font-size: 13px;">image size
                                     should be 175px *175px</p>
                             </div>
@@ -363,6 +372,8 @@
             file=files_en;
             fd.append('image_upload',file);
 
+        }else{
+            en_img_validation.style.display = "block";
         }
         
         if(files_ta!=null){
@@ -429,12 +440,30 @@
                 var sidv=si.value +' ';
                 var si_title_div = document.getElementById("si_title_validation");
                 var si_dec_div = document.getElementById("si_des_validation");
+
+                var en=document.getElementById('en-title');
+                var env=en.value + ' ';
+                var endesc=document.getElementById('en-description');
+                var endescv=endesc.value + ' ';
+                var en_title_div = document.getElementById("en_title_validation");
+                var en_dec_div = document.getElementById("en_des_validation");
+
         
                 let language=document.getElementById('language');
 
                 var selected=$('input[name="all-audiance"]:checked').val();
 
-                var divv = document.getElementById("en_div");       
+                var divv = document.getElementById("en_div");    
+
+                if(dt === " "){   
+                    datediv.style.display = "block";
+                }
+                if(tm === " "){
+                    timediv.style.display = "block";
+                }
+                if(usgp === " "){
+                    usergrpdiv.style.display = "block";
+                }   
 
                if(selected === 'check'){
                    if(language.value === 'SINHALA'){
@@ -443,20 +472,17 @@
                     sinhalaimage=document.getElementById('si-image');
                     // document.getElementById("myBtn").disabled = true;
                     
-                    if(dt === " "){   
-                    datediv.style.display = "block";
-                    }
-                    if(tm === " "){
-                        timediv.style.display = "block";
-                    }
-                    if(usgp === " "){
-                        usergrpdiv.style.display = "block";
-                    }
+                 
                     if(siv === " "){
                         si_title_div.style.display = "block";  
+                    }else{
+                        si_title_div.style.display = "none"; 
                     }
+
                     if(sidv === " "){
                         si_dec_div.style.display = "block";  
+                    }else{
+                        si_dec_div.style.display = "none"; 
                     }
 
 
@@ -465,6 +491,18 @@
                     englishtittle=document.getElementById('en-title');
                     englishdescription=document.getElementById('en-description');
                     englishimage=document.getElementById('en-image');
+
+                    
+                    if(env === " "){
+                        en_title_div.style.display = "block";  
+                    }else{
+                        en_title_div.style.display = "none";  
+                    }
+                    if(endescv === " "){
+                        en_dec_div.style.display = "block";  
+                    }else{
+                        en_dec_div.style.display = "none";  
+                    }
                   
                    }
                    if(language.value === 'TAMIL'){
