@@ -58,7 +58,8 @@
       "ProjectManage\\": "app/Packages/project-management/src/",
       "SongManage\\": "app/Packages/song-management/src/",
       "PlaylistManage\\": "app/Packages/playlist-management/src/",
-      "NotificationManage\\": "app/Packages/notification-management/src/"
+      "NotificationManage\\": "app/Packages/notification-management/src/",
+      "ChannelManage\\": "app/Packages/channel-management/src/"
     }
   },
   "autoload-dev": {

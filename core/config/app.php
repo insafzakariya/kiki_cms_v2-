@@ -161,6 +161,7 @@ return [
 		'ProductManage\ProductManageServiceProvider',
 		'ProjectManage\ProjectManageServiceProvider',
 		'SongManage\SongManageServiceProvider',
+		'ChannelManage\ChannelManageServiceProvider',
 		'PlaylistManage\PlaylistManageServiceProvider',
 		'NotificationManage\NotificationManageServiceProvider',
 
