@@ -72,6 +72,19 @@ class ImageController extends Controller
         return $path;
 
     }
+    public function UploadVideo($folder, $file, $file_name, $id = null)
+    {
+        $upload_path = env('IMAGE_UPLOAD_PATH', '');
+        $disk = Storage::disk('gcs');
+
+        // $path = $upload_path . '/' . $folder . '/' . $id;
+        $path = $upload_path . '/' . $folder;
+        $audionFile = file_get_contents($file);
+
+        $disk->put($path . '/' . $file_name, $audionFile);
+        return $path;
+
+    }
 
     public function UploadAudio($folder, $file, $file_name, $id = null)
     {

@@ -6,6 +6,9 @@ Route::group(['middleware' => [], 'prefix' => 'admin/channel', 'namespace' => 'C
     Route::get('/', [
         'as' => 'index', 'uses' => 'ChannelController@index'
     ]);
+    Route::post('/', [
+        'as' => 'index', 'uses' => 'ChannelController@store'
+    ]);
 
     
 

@@ -22,7 +22,7 @@
     <div class="col-lg-12 margins">
         <div class="ibox-content">
                       
-                <form method="POST" class="form-horizontal" id="form" action="{{route('admin.artists.store')}}" enctype="multipart/form-data">
+                <form method="POST" class="form-horizontal" id="form"  enctype="multipart/form-data">
                 	{!!Form::token()!!}
 
                 	<div class="form-group"><label class="col-sm-2 control-label">Channel Name</label>
@@ -57,31 +57,27 @@
                     <div class="form-group">
                         <label class="col-sm-2 control-label required">Intro Vedio</label>
                         <div class="col-sm-4">
-                            <input id="image" name="intro_vedio" type="file"  class="form-control" >
+                            <input id="vedio" name="intro_vedio" type="file"  class="form-control" >
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label required"></label>
                         <div class="col-sm-4 form-check">
-                        <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                        <label class="form-check-label" for="exampleCheck1">Kids Channel</label>
+                        <input type="checkbox" class="form-check-input" name="kids_channel" id="exampleCheck1">
+                        <label class="form-check-label"  for="exampleCheck1">Kids Channel</label>
                         </div>
                     </div>
                     
-                    <div class="form-group"><label class="col-sm-2 control-label">Search Tags</label>
-                        <div class="col-sm-8">
-                            <select class="select-simple-tag form-control" name="tags[]" multiple="multiple">
-                            </select>
-                        </div>
-                    </div>
+                    
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">Search Tags</label>
+                        <label class="col-sm-2 control-label">Content Policies</label>
                         <div class="col-sm-8" style="display: inline">
                             <div class="col-md-5 no-padding">
                                 <select class="form-control policy" id="policySelector" name="advertisementPolicy" style="width: 90%;" multiple="multiple">
                                   
-                                <option value="d" selected>dd</option>
-                                        <option value="d3" selected>dd</option>
+                                @foreach ($channelContentPolicies as $channelContentPolicy)
+                                <option value="{{$channelContentPolicy->PolicyID}}">{{$channelContentPolicy->Name}}</option>
+                                @endforeach
                                   
                                 </select>
                             </div>
@@ -89,8 +85,6 @@
                             <div class="col-md-5">
                                 <select class="form-control policy" id="content_policies" name="content_policies[]"
                                         style="width:90%;" multiple >
-                                        <option value="d4" selected>dd</option>
-                           
 
                                 </select>
                                 <label id="content_error" class="text-danger" for="content_policies"></label>
@@ -101,6 +95,23 @@
 
                         </div>
                     </div>
+                    <div class="form-group"><label class="col-sm-2 control-label">Advertisment Policy</label>
+                    	<div class="col-sm-5">
+                        <select  name="advertisment_policy" class="form-control" >
+                        @foreach ($advertismentPolicies as $advertismentPolicy)
+                        <option value="{{$advertismentPolicy->PolicyID}}">{{$advertismentPolicy->Name}}</option>
+                        @endforeach
+                      
+                            </select>
+                        </div>
+                	</div>
+                    <div class="form-group"><label class="col-sm-2 control-label">Search Tags</label>
+                        <div class="col-sm-8">
+                            <select class="select-simple-tag form-control" name="tags[]" multiple="multiple">
+                            </select>
+                        </div>
+                    </div>
+                    
                 	<div class="hr-line-dashed"></div>
 	                <div class="form-group">
 	                    <div class="col-sm-8 col-sm-offset-2">
@@ -126,60 +137,13 @@
             $('.select2-container--open .select2-dropdown--below').css('display', 'none');
         });
 
-        jQuery.validator.addMethod("filesize_max_kb", function(value, element, param) {
-                var isOptional = this.optional(element),
-                    file;
-
-                if(isOptional) {
-                    return isOptional;
-                }
-                if ($(element).attr("type") === "file") {
-                    if (element.files && element.files.length) {
-
-                        file = element.files[0];
-                        return ( file.size && (file.size/1000) <= param );
-                    }
-                }
-                return false;
-            },
-            $.validator.format("File size is larger than  {0}kb")
-        );
-        $('#image').change(function() {
-            $('#image').removeData('imageWidth');
-            $('#image').removeData('imageHeight');
-            var file = this.files[0];
-            var tmpImg = new Image();
-            tmpImg.src=window.URL.createObjectURL( file );
-            tmpImg.onload = function() {
-                const width = tmpImg.naturalWidth,
-                    height = tmpImg.naturalHeight;
-                $('#image').data('imageWidth', width);
-                $('#image').data('imageHeight', height);
-            }
-        });
-
-        $.validator.addMethod('dimension', function(value, element, param) {
-                if (element.files.length === 0) {
-                    return true;
-                }
-                var width = $(element).data('imageWidth');
-                var height = $(element).data('imageHeight');
-                if (width == param[0] && height == param[1]) {
-                    return true;
-                } else {
-                    return false;
-                }
-            },
-            $.validator.format("Upload image size should be {0}px X {1}px")
-        );
-
-        $('select[name="similar_artists[]"]').select2({
-            multiple: true,
+        $('select[name="advertisment_policy"]').select2({
+            // multiple: true,
         });
 
 		$("#form").validate({
             rules: {
-                name: {
+                channel_name_en: {
                     required:  {
                         depends:function(){
                             $(this).val($.trim($(this).val()));
@@ -188,17 +152,63 @@
                     },
                   
                 },
-                image: {
-                    required: true,
-                    accept: "image/*",
-                    dimension: [175,175],
-                    filesize_max_kb: {{ env('Upload_Image_Size') }}
-
+                channel_name_si: {
+                    required:  {
+                        depends:function(){
+                            $(this).val($.trim($(this).val()));
+                            return true;
+                        }
+                    },
+                  
                 },
-                tags: {
-                    required: true
-
+                channel_name_ta: {
+                    required:  {
+                        depends:function(){
+                            $(this).val($.trim($(this).val()));
+                            return true;
+                        }
+                    },
+                  
+                },
+                channel_description_en: {
+                    required:  {
+                        depends:function(){
+                            $(this).val($.trim($(this).val()));
+                            return true;
+                        }
+                    },
+                  
+                },
+                channel_description_si: {
+                    required:  {
+                        depends:function(){
+                            $(this).val($.trim($(this).val()));
+                            return true;
+                        }
+                    },
+                  
+                },
+                channel_description_ta: {
+                    required:  {
+                        depends:function(){
+                            $(this).val($.trim($(this).val()));
+                            return true;
+                        }
+                    },
+                  
                 }
+                // ,
+                // image: {
+                //     required: true,
+                //     accept: "image/*",
+                //     dimension: [175,175],
+                //     filesize_max_kb: {{ env('Upload_Image_Size') }}
+
+                // },
+                // tags: {
+                //     required: true
+
+                // }
                
             },
             submitHandler: function(form) {
