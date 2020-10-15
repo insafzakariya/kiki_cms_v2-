@@ -118,11 +118,11 @@ class ChannelController extends Controller
     public function editView($id)
     {
         $exsist_channel=Channel::with(['getContentPolices.getPolicy'])->find($id);
-        // return $exsist_channel->getContentPolices;
+        
         if($exsist_channel){
-
-            $channelContentPolicies=Policy::getChannelContentPolicies();
             $advertismentPolicies=Policy::getAdvertisementPolicies();
+            $used_content_policy_ids = array_column(json_decode($exsist_channel->getContentPolices), 'PolicyID');
+            $channelContentPolicies=Policy::getChannelContentPoliciesByFilterIds($used_content_policy_ids);
            
             return view('ChannelManage::edit')
             ->with(
@@ -137,7 +137,7 @@ class ChannelController extends Controller
         }else{
             return "Channel Not Found.";
         }
-        return $id;
+       
     }
 
     public function edit(Request $request,$id )
