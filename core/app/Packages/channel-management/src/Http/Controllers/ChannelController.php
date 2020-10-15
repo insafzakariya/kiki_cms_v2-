@@ -6,6 +6,7 @@ namespace ChannelManage\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\ImageController;
 use App\Models\Policy;
+use App\Models\ContentPolicy;
 use Carbon\Carbon;
 use Config;
 use Datatables;
@@ -40,6 +41,9 @@ class ChannelController extends Controller
  
     public function store(Request $request)
     {
+
+       
+        // return $request->all();
         //Kids On Validation
         $kids=0;
         if($request->kids_channel=="on"){
@@ -62,22 +66,53 @@ class ChannelController extends Controller
             'search_tag'=>json_encode($request->tags)
         ]);
 
-        if($request->hasFile('channel_image')) {
-            $aImage = $request->file('channel_image');
-            $ext = $aImage->getClientOriginalExtension();
-            $fileName = 'channel-image-' . rand(0, 999999) . '-' . date('YmdHis') . '.' . $ext;
-            $filePath = $this->imageController->Upload($this->channelImagePath, $aImage, $fileName, "-");
-            $channel->logoImage = $fileName;
-        }
-        if($request->hasFile('intro_vedio')) {
-            $aImage = $request->file('intro_vedio');
-            $ext = $aImage->getClientOriginalExtension();
-            $fileName = 'channel-intro-vedio-' . rand(0, 999999) . '-' . date('YmdHis') . '.' . $ext;
-            $filePath = $this->imageController->UploadVideo($this->channelImagePath, $aImage, $fileName, "-");
-            $channel->introVideo = $fileName;
-        }
+        
 
-        $channel->save();
+       
+        if($channel){
+            if($request->hasFile('channel_image')) {
+                $aImage = $request->file('channel_image');
+                $ext = $aImage->getClientOriginalExtension();
+                $fileName = 'channel-image-' . rand(0, 999999) . '-' . date('YmdHis') . '.' . $ext;
+                $filePath = $this->imageController->Upload($this->channelImagePath, $aImage, $fileName, "-");
+                $channel->logoImage = $fileName;
+            }
+            if($request->hasFile('intro_vedio')) {
+                $aImage = $request->file('intro_vedio');
+                $ext = $aImage->getClientOriginalExtension();
+                $fileName = 'channel-intro-vedio-' . rand(0, 999999) . '-' . date('YmdHis') . '.' . $ext;
+                $filePath = $this->imageController->UploadVideo($this->channelImagePath, $aImage, $fileName, "-");
+                $channel->introVideo = $fileName;
+            }
+            $channel->save();
+             // Insert to Content Policy Table
+            if(isset($request->content_policies)){
+                foreach ($request->content_policies as $key => $contentpolicy) {
+                    ContentPolicy::create([
+                        'ContentID'=>$channel->channelId,
+                        'PolicyID'=>$contentpolicy,
+                        'ContentType'=>2,
+                        'Status'=>1,
+                        'type'=>null
+                    ]);
+                    
+                }
+            }
+
+            return redirect('admin/channel')->with(['success' => true,
+            'success.message' => 'Channel Created successfully!',
+            'success.title' => 'Well Done!']);
+        }else{
+            return redirect('admin/channel')->with([
+                'error' => true,
+                'error.message'=> 'Error adding new Channel. Please try again.',
+                'error.title' => 'Oops !!'
+            ]);
+        }
+       
+       
+
+       
     }
  
    
