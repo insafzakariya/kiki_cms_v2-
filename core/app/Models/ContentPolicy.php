@@ -16,6 +16,10 @@ class ContentPolicy extends Model{
         'Status',
         'type',
     ];
+    public function getPolicy()
+    {
+        return $this->belongsTo('App\Models\Policy', 'PolicyID', 'PolicyID');
+    }
 
   
 }

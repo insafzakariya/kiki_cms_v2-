@@ -54,7 +54,7 @@ class ChannelController extends Controller
             'channelName'=>$request->channel_name_en,
             'channelDesc'=>$request->channel_description_en,
             'workingHours'=>"",
-            'advertisementPolicy'=>$request->channel_description_en,
+            'advertisementPolicy'=>$request->advertisment_policy,
             'status'=>1,
             'channel_order'=>0,
             'kids'=>$kids,
@@ -113,6 +113,36 @@ class ChannelController extends Controller
        
 
        
+    }
+    // Channel Edit View Load
+    public function editView($id)
+    {
+        $exsist_channel=Channel::with(['getContentPolices.getPolicy'])->find($id);
+        // return $exsist_channel->getContentPolices;
+        if($exsist_channel){
+
+            $channelContentPolicies=Policy::getChannelContentPolicies();
+            $advertismentPolicies=Policy::getAdvertisementPolicies();
+           
+            return view('ChannelManage::edit')
+            ->with(
+                ['channelContentPolicies'=>$channelContentPolicies,
+                'advertismentPolicies'=>$advertismentPolicies,
+                'exsist_channel'=>$exsist_channel
+                
+                ]
+            );
+
+            return $exsist_channel;
+        }else{
+            return "Channel Not Found.";
+        }
+        return $id;
+    }
+
+    public function edit(Request $request,$id )
+    {
+        return $request->all();
     }
  
    

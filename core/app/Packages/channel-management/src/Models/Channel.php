@@ -32,6 +32,10 @@ class Channel extends Model{
         'search_tag'
        
     ];
+    public function getContentPolices()
+    {
+        return $this->hasMany('App\Models\ContentPolicy', 'ContentID', 'channelId')->where('ContentType',2);
+    }
 
 
     

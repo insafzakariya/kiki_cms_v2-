@@ -28,4 +28,11 @@ class Policy extends Model{
             ->whereStatus(1)
             ->get();
     }
+    static function  getChannelContentPoliciesByFilterIds(){
+        return SELF::where('policyType', 2)
+            ->where('validFrom', '<=', date("Y-m-d"))
+            ->where('validTo', '>=', date("Y-m-d"))
+            ->whereStatus(1)
+            ->get();
+    }
 }

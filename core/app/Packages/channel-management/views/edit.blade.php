@@ -11,7 +11,7 @@
             <a href="{{url('/')}}">Home</a>
         </li>
         <li class="active">
-            <strong>Channel/ADD</strong>
+            <strong>Channel/Edit</strong>
         </li>
     </ol>
 </div>                  
@@ -29,24 +29,31 @@
                     	<div class="col-sm-10"></div>
                 	</div>
                     <div class="form-group"><label class="col-sm-2 control-label">English</label>
-                    	<div class="col-sm-5"><input type="text" class="form-control" name="channel_name_en"></div>
+                    	<div class="col-sm-5"><input type="text" class="form-control" name="channel_name_en" value="{{$exsist_channel->channelName}}"></div>
                 	</div>
                     <div class="form-group"><label class="col-sm-2 control-label">Sinhala</label>
-                    	<div class="col-sm-5"><input type="text" class="form-control" name="channel_name_si"></div>
+                    	<div class="col-sm-5"><input type="text" class="form-control" name="channel_name_si" value="{{$exsist_channel->channelName_si}}"></div>
                 	</div>
                     <div class="form-group"><label class="col-sm-2 control-label">Tamil</label>
-                    	<div class="col-sm-5"><input type="text" class="form-control" name="channel_name_ta"></div>
+                    	<div class="col-sm-5"><input type="text" class="form-control" name="channel_name_ta" value="{{$exsist_channel->channelName_ta}}"></div>
                 	</div>
                     <div class="form-group"><label class="col-sm-2 control-label">Description</label>
                 	</div>
                     <div class="form-group"><label class="col-sm-2 control-label">English</label>
-                    	<div class="col-sm-5"><input type="text" class="form-control" name="channel_description_en"></div>
+                    	<div class="col-sm-5">
+                        <textarea class="form-control" name="channel_description_en">{!! $exsist_channel->channelDesc !!}</textarea>
+                        </div>
                 	</div>
+
                     <div class="form-group"><label class="col-sm-2 control-label">Sinhala</label>
-                    	<div class="col-sm-5"><input type="text" class="form-control" name="channel_description_si"></div>
-                	</div>
+                        <div class="col-sm-5">
+                            <textarea class="form-control" name="channel_description_si">{!! $exsist_channel->channelDesc_si !!}</textarea>    
+                        </div>
+                    </div>
                     <div class="form-group"><label class="col-sm-2 control-label">Tamil</label>
-                    	<div class="col-sm-5"><input type="text" class="form-control" name="channel_description_ta"></div>
+                        <div class="col-sm-5">
+                            <textarea class="form-control" name="channel_description_ta">{!! $exsist_channel->channelDesc_ta !!}</textarea>  
+                        </div>
                 	</div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label required">Channel Image</label>
@@ -63,7 +70,8 @@
                     <div class="form-group">
                         <label class="col-sm-2 control-label required"></label>
                         <div class="col-sm-4 form-check">
-                        <input type="checkbox" class="form-check-input" name="kids_channel" id="exampleCheck1">
+                        <input type="checkbox" class="form-check-input" name="kids_channel" 
+                        <?php if( $exsist_channel->kids){ ?> checked <?php } ?> id="exampleCheck1">
                         <label class="form-check-label"  for="exampleCheck1">Kids Channel</label>
                         </div>
                     </div>
@@ -73,10 +81,10 @@
                         <label class="col-sm-2 control-label">Content Policies</label>
                         <div class="col-sm-8" style="display: inline">
                             <div class="col-md-5 no-padding">
-                                <select class="form-control policy" id="policySelector" name="content_policies_lft" style="width: 90%;" multiple="multiple">
+                                <select class="form-control policy" id="policySelector" name="advertisementPolicy" style="width: 90%;" multiple="multiple">
                                   
                                 @foreach ($channelContentPolicies as $channelContentPolicy)
-                                <option value="{{$channelContentPolicy->PolicyID}}">{{$channelContentPolicy->Name}}</option>
+                                <option value="{{$channelContentPolicy->PolicyID}}" selected>{{$channelContentPolicy->Name}}</option>
                                 @endforeach
                                   
                                 </select>
@@ -85,7 +93,9 @@
                             <div class="col-md-5">
                                 <select class="form-control policy" id="content_policies" name="content_policies[]"
                                         style="width:90%;" multiple >
-
+                                        @foreach ($exsist_channel->getContentPolices as $policy)
+                                        <option value="{{$policy->PolicyID}}" selected>{{$policy->getPolicy->Name}}</option>
+                                        @endforeach
                                 </select>
                                 <label id="content_error" class="text-danger" for="content_policies"></label>
 
@@ -98,16 +108,27 @@
                     <div class="form-group"><label class="col-sm-2 control-label">Advertisment Policy</label>
                     	<div class="col-sm-5">
                         <select  name="advertisment_policy" class="form-control" >
-                        @foreach ($advertismentPolicies as $advertismentPolicy)
-                        <option value="{{$advertismentPolicy->PolicyID}}">{{$advertismentPolicy->Name}}</option>
-                        @endforeach
+                            @foreach ($advertismentPolicies as $advertismentPolicy)
+                            <?php if($advertismentPolicy->PolicyID == $exsist_channel->advertisementPolicy){?>
+                                <option value="{{$advertismentPolicy->PolicyID}}" selected>{{$advertismentPolicy->Name}}</option>
+                            <?php }else{?>
+                                <option value="{{$advertismentPolicy->PolicyID}}">{{$advertismentPolicy->Name}}</option>
+                            <?php }?>
+                             
+                        
+                            @endforeach
                       
                             </select>
                         </div>
                 	</div>
                     <div class="form-group"><label class="col-sm-2 control-label">Search Tags</label>
                         <div class="col-sm-8">
-                            <select class="select-simple-tag form-control" name="tags[]" multiple="multiple">
+                            <select class="select-simple-tag form-control" name="tags[]" multiple="multiple" >
+                           
+                            @foreach (json_decode($exsist_channel->search_tag) as $tag)
+                            <option value="{{$tag}}" selected="selected">{{$tag}}</option>
+                            @endforeach
+                           
                             </select>
                         </div>
                     </div>
@@ -131,10 +152,12 @@
 	$(document).ready(function(){
         $('.select-simple-tag').select2({
             tags: true,
-            multiple: true,
-            tokenSeparators: [','],
-        }).on('select2:open', function (e) {
-            $('.select2-container--open .select2-dropdown--below').css('display', 'none');
+            // data: ["Clare","Cork","South Dublin"],
+            tokenSeparators: [','], 
+            placeholder: "Add your tags here",
+            /* the next 2 lines make sure the user can click away after typing and not lose the new tag */
+            selectOnClose: true, 
+            closeOnSelect: false
         });
 
         $('select[name="advertisment_policy"]').select2({
