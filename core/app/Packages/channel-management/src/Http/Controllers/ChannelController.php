@@ -91,7 +91,7 @@ class ChannelController extends Controller
                     ContentPolicy::create([
                         'ContentID'=>$channel->channelId,
                         'PolicyID'=>$contentpolicy,
-                        'ContentType'=>2,
+                        'ContentType'=>1,
                         'Status'=>1,
                         'type'=>null
                     ]);
@@ -99,11 +99,11 @@ class ChannelController extends Controller
                 }
             }
 
-            return redirect('admin/channel')->with(['success' => true,
+            return redirect('admin/channel/add')->with(['success' => true,
             'success.message' => 'Channel Created successfully!',
             'success.title' => 'Well Done!']);
         }else{
-            return redirect('admin/channel')->with([
+            return redirect('admin/channel/add')->with([
                 'error' => true,
                 'error.message'=> 'Error adding new Channel. Please try again.',
                 'error.title' => 'Oops !!'
@@ -209,19 +209,24 @@ class ChannelController extends Controller
                 $exsist_channel->introVideo =  null;
             }
             $exsist_channel->save();
-            // return $request->file('intro_vedio');
+            ContentPolicy::where('status', 1)
+                ->where('ContentID', $exsist_channel->channelId)
+                ->where('ContentType', 1)
+                ->update(['status' => 0]);
              // Insert to Content Policy Table
+            // return $request->content_policies;
             if(isset($request->content_policies)){
-                // foreach ($request->content_policies as $key => $contentpolicy) {
-                //     ContentPolicy::create([
-                //         'ContentID'=>$channel->channelId,
-                //         'PolicyID'=>$contentpolicy,
-                //         'ContentType'=>2,
-                //         'Status'=>1,
-                //         'type'=>null
-                //     ]);
+                foreach ($request->content_policies as $key => $contentpolicy) {
+                     ContentPolicy::create([
+                        'ContentID'=>$exsist_channel->channelId,
+                        'PolicyID'=>$contentpolicy,
+                        'ContentType'=>1,
+                        'Status'=>1,
+                        'type'=>null
+                    ]);
                     
-                // }
+                }
+                
             }
 
             return redirect('admin/channel/'.$id.'/edit')->with(['success' => true,
@@ -235,7 +240,15 @@ class ChannelController extends Controller
             ]);
         }
       
-        return $request->all();
+       
+    }
+    public function listView()
+    {
+        return view('ChannelManage::list');
+    }
+    public function listJson()
+    {
+        return "kk";
     }
  
    

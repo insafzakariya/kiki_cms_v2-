@@ -296,8 +296,8 @@
                 showRemove: true,
                 multiple: false,
                 initialPreviewShowDelete: false,
-                allowedFileTypes: ['image'],
-                allowedFileExtensions: ["jpg", "gif", "png", "jpeg", "jfif"],
+                // allowedFileTypes: ['image'],
+                // allowedFileExtensions: ["jpg", "gif", "png", "jpeg", "jfif"],
                 overwriteInitial: true,
                 initialPreview: <?php echo json_encode($intro_vedio); ?>,
                 initialPreviewConfig: <?php echo json_encode($intro_vedio_config) ?>

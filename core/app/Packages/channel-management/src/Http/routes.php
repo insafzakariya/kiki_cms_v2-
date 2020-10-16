@@ -1,9 +1,9 @@
 <?php
 
-Route::group(['middleware' => [], 'prefix' => 'admin/channel', 'namespace' => 'ChannelManage\Http\Controllers'], function()
+Route::group(['middleware' => ['auth'], 'prefix' => 'channel', 'namespace' => 'ChannelManage\Http\Controllers'], function()
 {
 
-    Route::get('/', [
+    Route::get('/add', [
         'as' => 'index', 'uses' => 'ChannelController@index'
     ]);
     Route::post('/', [
@@ -14,6 +14,12 @@ Route::group(['middleware' => [], 'prefix' => 'admin/channel', 'namespace' => 'C
     ]);
     Route::post('{id}/edit', [
         'as' => 'index', 'uses' => 'ChannelController@edit'
+    ]);
+    Route::get('/', [
+        'as' => 'index', 'uses' => 'ChannelController@listView'
+    ]);
+    Route::get('list/json', [
+        'as' => 'index', 'uses' => 'ChannelController@listJson'
     ]);
 
 

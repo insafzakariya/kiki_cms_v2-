@@ -34,7 +34,7 @@ class Channel extends Model{
     ];
     public function getContentPolices()
     {
-        return $this->hasMany('App\Models\ContentPolicy', 'ContentID', 'channelId')->where('ContentType',2);
+        return $this->hasMany('App\Models\ContentPolicy', 'ContentID', 'channelId')->where('ContentType',1)->where('status',1);
     }
 
 
