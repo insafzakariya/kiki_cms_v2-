@@ -24,7 +24,8 @@
                       
                 <form method="POST" class="form-horizontal" id="form"  enctype="multipart/form-data">
                 	{!!Form::token()!!}
-
+                    <input type="hidden" name="image_removed" id="image_removed" value="0">
+                    <input type="hidden" name="vedio_removed" id="vedio_removed" value="0">
                 	<div class="form-group"><label class="col-sm-2 control-label">Channel Name</label>
                     	<div class="col-sm-10"></div>
                 	</div>
@@ -58,13 +59,13 @@
                     <div class="form-group">
                         <label class="col-sm-2 control-label required">Channel Image</label>
                         <div class="col-sm-4">
-                            <input id="image" name="channel_image" type="file"  class="form-control" accept="image/*">
+                            <input id="channel_image" name="channel_image" type="file"  class="form-control" accept="image/*">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label required">Intro Vedio</label>
                         <div class="col-sm-4">
-                            <input id="vedio" name="intro_vedio" type="file"  class="form-control" >
+                            <input id="intro_vedio" name="intro_vedio" type="file"  class="form-control" >
                         </div>
                     </div>
                     <div class="form-group">
@@ -272,6 +273,39 @@
             //$('#content_count').val($('#content_policies').find('option').length);
         }
     });
+
+
+        $("#channel_image").fileinput({
+                theme: "fa",
+                showUpload: false,
+                showRemove: true,
+                multiple: false,
+                initialPreviewShowDelete: false,
+                allowedFileTypes: ['image'],
+                allowedFileExtensions: ["jpg", "gif", "png", "jpeg", "jfif"],
+                overwriteInitial: true,
+                initialPreview: <?php echo json_encode($image); ?>,
+                initialPreviewConfig: <?php echo json_encode($image_config) ?>
+                
+            }).on('filecleared', function() {
+                $("#image_removed").val(1);
+            });
+        $("#intro_vedio").fileinput({
+            theme: "fa",
+                showUpload: false,
+                showRemove: true,
+                multiple: false,
+                initialPreviewShowDelete: false,
+                allowedFileTypes: ['image'],
+                allowedFileExtensions: ["jpg", "gif", "png", "jpeg", "jfif"],
+                overwriteInitial: true,
+                initialPreview: <?php echo json_encode($intro_vedio); ?>,
+                initialPreviewConfig: <?php echo json_encode($intro_vedio_config) ?>
+                
+            }).on('filecleared', function() {
+                $("#vedio_removed").val(1);
+            });
+
 	
 	
 </script>
