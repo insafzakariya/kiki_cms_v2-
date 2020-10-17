@@ -98,11 +98,12 @@
             table=$('#example1').dataTable( {
                 "ajax": '{{url('channel/list/json')}}',
                 "columns": [
-                    { "data": "writerId" },
-                    { "data": "name" },
-                    { "data": "songs_count" },
+                    { "data": "channelId" },
+                    { "data": "channelName" },
+                    { "data": "channelName_si" },
+                    { "data": "channelName_ta" },
+                    { "data": "kids" },
                     { "data": "status" },
-                    { "data": "toggle-status" },
                     { "data": "edit" }
                 ],
                 "columnDefs": [

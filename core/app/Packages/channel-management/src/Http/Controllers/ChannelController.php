@@ -17,6 +17,9 @@ use Log;
 use Response;
 use Session;
 use ChannelManage\Models\Channel;
+use Sentinel;
+use MoodManage\Models\Mood;
+
 class ChannelController extends Controller
 {
     private $channelImagePath ;
@@ -229,7 +232,7 @@ class ChannelController extends Controller
                 
             }
 
-            return redirect('admin/channel/'.$id.'/edit')->with(['success' => true,
+            return redirect('channel/'.$id.'/edit')->with(['success' => true,
             'success.message' => 'Channel Created successfully!',
             'success.title' => 'Well Done!']);
         }else{
@@ -248,7 +251,35 @@ class ChannelController extends Controller
     }
     public function listJson()
     {
-        return "kk";
+        // try {
+            $user = Sentinel::getUser();
+            return Datatables::usingCollection(
+                Channel::select('channelId', 'channelName', 'channelName_si','channelName_ta', 'kids','status')->get()
+            )
+                ->editColumn('status', function ($value){
+                    return $value->status == 1 ? 'Activated' : 'Inactivated';
+                })
+                ->editColumn('kids', function ($value){
+                    if($value->kids == 1){
+                        return '<center><a href="javascript:void(0)" form="noForm" class="blue mood-status-toggle " data-id="'.$value->channelId.'"  data-toggle="tooltip" data-placement="top" title="Deactivate"><i class="fa fa-toggle-on"></i></a></><center>';
+                    }else{
+                        return '<center><a href="javascript:void(0)" form="noForm" class="blue mood-status-toggle " data-id="'.$value->channelId.'"  data-toggle="tooltip" data-placement="top" title="Activate"><i class="fa fa-toggle-off"></i></a></><center>';
+                    }
+                })
+                ->addColumn('edit', function ($value) use ($user){
+                    if($user->hasAnyAccess(['channel.edit', 'admin'])){
+                        return '<center><a href="#" class="blue" onclick="window.location.href=\''.url('channel/'.$value->channelId.'/edit').'\'" data-toggle="tooltip" data-placement="top" title="View/ Edit Channel"><i class="fa fa-pencil"></i></a></center>';
+                    }else{
+                        return '<center><a href="#" class="disabled" data-toggle="tooltip" data-placement="top" title="Edit Disabled"><i class="fa fa-pencil"></i></a></center>';
+                    }
+                        
+                })
+                ->make(true);
+        // }catch (\Throwable $exception){
+        //     $exceptionId = rand(0, 99999999);
+        //     Log::error("Ex " . $exceptionId . " | Error in " . __CLASS__ . "::" . __FUNCTION__ .":" .$exception->getLine()." | " . $exception->getMessage());
+        //     return Datatables::of(collect())->make(true);
+        // }
     }
  
    
