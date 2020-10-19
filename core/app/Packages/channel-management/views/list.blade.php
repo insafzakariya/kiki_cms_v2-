@@ -95,7 +95,7 @@
     <script type="text/javascript">
         let table;
         $(document).ready(function(){
-            table=$('#example1').dataTable( {
+            table=$('#example1').DataTable( {
                 "ajax": '{{url('channel/list/json')}}',
                 "columns": [
                     { "data": "channelId" },
@@ -124,10 +124,12 @@
             });
 
             table.on( 'draw.dt', function () {
-                $('.lyricist-status-toggle').click(function(e){
+                $('.channel-status-toggle').click(function(e){
                     e.preventDefault();
                     id = $(this).data('id');
-                    confirmStatus(id);
+                    state = $(this).data('status');
+                    changeStatus(id, state);
+
 
                 });
 
@@ -137,16 +139,29 @@
 
         });
 
-        function confirmStatusAction(id){
-            let url = '{!! route('admin.lyricists.status.toggle')!!}';
-            $.ajax({
-                method: "POST",
-                url: url.replace('%7Blyricists%7D', id),
-            })
-                .done(function( msg ) {
-                    table.fnReloadAjax();
-                });
+        function changeStatus(id, state) {
+            swal({
+                title: "Are you sure?",
+                text:"Change the status",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, change it!"
 
+            }).then(function (isConfirm) {
+                if (isConfirm) {
+                    $.ajax({
+                        method: "POST",
+                        url: '{{url('channel/changeState')}}',
+                        data:{ 'id' : id, 'state' : state  }
+                    }).done(function( msg ) {
+                        console.log("CHANGED");
+                        table.ajax.reload();
+                    });
+                } else {
+                    swal("Cancelled", "Cancelled the status change", "error");
+                }
+            });
         }
 
 

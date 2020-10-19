@@ -257,13 +257,18 @@ class ChannelController extends Controller
                 Channel::select('channelId', 'channelName', 'channelName_si','channelName_ta', 'kids','status')->get()
             )
                 ->editColumn('status', function ($value){
+                    if($value->status==1){
+                        return '<center><a href="javascript:void(0)" form="noForm" class="blue channel-status-toggle " data-id="'.$value->channelId.'" data-status="0"  data-toggle="tooltip" data-placement="top" title="Deactivate"><i class="fa fa-toggle-on"></i></a></><center>';
+                    }else{
+                        return '<center><a href="javascript:void(0)" form="noForm" class="blue channel-status-toggle " data-id="' . $value->channelId . '" data-status="1"  data-toggle="tooltip" data-placement="top" title="Activate"><i class="fa fa-toggle-off"></i></a></><center>';
+                    }
                     return $value->status == 1 ? 'Activated' : 'Inactivated';
                 })
                 ->editColumn('kids', function ($value){
                     if($value->kids == 1){
-                        return '<center><a href="javascript:void(0)" form="noForm" class="blue mood-status-toggle " data-id="'.$value->channelId.'"  data-toggle="tooltip" data-placement="top" title="Deactivate"><i class="fa fa-toggle-on"></i></a></><center>';
+                        return '<center><i class="fa fa-check"></i><center>';
                     }else{
-                        return '<center><a href="javascript:void(0)" form="noForm" class="blue mood-status-toggle " data-id="'.$value->channelId.'"  data-toggle="tooltip" data-placement="top" title="Activate"><i class="fa fa-toggle-off"></i></a></><center>';
+                        return '<center><i class="fa fa-remove"></i></center>';
                     }
                 })
                 ->addColumn('edit', function ($value) use ($user){
@@ -280,6 +285,21 @@ class ChannelController extends Controller
         //     Log::error("Ex " . $exceptionId . " | Error in " . __CLASS__ . "::" . __FUNCTION__ .":" .$exception->getLine()." | " . $exception->getMessage());
         //     return Datatables::of(collect())->make(true);
         // }
+    }
+  
+    public function changeStatus(Request $request)
+    {
+        $id = $request->id;
+        $state = $request->state;
+
+        $channel = Channel::find($id);
+        if ($channel) {
+            $channel->status = $state;
+            $channel->save();
+            
+            return response()->json(['status' => 'success']);
+        }
+        return response()->json(['status' => 'invalid_id']);
     }
  
    

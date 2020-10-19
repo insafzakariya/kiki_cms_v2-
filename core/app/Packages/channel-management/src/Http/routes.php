@@ -4,22 +4,25 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'channel', 'namespace' => 'C
 {
 
     Route::get('/add', [
-        'as' => 'index', 'uses' => 'ChannelController@index'
+        'as' => 'channel.add', 'uses' => 'ChannelController@index'
     ]);
     Route::post('/', [
-        'as' => 'index', 'uses' => 'ChannelController@store'
+        'as' => 'channel.add', 'uses' => 'ChannelController@store'
     ]);
     Route::get('{id}/edit', [
-        'as' => 'index', 'uses' => 'ChannelController@editView'
+        'as' => 'channel.edit', 'uses' => 'ChannelController@editView'
     ]);
     Route::post('{id}/edit', [
-        'as' => 'index', 'uses' => 'ChannelController@edit'
+        'as' => 'channel.edit', 'uses' => 'ChannelController@edit'
     ]);
     Route::get('/', [
-        'as' => 'index', 'uses' => 'ChannelController@listView'
+        'as' => 'channel.list', 'uses' => 'ChannelController@listView'
     ]);
     Route::get('list/json', [
-        'as' => 'index', 'uses' => 'ChannelController@listJson'
+        'as' => 'channel.list', 'uses' => 'ChannelController@listJson'
+    ]);
+    Route::post('changeState', [
+        'as' => 'channel.edit', 'uses' => 'ChannelController@changeStatus'
     ]);
 
 
