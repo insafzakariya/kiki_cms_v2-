@@ -97,7 +97,7 @@ class ProgrammeController extends Controller
                     ContentPolicy::create([
                         'ContentID'=>$programme->programId,
                         'PolicyID'=>$contentpolicy,
-                        'ContentType'=>3,
+                        'ContentType'=>2,
                         'Status'=>1,
                         'type'=>null
                     ]);
@@ -143,102 +143,76 @@ class ProgrammeController extends Controller
            
         }else{
             return redirect('programme/add')->with([
-                        'error' => true,
-                        'error.message'=> 'Error adding new Programme. Please try again.',
-                        'error.title' => 'Oops !!'
-                    ]);
+                'error' => true,
+                'error.message'=> 'Error adding new Programme. Please try again.',
+                'error.title' => 'Oops !!'
+            ]);
         }
 
-        
-
        
-        // if($channel){
-        //     if($request->hasFile('channel_image')) {
-        //         $aImage = $request->file('channel_image');
-        //         $ext = $aImage->getClientOriginalExtension();
-        //         $fileName = 'channel-image-' . rand(0, 999999) . '-' . date('YmdHis') . '.' . $ext;
-        //         $filePath = $this->imageController->Upload($this->programmeImagePath, $aImage, $fileName, "-");
-        //         $channel->logoImage = $fileName;
-        //     }
-        //     if($request->hasFile('intro_vedio')) {
-        //         $aImage = $request->file('intro_vedio');
-        //         $ext = $aImage->getClientOriginalExtension();
-        //         $fileName = 'channel-intro-vedio-' . rand(0, 999999) . '-' . date('YmdHis') . '.' . $ext;
-        //         $filePath = $this->imageController->UploadVideo($this->channelImagePath, $aImage, $fileName, "-");
-        //         $channel->introVideo = $fileName;
-        //     }
-        //     $channel->save();
-        //      // Insert to Content Policy Table
-        //     if(isset($request->content_policies)){
-        //         foreach ($request->content_policies as $key => $contentpolicy) {
-        //             ContentPolicy::create([
-        //                 'ContentID'=>$channel->channelId,
-        //                 'PolicyID'=>$contentpolicy,
-        //                 'ContentType'=>1,
-        //                 'Status'=>1,
-        //                 'type'=>null
-        //             ]);
-                    
-        //         }
-        //     }
-
-        //     return redirect('admin/channel/add')->with(['success' => true,
-        //     'success.message' => 'Channel Created successfully!',
-        //     'success.title' => 'Well Done!']);
-        // }else{
-        //     return redirect('admin/channel/add')->with([
-        //         'error' => true,
-        //         'error.message'=> 'Error adding new Channel. Please try again.',
-        //         'error.title' => 'Oops !!'
-        //     ]);
-        // }
-       
-       
-
        
     }
-    // Channel Edit View Load
+    // Programme Edit View Load
     public function editView($id)
     {
-        $exsist_channel=Channel::with(['getContentPolices.getPolicy'])->find($id);
-        $image = [];
-        $image_config = [];
-        $intro_vedio = [];
-        $intro_vedio_config = [];
+        $exsist_programme=Programme::with([
+            'getContentPolices.getPolicy',
+            'getProgrammeThumbImages',
+            'getProgrammeCoverImages',
+            'getProgrammeChannels.getChannel'
+            ])
+        ->find($id);
+        $channels=Channel::where('status',1)->get();
+        $thumb_image = [];
+        $thumb_image_config = [];
+        $cover_image = [];
+        $cover_image_config = [];
+       
         
-        if($exsist_channel){
+        if($exsist_programme){
             $advertismentPolicies=Policy::getAdvertisementPolicies();
-            $used_content_policy_ids = array_column(json_decode($exsist_channel->getContentPolices), 'PolicyID');
-            $channelContentPolicies=Policy::getChannelContentPoliciesByFilterIds($used_content_policy_ids);
+            $used_channel_ids=array_column(json_decode($exsist_programme->getProgrammeChannels), 'channel_id');
+            $used_content_policy_ids = array_column(json_decode($exsist_programme->getContentPolices), 'PolicyID');
+            $programmeContentPolicies=Policy::getProgrammeContentPoliciesByFilterIds($used_content_policy_ids);
 
-            if ($exsist_channel->logoImage) {
-                array_push($image, "<img style='height:190px' src='" . Config('constants.bucket.url') . Config('filePaths.front.channel') . $exsist_channel->logoImage . "'>");
-                array_push($image_config, array(
-                    'caption' => '',
-                    'type' => 'image',
-                    'key' => $exsist_channel->channelId,
-                    // 'url' => url('admin/channel/image-delete'),
-                ));
+            if ($exsist_programme->getProgrammeThumbImages) {
+                foreach ($exsist_programme->getProgrammeThumbImages as $key => $thumb_image_value) {
+                    array_push($thumb_image, "<img style='height:190px' src='" . Config('constants.bucket.url') . Config('filePaths.front.programme') . $thumb_image_value->file_name . "'>");
+                    array_push($thumb_image_config, array(
+                        'caption' => '',
+                        'type' => 'image',
+                        'key' => $thumb_image_value->id,
+                        // 'url' => url('admin/channel/image-delete'),
+                    ));
+                }
+                
             }
-            if ($exsist_channel->introVideo) {
-                array_push($intro_vedio, "<img style='height:190px' src='" . Config('constants.bucket.url') . Config('filePaths.front.channel') . $exsist_channel->introVideo . "'>");
-                array_push($intro_vedio_config, array(
-                    'caption' => '',
-                    'type' => 'image',
-                    'key' => $exsist_channel->channelId,
-                    // 'url' => url('admin/channel/intro-vedio-delete'),
-                ));
+            if ($exsist_programme->getProgrammeCoverImages) {
+                foreach ($exsist_programme->getProgrammeCoverImages as $key => $cover_image_value) {
+                    array_push($cover_image, "<img style='height:190px' src='" . Config('constants.bucket.url') . Config('filePaths.front.programme') . $cover_image_value->file_name . "'>");
+                    array_push($cover_image_config, array(
+                        'caption' => '',
+                        'type' => 'image',
+                        'key' => $cover_image_value->id,
+                        // 'url' => url('admin/channel/image-delete'),
+                    ));
+                }
+                
             }
+          
+            
          
-            return view('ChannelManage::edit')
+            return view('ProgrammeManage::edit')
             ->with(
-                ['channelContentPolicies'=>$channelContentPolicies,
+                ['programmeContentPolicies'=>$programmeContentPolicies,
                 'advertismentPolicies'=>$advertismentPolicies,
-                'exsist_channel'=>$exsist_channel,
-                'image'=>$image,
-                'image_config'=>$image_config,
-                'intro_vedio'=>$intro_vedio,
-                'intro_vedio_config'=>$intro_vedio_config
+                'exsist_programme'=>$exsist_programme,
+                'thumb_image'=>$thumb_image,
+                'thumb_image_config'=>$thumb_image_config,
+                'cover_image'=>$cover_image,
+                'cover_image_config'=>$cover_image_config,
+                'channels'=>$channels,
+                'used_channel_ids'=>$used_channel_ids
                 
                 ]
             );

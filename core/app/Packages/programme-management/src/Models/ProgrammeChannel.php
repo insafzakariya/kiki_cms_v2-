@@ -22,7 +22,10 @@ class ProgrammeChannel extends Model{
         
        
     ];
- 
+    public function getChannel()
+    {
+        return $this->belongsTo('ChannelManage\Models\Channel', 'channel_id', 'channelId');
+    }
 
 
     

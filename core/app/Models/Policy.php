@@ -29,7 +29,7 @@ class Policy extends Model{
             ->get();
     }
     static function  getProgrammeContentPolicies(){
-        return SELF::where('policyType', 3)
+        return SELF::where('policyType',2)
             ->where('validFrom', '<=', date("Y-m-d"))
             ->where('validTo', '>=', date("Y-m-d"))
             ->whereStatus(1)
@@ -37,6 +37,14 @@ class Policy extends Model{
     }
     static function  getChannelContentPoliciesByFilterIds($used_content_policy_ids){
         return SELF::where('policyType', 1)
+            ->where('validFrom', '<=', date("Y-m-d"))
+            ->where('validTo', '>=', date("Y-m-d"))
+            ->whereStatus(1)
+            ->whereNotIn('PolicyID', $used_content_policy_ids)
+            ->get();
+    }
+    static function  getProgrammeContentPoliciesByFilterIds($used_content_policy_ids){
+        return SELF::where('policyType',2)
             ->where('validFrom', '<=', date("Y-m-d"))
             ->where('validTo', '>=', date("Y-m-d"))
             ->whereStatus(1)

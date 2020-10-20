@@ -1,17 +1,17 @@
-@extends('layouts.back.master') @section('current_title','Programme/Edit')
+@extends('layouts.back.master') @section('current_title','Artist/ADD')
 @section('css')
 <link rel="stylesheet" href="{{asset('assets/back/vendor/select2-3.5.2/select2.css')}}" />
 <link rel="stylesheet" href="{{asset('assets/back/vendor/select2-bootstrap/select2-bootstrap.css')}}" />
 @stop
 @section('page_header')
  <div class="col-lg-9">
-    <h2>Programme Management</h2>
+    <h2>Channel Management</h2>
     <ol class="breadcrumb">
         <li>
             <a href="{{url('/')}}">Home</a>
         </li>
         <li class="active">
-            <strong>Programme/Edit</strong>
+            <strong>Channel/Edit</strong>
         </li>
     </ol>
 </div>                  
@@ -24,92 +24,68 @@
                       
                 <form method="POST" class="form-horizontal" id="form"  enctype="multipart/form-data">
                 	{!!Form::token()!!}
-
-                	<div class="form-group"><label class="col-sm-2 control-label">Programme Name</label>
+                    <input type="hidden" name="image_removed" id="image_removed" value="0">
+                    <input type="hidden" name="vedio_removed" id="vedio_removed" value="0">
+                	<div class="form-group"><label class="col-sm-2 control-label">Channel Name</label>
                     	<div class="col-sm-10"></div>
                 	</div>
                     <div class="form-group"><label class="col-sm-2 control-label">English</label>
-                    	<div class="col-sm-5"><input type="text" class="form-control" name="programme_name_en" value="{{$exsist_programme->programName}}"></div>
+                    	<div class="col-sm-5"><input type="text" class="form-control" name="channel_name_en" value="{{$exsist_channel->channelName}}"></div>
                 	</div>
                     <div class="form-group"><label class="col-sm-2 control-label">Sinhala</label>
-                    	<div class="col-sm-5"><input type="text" class="form-control" name="programme_name_si" value="{{$exsist_programme->programmeName_si}}"></div>
+                    	<div class="col-sm-5"><input type="text" class="form-control" name="channel_name_si" value="{{$exsist_channel->channelName_si}}"></div>
                 	</div>
                     <div class="form-group"><label class="col-sm-2 control-label">Tamil</label>
-                    	<div class="col-sm-5"><input type="text" class="form-control" name="programme_name_ta" value="{{$exsist_programme->programmeName_ta}}"></div>
+                    	<div class="col-sm-5"><input type="text" class="form-control" name="channel_name_ta" value="{{$exsist_channel->channelName_ta}}"></div>
                 	</div>
-                    <div class="form-group"><label class="col-sm-2 control-label">Channels </label>
-                    	<div class="col-sm-5">
-                        <select  name="channels[]" class="form-control" >
-                        
-                        @foreach ($channels as $channel)
-                       
-                           
-                            <option value="{{$channel->channelId}}" >{{$channel->channelName}}</option>
-                            
-                        
-                        @endforeach
-                      
-                            </select>
-                        </div>
-                	</div>
-                    <div class="form-group"><label class="col-sm-2 control-label">Programme Type </label>
-                    	<div class="col-sm-5">
-                        <select  name="programme_type" class="form-control" >
-                            <option value="live">Live</option>
-                            <option value="vod">VOD</option>
-                            <option value="reality">Reality</option>
-                            </select>
-                        </div>
-                	</div>
-                    <div class="form-group"><label class="col-sm-2 control-label">Start Date</label>
-                    	<div class="col-sm-5">
-                        <input type="date" id="start_date" name="start_date" class="">
-                        </div>
-                	</div>
-                    <div class="form-group"><label class="col-sm-2 control-label">End Date</label>
-                    	<div class="col-sm-5">
-                        <input type="date" id="end_date" name="end_date" vale="31-12-2099" class="">
-                        </div>
-                	</div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label required">Thumb Image</label>
-                        <div class="col-sm-4">
-                            <input id="thumb_image" name="thumb_image[]" type="file" multiple class="form-control" accept="image/*">
-                        </div>
-                    </div>
                     <div class="form-group"><label class="col-sm-2 control-label">Description</label>
                 	</div>
                     <div class="form-group"><label class="col-sm-2 control-label">English</label>
-                    	<div class="col-sm-5"><input type="text" class="form-control" name="programme_description_en"></div>
+                    	<div class="col-sm-5">
+                        <textarea class="form-control" name="channel_description_en">{!! $exsist_channel->channelDesc !!}</textarea>
+                        </div>
                 	</div>
+
                     <div class="form-group"><label class="col-sm-2 control-label">Sinhala</label>
-                    	<div class="col-sm-5"><input type="text" class="form-control" name="programme_description_si"></div>
-                	</div>
+                        <div class="col-sm-5">
+                            <textarea class="form-control" name="channel_description_si">{!! $exsist_channel->channelDesc_si !!}</textarea>    
+                        </div>
+                    </div>
                     <div class="form-group"><label class="col-sm-2 control-label">Tamil</label>
-                    	<div class="col-sm-5"><input type="text" class="form-control" name="programme_description_ta"></div>
+                        <div class="col-sm-5">
+                            <textarea class="form-control" name="channel_description_ta">{!! $exsist_channel->channelDesc_ta !!}</textarea>  
+                        </div>
                 	</div>
                     <div class="form-group">
-                        <label class="col-sm-2 control-label required">Cover Image</label>
+                        <label class="col-sm-2 control-label required">Channel Image</label>
                         <div class="col-sm-4">
-                            <input id="cover_image" name="cover_image[]" type="file" multiple class="form-control" accept="image/*">
+                            <input id="channel_image" name="channel_image" type="file"  class="form-control" accept="image/*">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label required">Intro Vedio</label>
+                        <div class="col-sm-4">
+                            <input id="intro_vedio" name="intro_vedio" type="file"  class="form-control" >
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label required"></label>
                         <div class="col-sm-4 form-check">
-                        <input type="checkbox" class="form-check-input" name="kids_channel" id="exampleCheck1">
+                        <input type="checkbox" class="form-check-input" name="kids_channel" 
+                        <?php if( $exsist_channel->kids){ ?> checked <?php } ?> id="exampleCheck1">
                         <label class="form-check-label"  for="exampleCheck1">Kids Channel</label>
                         </div>
                     </div>
-                 
+                    
+                    
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">Programme Policies</label>
+                        <label class="col-sm-2 control-label">Content Policies</label>
                         <div class="col-sm-8" style="display: inline">
                             <div class="col-md-5 no-padding">
-                                <select class="form-control policy" id="policySelector" name="content_policies_lft" style="width: 90%;" multiple="multiple">
+                                <select class="form-control policy" id="policySelector" name="advertisementPolicy" style="width: 90%;" multiple="multiple">
                                   
-                                @foreach ($programmeContentPolicies as $programmeContentPolicy)
-                                <option value="{{$programmeContentPolicy->PolicyID}}">{{$programmeContentPolicy->Name}}</option>
+                                @foreach ($channelContentPolicies as $channelContentPolicy)
+                                <option value="{{$channelContentPolicy->PolicyID}}" selected>{{$channelContentPolicy->Name}}</option>
                                 @endforeach
                                   
                                 </select>
@@ -118,7 +94,9 @@
                             <div class="col-md-5">
                                 <select class="form-control policy" id="content_policies" name="content_policies[]"
                                         style="width:90%;" multiple >
-
+                                        @foreach ($exsist_channel->getContentPolices as $policy)
+                                        <option value="{{$policy->PolicyID}}" selected>{{$policy->getPolicy->Name}}</option>
+                                        @endforeach
                                 </select>
                                 <label id="content_error" class="text-danger" for="content_policies"></label>
 
@@ -131,33 +109,27 @@
                     <div class="form-group"><label class="col-sm-2 control-label">Advertisment Policy</label>
                     	<div class="col-sm-5">
                         <select  name="advertisment_policy" class="form-control" >
-                        @foreach ($advertismentPolicies as $advertismentPolicy)
-                        <option value="{{$advertismentPolicy->PolicyID}}">{{$advertismentPolicy->Name}}</option>
-                        @endforeach
+                            @foreach ($advertismentPolicies as $advertismentPolicy)
+                            <?php if($advertismentPolicy->PolicyID == $exsist_channel->advertisementPolicy){?>
+                                <option value="{{$advertismentPolicy->PolicyID}}" selected>{{$advertismentPolicy->Name}}</option>
+                            <?php }else{?>
+                                <option value="{{$advertismentPolicy->PolicyID}}">{{$advertismentPolicy->Name}}</option>
+                            <?php }?>
+                             
+                        
+                            @endforeach
                       
                             </select>
-                        </div>
-                	</div>
-                    <div class="form-group"><label class="col-sm-2 control-label">Likes </label>
-                    	<div class="col-sm-5">
-                        <select  name="likes" class="form-control" >
-                            <option value="1">enable</option>
-                            <option value="0">disable</option>
-                            </select>
-                        </div>
-                	</div>
-                    <div class="form-group"><label class="col-sm-2 control-label">Subtitles </label>
-                    	<div class="col-sm-5">
-                            <input type="radio" checked id="yes" name="subtitle" value="1">
-                            <label for="yes">Yes</label><br>
-                            <input type="radio" id="no" name="subtitle" value="0">
-                            <label for="no">No</label><br>
-                      
                         </div>
                 	</div>
                     <div class="form-group"><label class="col-sm-2 control-label">Search Tags</label>
                         <div class="col-sm-8">
-                            <select class="select-simple-tag form-control" name="tags[]" multiple="multiple">
+                            <select class="select-simple-tag form-control" name="tags[]" multiple="multiple" >
+                           
+                            @foreach (json_decode($exsist_channel->search_tag) as $tag)
+                            <option value="{{$tag}}" selected="selected">{{$tag}}</option>
+                            @endforeach
+                           
                             </select>
                         </div>
                     </div>
@@ -181,31 +153,21 @@
 	$(document).ready(function(){
         $('.select-simple-tag').select2({
             tags: true,
-            multiple: true,
-            tokenSeparators: [','],
-        }).on('select2:open', function (e) {
-            $('.select2-container--open .select2-dropdown--below').css('display', 'none');
+            // data: ["Clare","Cork","South Dublin"],
+            tokenSeparators: [','], 
+            placeholder: "Add your tags here",
+            /* the next 2 lines make sure the user can click away after typing and not lose the new tag */
+            selectOnClose: true, 
+            closeOnSelect: false
         });
 
         $('select[name="advertisment_policy"]').select2({
             // multiple: true,
         });
-        $('select[name="channels[]"]').select2({
-            // placeholder: "Choose Channels ",
-            multiple: true,
-            
-        }).select2('val', <?php echo json_encode($used_channel_ids); ?>);
-
-        $('select[name="programme_type"]').select2({
-            // multiple: true,
-        });
-        $('select[name="likes"]').select2({
-            // multiple: true,
-        });
 
 		$("#form").validate({
             rules: {
-                programme_name_en: {
+                channel_name_en: {
                     required:  {
                         depends:function(){
                             $(this).val($.trim($(this).val()));
@@ -214,7 +176,7 @@
                     },
                   
                 },
-                programme_name_si: {
+                channel_name_si: {
                     required:  {
                         depends:function(){
                             $(this).val($.trim($(this).val()));
@@ -223,7 +185,7 @@
                     },
                   
                 },
-                programme_name_ta: {
+                channel_name_ta: {
                     required:  {
                         depends:function(){
                             $(this).val($.trim($(this).val()));
@@ -232,7 +194,7 @@
                     },
                   
                 },
-                programme_description_en: {
+                channel_description_en: {
                     required:  {
                         depends:function(){
                             $(this).val($.trim($(this).val()));
@@ -241,7 +203,7 @@
                     },
                   
                 },
-                programme_description_si: {
+                channel_description_si: {
                     required:  {
                         depends:function(){
                             $(this).val($.trim($(this).val()));
@@ -250,7 +212,7 @@
                     },
                   
                 },
-                programme_description_ta: {
+                channel_description_ta: {
                     required:  {
                         depends:function(){
                             $(this).val($.trim($(this).val()));
@@ -258,28 +220,15 @@
                         }
                     },
                   
-                },
-                // tags: {
-                //     required: true
-
-                // }
+                }
                 // ,
-                // 'thumb_image[]': {
+                // image: {
                 //     required: true,
                 //     accept: "image/*",
                 //     dimension: [175,175],
                 //     filesize_max_kb: {{ env('Upload_Image_Size') }}
 
-                // }
-                // ,
-                // 'cover_image[]': {
-                //     required: true,
-                //     accept: "image/*",
-                //     dimension: [175,175],
-                //     filesize_max_kb: {{ env('Upload_Image_Size') }}
-
-                // }
-                // ,
+                // },
                 // tags: {
                 //     required: true
 
@@ -325,27 +274,38 @@
         }
     });
 
-    $("#thumb_image").fileinput({
-        uploadUrl: "", // server upload action
-        dropZoneEnabled: true,
-        uploadAsync: false,
-        minFileCount: 3,
-        showRemove: true,
-        showUpload:false,
-        allowedFileExtensions: ["jpg", "gif", "png", "jpeg", "jfif"]
-        
-    });;
-	
-    $("#cover_image").fileinput({
-        uploadUrl: "", // server upload action
-        dropZoneEnabled: true,
-        uploadAsync: false,
-        minFileCount: 2,
-        showRemove: true,
-        showUpload:false,
-        allowedFileExtensions: ["jpg", "gif", "png", "jpeg", "jfif"]
-        
-    });;
+
+        $("#channel_image").fileinput({
+                theme: "fa",
+                showUpload: false,
+                showRemove: true,
+                multiple: false,
+                initialPreviewShowDelete: false,
+                allowedFileTypes: ['image'],
+                allowedFileExtensions: ["jpg", "gif", "png", "jpeg", "jfif"],
+                overwriteInitial: true,
+                initialPreview: <?php echo json_encode($image); ?>,
+                initialPreviewConfig: <?php echo json_encode($image_config) ?>
+                
+            }).on('filecleared', function() {
+                $("#image_removed").val(1);
+            });
+        $("#intro_vedio").fileinput({
+            theme: "fa",
+                showUpload: false,
+                showRemove: true,
+                multiple: false,
+                initialPreviewShowDelete: false,
+                // allowedFileTypes: ['image'],
+                // allowedFileExtensions: ["jpg", "gif", "png", "jpeg", "jfif"],
+                overwriteInitial: true,
+                initialPreview: <?php echo json_encode($intro_vedio); ?>,
+                initialPreviewConfig: <?php echo json_encode($intro_vedio_config) ?>
+                
+            }).on('filecleared', function() {
+                $("#vedio_removed").val(1);
+            });
+
 	
 	
 </script>

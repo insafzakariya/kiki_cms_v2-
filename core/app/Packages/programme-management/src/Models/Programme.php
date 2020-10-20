@@ -34,7 +34,19 @@ class Programme extends Model{
     ];
     public function getContentPolices()
     {
-        return $this->hasMany('App\Models\ContentPolicy', 'ContentID', 'channelId')->where('ContentType',1)->where('status',1);
+        return $this->hasMany('App\Models\ContentPolicy', 'ContentID', 'programId')->where('ContentType',2)->where('status',1);
+    }
+    public function getProgrammeThumbImages()
+    {
+        return $this->hasMany('App\Models\MasterImage', 'parent_id', 'programId')->where('parent_type','programme')->where('image_type','thumb_image')->where('status',1);   
+    }
+    public function getProgrammeCoverImages()
+    {
+        return $this->hasMany('App\Models\MasterImage', 'parent_id', 'programId')->where('parent_type','programme')->where('image_type','cover_image')->where('status',1);   
+    }
+    public function getProgrammeChannels()
+    {
+        return $this->hasMany('ProgrammeManage\Models\ProgrammeChannel', 'programme_id', 'programId')->where('status',1);   
     }
 
 
