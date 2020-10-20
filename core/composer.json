@@ -59,7 +59,8 @@
       "SongManage\\": "app/Packages/song-management/src/",
       "PlaylistManage\\": "app/Packages/playlist-management/src/",
       "NotificationManage\\": "app/Packages/notification-management/src/",
-      "ChannelManage\\": "app/Packages/channel-management/src/"
+      "ChannelManage\\": "app/Packages/channel-management/src/",
+      "ProgrammeManage\\": "app/Packages/programme-management/src/"
     }
   },
   "autoload-dev": {

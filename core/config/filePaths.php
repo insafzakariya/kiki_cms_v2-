@@ -8,6 +8,7 @@ return [
     'playlist-image' => 'playlist',
     'lyricist-images' => 'lyricist',
     'channel-images' => 'channel',
+    'programme-images' => 'programme',
     'song-composer-images' => 'composer',
     'project-images' => 'projects',
     'product-images' => 'product',
@@ -28,5 +29,6 @@ return [
         'song-audio' => env('IMAGE_UPLOAD_PATH', '') . '/kiki_music/mp3_files/',
         'song-smil' => env('IMAGE_UPLOAD_PATH', '') . '/smil/',
         'channel' => env('IMAGE_UPLOAD_PATH', '') . '/channel/',
+        'programme' => env('IMAGE_UPLOAD_PATH', '') . '/programme/',
     ],
 ];

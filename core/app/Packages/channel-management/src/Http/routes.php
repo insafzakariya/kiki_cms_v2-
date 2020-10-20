@@ -6,7 +6,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'channel', 'namespace' => 'C
     Route::get('/add', [
         'as' => 'channel.add', 'uses' => 'ChannelController@index'
     ]);
-    Route::post('/', [
+    Route::post('/add', [
         'as' => 'channel.add', 'uses' => 'ChannelController@store'
     ]);
     Route::get('{id}/edit', [
