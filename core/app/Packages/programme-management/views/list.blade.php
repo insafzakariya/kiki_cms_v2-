@@ -1,4 +1,4 @@
-@extends('layouts.back.master') @section('current_title','Lyricist/VIEW')
+@extends('layouts.back.master') @section('current_title','Programme/view')
 @section('css')
     <style type="text/css">
         #floating-button{
@@ -76,9 +76,9 @@
                         <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Channel Name en</th>
-                            <th>Channel Name si</th>
-                            <th>Channel Name ta</th>
+                            <th>Programme Name en</th>
+                            <th>Programme Name si</th>
+                            <th>Programme Name ta</th>
                             <th>Kids</th>
                             <th width="1%">Active/ Deactivate</th>
                             <th width="1%">Edit</th>
@@ -96,12 +96,12 @@
         let table;
         $(document).ready(function(){
             table=$('#example1').DataTable( {
-                "ajax": '{{url('channel/list/json')}}',
+                "ajax": '{{url('programme/list/json')}}',
                 "columns": [
-                    { "data": "channelId" },
-                    { "data": "channelName" },
-                    { "data": "channelName_si" },
-                    { "data": "channelName_ta" },
+                    { "data": "programId" },
+                    { "data": "programName" },
+                    { "data": "programmeName_si" },
+                    { "data": "programmeName_ta" },
                     { "data": "kids" },
                     { "data": "status" },
                     { "data": "edit" }
@@ -124,7 +124,7 @@
             });
 
             table.on( 'draw.dt', function () {
-                $('.channel-status-toggle').click(function(e){
+                $('.programme-status-toggle').click(function(e){
                     e.preventDefault();
                     id = $(this).data('id');
                     state = $(this).data('status');
@@ -152,7 +152,7 @@
                 if (isConfirm) {
                     $.ajax({
                         method: "POST",
-                        url: '{{url('channel/changeState')}}',
+                        url: '{{url('programme/changeState')}}',
                         data:{ 'id' : id, 'state' : state  }
                     }).done(function( msg ) {
                         console.log("CHANGED");

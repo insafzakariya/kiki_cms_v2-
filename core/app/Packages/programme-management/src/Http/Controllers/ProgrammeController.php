@@ -226,58 +226,117 @@ class ProgrammeController extends Controller
 
     public function edit(Request $request,$id )
     {
-        $exsist_channel=Channel::with(['getContentPolices.getPolicy'])->find($id);
+
+        //   return $request->all();
+        $exsist_programme=Programme::with(['getContentPolices.getPolicy'])->find($id);
         
         $kids=0;
-        if($request->kids_channel=="on"){
+        if($request->kids_programme=="on"){
             $kids=1;
         }
+        
 
-        $exsist_channel->channelName=$request->channel_name_en;
-        $exsist_channel->channelDesc=$request->channel_description_en;
-        $exsist_channel->advertisementPolicy=$request->advertisment_policy;
-        $exsist_channel->kids=$kids;
-        $exsist_channel->channelName_si=$request->channel_name_si;
-        $exsist_channel->channelName_ta=$request->channel_name_ta;
-        $exsist_channel->channelDesc_si=$request->channel_description_si;
-        $exsist_channel->channelDesc_ta=$request->channel_description_ta;
-        $exsist_channel->search_tag=json_encode($request->tags);
+        $exsist_programme->programName=$request->programme_name_en;
+        $exsist_programme->description=$request->programme_description_en;
+        $exsist_programme->advertisementPolicy=$request->advertisment_policy;
+        $exsist_programme->kids=$kids;
+        $exsist_programme->programmeName_si=$request->programme_name_si;
+        $exsist_programme->programmeName_ta=$request->programme_name_ta;
+        $exsist_programme->programmeDesc_si=$request->programme_description_si;
+        $exsist_programme->programmeDesc_ta=$request->programme_description_ta;
+        $exsist_programme->start_date=$request->start_date;
+        $exsist_programme->end_date=$request->end_date;
+        $exsist_programme->subtitles=$request->subtitle;
+        $exsist_programme->likes=$request->likes;
+        $exsist_programme->programType=$request->programme_type;
+        $exsist_programme->search_tag=json_encode($request->tags);
 
-        $exsist_channel->save();
+        $exsist_programme->save();
 
-        if($exsist_channel){
-            if($request->hasFile('channel_image')) {
-                $aImage = $request->file('channel_image');
-                $ext = $aImage->getClientOriginalExtension();
-                $fileName = 'channel-image-' . rand(0, 999999) . '-' . date('YmdHis') . '.' . $ext;
-                $filePath = $this->imageController->Upload($this->channelImagePath, $aImage, $fileName, "-");
-                $exsist_channel->logoImage = $fileName;
-            }else if($request->has('image_removed') && $request->get('image_removed') == 1){
-                $exsist_channel->logoImage =  null;
+        if($exsist_programme){
+            if(isset($request->channels)){
+                foreach ($request->channels as $key => $channel) {
+                    ProgrammeChannel::where('status', 1)
+                    ->where('programme_id', $exsist_programme->programId)
+                    ->where('channel_id', $channel)
+                    ->update(['status' => 0]);
+
+                    ProgrammeChannel::create([
+                        'programme_id'=>$exsist_programme->programId,
+                        'channel_id'=>$channel,
+                        'status'=>1
+                    ]);
+                }
+            }
+            if($request->hasFile('cover_image')) {
+                $cover_images=$request->file('cover_image');
+
+                MasterImage::where('status', 1)
+                    ->where('parent_type', "programme")
+                    ->where('parent_id', $exsist_programme->programId)
+                    ->where('image_type', "cover_image")
+                    ->update(['status' => 0]);
+
+                foreach ($cover_images as $key => $aImage) {
+                    $ext = $aImage->getClientOriginalExtension();
+                    $fileName = 'programme-cover-image-' . rand(0, 999999) . '-' . date('YmdHis') . '.' . $ext;
+                    $filePath = $this->imageController->Upload($this->programmeImagePath, $aImage, $fileName, "-");
+
+                    MasterImage::create([
+                        'parent_type'=>'programme',
+                        'parent_id'=>$exsist_programme->programId,
+                        'image_type'=>'cover_image',
+                        'file_name'=>$fileName
+                    ]);
+                }
+            }else if($request->has('cover_image_removed') && $request->get('cover_image_removed') == 1){
+                MasterImage::where('status', 1)
+                ->where('parent_type', "programme")
+                ->where('parent_id', $exsist_programme->programId)
+                ->where('image_type', "cover_image")
+                ->update(['status' => 0]);
             }
 
-            if($request->hasFile('intro_vedio')) {
-                $aImage = $request->file('intro_vedio');
-                $ext = $aImage->getClientOriginalExtension();
-                $fileName = 'channel-intro-vedio-' . rand(0, 999999) . '-' . date('YmdHis') . '.' . $ext;
-                $filePath = $this->imageController->UploadVideo($this->channelImagePath, $aImage, $fileName, "-");
-                $exsist_channel->introVideo = $fileName;
-            }else if($request->has('vedio_removed') && $request->get('vedio_removed') == 1){
-                $exsist_channel->introVideo =  null;
+            if($request->hasFile('thumb_image')) {
+                $cover_images=$request->file('thumb_image');
+                MasterImage::where('status', 1)
+                    ->where('parent_type', "programme")
+                    ->where('parent_id', $exsist_programme->programId)
+                    ->where('image_type', "thumb_image")
+                    ->update(['status' => 0]);
+
+                foreach ($cover_images as $key => $aImage) {
+                    $ext = $aImage->getClientOriginalExtension();
+                    $fileName = 'programme-thumb-image-' . rand(0, 999999) . '-' . date('YmdHis') . '.' . $ext;
+                    $filePath = $this->imageController->Upload($this->programmeImagePath, $aImage, $fileName, "-");
+                    
+                    MasterImage::create([
+                        'parent_type'=>'programme',
+                        'parent_id'=>$exsist_programme->programId,
+                        'image_type'=>'thumb_image',
+                        'file_name'=>$fileName
+                    ]);
+                }
+            }else if($request->has('thumb_image_removed') && $request->get('thumb_image_removed') == 1){
+                MasterImage::where('status', 1)
+                ->where('parent_type', "programme")
+                ->where('parent_id', $exsist_programme->programId)
+                ->where('image_type', "thumb_image")
+                ->update(['status' => 0]);
             }
-            $exsist_channel->save();
+            
             ContentPolicy::where('status', 1)
-                ->where('ContentID', $exsist_channel->channelId)
-                ->where('ContentType', 1)
+                ->where('ContentID', $exsist_programme->programId)
+                ->where('ContentType', 2)
                 ->update(['status' => 0]);
              // Insert to Content Policy Table
             // return $request->content_policies;
             if(isset($request->content_policies)){
                 foreach ($request->content_policies as $key => $contentpolicy) {
                      ContentPolicy::create([
-                        'ContentID'=>$exsist_channel->channelId,
+                        'ContentID'=>$exsist_programme->programId,
                         'PolicyID'=>$contentpolicy,
-                        'ContentType'=>1,
+                        'ContentType'=>2,
                         'Status'=>1,
                         'type'=>null
                     ]);
@@ -286,11 +345,11 @@ class ProgrammeController extends Controller
                 
             }
 
-            return redirect('channel/'.$id.'/edit')->with(['success' => true,
+            return redirect('programme/'.$id.'/edit')->with(['success' => true,
             'success.message' => 'Channel Created successfully!',
             'success.title' => 'Well Done!']);
         }else{
-            return redirect('admin/channel/'.$id.'/edit')->with([
+            return redirect('programme/'.$id.'/edit')->with([
                 'error' => true,
                 'error.message'=> 'Error adding new Channel. Please try again.',
                 'error.title' => 'Oops !!'
@@ -301,20 +360,20 @@ class ProgrammeController extends Controller
     }
     public function listView()
     {
-        return view('ChannelManage::list');
+        return view('ProgrammeManage::list');
     }
     public function listJson()
     {
         // try {
             $user = Sentinel::getUser();
             return Datatables::usingCollection(
-                Channel::select('channelId', 'channelName', 'channelName_si','channelName_ta', 'kids','status')->get()
+                Programme::select('programId', 'programName', 'programmeName_si','programmeName_ta', 'kids','status')->get()
             )
                 ->editColumn('status', function ($value){
                     if($value->status==1){
-                        return '<center><a href="javascript:void(0)" form="noForm" class="blue channel-status-toggle " data-id="'.$value->channelId.'" data-status="0"  data-toggle="tooltip" data-placement="top" title="Deactivate"><i class="fa fa-toggle-on"></i></a></><center>';
+                        return '<center><a href="javascript:void(0)" form="noForm" class="blue programme-status-toggle " data-id="'.$value->programId.'" data-status="0"  data-toggle="tooltip" data-placement="top" title="Deactivate"><i class="fa fa-toggle-on"></i></a></><center>';
                     }else{
-                        return '<center><a href="javascript:void(0)" form="noForm" class="blue channel-status-toggle " data-id="' . $value->channelId . '" data-status="1"  data-toggle="tooltip" data-placement="top" title="Activate"><i class="fa fa-toggle-off"></i></a></><center>';
+                        return '<center><a href="javascript:void(0)" form="noForm" class="blue programme-status-toggle " data-id="' . $value->programId . '" data-status="1"  data-toggle="tooltip" data-placement="top" title="Activate"><i class="fa fa-toggle-off"></i></a></><center>';
                     }
                     return $value->status == 1 ? 'Activated' : 'Inactivated';
                 })
@@ -326,8 +385,8 @@ class ProgrammeController extends Controller
                     }
                 })
                 ->addColumn('edit', function ($value) use ($user){
-                    if($user->hasAnyAccess(['channel.edit', 'admin'])){
-                        return '<center><a href="#" class="blue" onclick="window.location.href=\''.url('channel/'.$value->channelId.'/edit').'\'" data-toggle="tooltip" data-placement="top" title="View/ Edit Channel"><i class="fa fa-pencil"></i></a></center>';
+                    if($user->hasAnyAccess(['programme.edit', 'admin'])){
+                        return '<center><a href="#" class="blue" onclick="window.location.href=\''.url('programme/'.$value->programId.'/edit').'\'" data-toggle="tooltip" data-placement="top" title="View/ Edit Channel"><i class="fa fa-pencil"></i></a></center>';
                     }else{
                         return '<center><a href="#" class="disabled" data-toggle="tooltip" data-placement="top" title="Edit Disabled"><i class="fa fa-pencil"></i></a></center>';
                     }
@@ -346,10 +405,10 @@ class ProgrammeController extends Controller
         $id = $request->id;
         $state = $request->state;
 
-        $channel = Channel::find($id);
-        if ($channel) {
-            $channel->status = $state;
-            $channel->save();
+        $programme = Programme::find($id);
+        if ($programme) {
+            $programme->status = $state;
+            $programme->save();
             
             return response()->json(['status' => 'success']);
         }

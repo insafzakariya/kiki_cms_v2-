@@ -24,7 +24,8 @@
                       
                 <form method="POST" class="form-horizontal" id="form"  enctype="multipart/form-data">
                 	{!!Form::token()!!}
-
+                    <input type="hidden" name="thumb_image_removed" id="thumb_image_removed" value="0">
+                    <input type="hidden" name="cover_image_removed" id="cover_image_removed" value="0">
                 	<div class="form-group"><label class="col-sm-2 control-label">Programme Name</label>
                     	<div class="col-sm-10"></div>
                 	</div>
@@ -117,7 +118,7 @@
                     <div class="form-group">
                         <label class="col-sm-2 control-label required"></label>
                         <div class="col-sm-4 form-check">
-                        <input type="checkbox" class="form-check-input" name="kids_channel" 
+                        <input type="checkbox" class="form-check-input" name="kids_programme" 
                         <?php if( $exsist_programme->kids){ ?> checked <?php } ?> id="exampleCheck1">
                         <label class="form-check-label"  for="exampleCheck1">Kids Channel</label>
                         </div>
@@ -170,7 +171,9 @@
                         <select  name="likes" class="form-control" >
                             @if($exsist_programme->likes)
                             <option value="1" selected>enable</option>
+                            <option value="0" >disable</option>
                             @else
+                            <option value="1" >enable</option>
                             <option value="0" selected>disable</option>
                             @endif
                            
@@ -199,9 +202,11 @@
                     <div class="form-group"><label class="col-sm-2 control-label">Search Tags</label>
                         <div class="col-sm-8">
                             <select class="select-simple-tag form-control" name="tags[]" multiple="multiple">
+                            @if(json_decode($exsist_programme->search_tag) !== null)
                             @foreach (json_decode($exsist_programme->search_tag) as $tag)
                             <option value="{{$tag}}" selected="selected">{{$tag}}</option>
                             @endforeach
+                            @endif
                             </select>
                         </div>
                     </div>
@@ -311,16 +316,16 @@
                 // 'thumb_image[]': {
                 //     required: true,
                 //     accept: "image/*",
-                //     dimension: [175,175],
-                //     filesize_max_kb: {{ env('Upload_Image_Size') }}
+                //     // dimension: [175,175],
+                //     // filesize_max_kb: {{ env('Upload_Image_Size') }}
 
                 // }
                 // ,
                 // 'cover_image[]': {
                 //     required: true,
                 //     accept: "image/*",
-                //     dimension: [175,175],
-                //     filesize_max_kb: {{ env('Upload_Image_Size') }}
+                //     // dimension: [175,175],
+                //     // filesize_max_kb: {{ env('Upload_Image_Size') }}
 
                 // }
                 // ,
@@ -374,12 +379,15 @@
         dropZoneEnabled: true,
         uploadAsync: false,
         minFileCount: 3,
-        showRemove: true,
+        showRemove: false,
         showUpload:false,
+        overwriteInitial: true,
         allowedFileExtensions: ["jpg", "gif", "png", "jpeg", "jfif"],
         initialPreview: <?php echo json_encode($thumb_image); ?>,
         initialPreviewConfig: <?php echo json_encode($thumb_image_config) ?>
         
+    }).on('filecleared', function() {
+        $("#thumb_image_removed").val(1);
     });;
 	
     $("#cover_image").fileinput({
@@ -387,13 +395,16 @@
         dropZoneEnabled: true,
         uploadAsync: false,
         minFileCount: 2,
-        showRemove: true,
+        showRemove: false,
         showUpload:false,
+        overwriteInitial: true,
         allowedFileExtensions: ["jpg", "gif", "png", "jpeg", "jfif"],
         initialPreview: <?php echo json_encode($cover_image); ?>,
         initialPreviewConfig: <?php echo json_encode($cover_image_config) ?>
         
-    });;
+    }).on('filecleared', function() {
+        $("#cover_image_removed").val(1);
+    });
 	
 	
 </script>
