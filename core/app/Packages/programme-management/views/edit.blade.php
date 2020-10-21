@@ -40,13 +40,8 @@
                     <div class="form-group"><label class="col-sm-2 control-label">Channels </label>
                     	<div class="col-sm-5">
                         <select  name="channels[]" class="form-control" >
-                        
                         @foreach ($channels as $channel)
-                       
-                           
                             <option value="{{$channel->channelId}}" >{{$channel->channelName}}</option>
-                            
-                        
                         @endforeach
                       
                             </select>
@@ -55,20 +50,37 @@
                     <div class="form-group"><label class="col-sm-2 control-label">Programme Type </label>
                     	<div class="col-sm-5">
                         <select  name="programme_type" class="form-control" >
-                            <option value="live">Live</option>
+                        @if($exsist_programme->programType =='live')
+                            <option value="live"  selected >Live</option>
+                        @else
+                            <option value="live"  selected >Live</option>
+                        @endif
+
+                        @if($exsist_programme->programType =='vod')
+                            <option value="vod" selected>VOD</option>
+                        @else
                             <option value="vod">VOD</option>
+                        @endif
+                       
+                        @if($exsist_programme->programType =='reality')
+                            <option value="reality" selected>Reality</option>
+                        @else
                             <option value="reality">Reality</option>
+                        @endif
+                            
+                            
+                            
                             </select>
                         </div>
                 	</div>
                     <div class="form-group"><label class="col-sm-2 control-label">Start Date</label>
                     	<div class="col-sm-5">
-                        <input type="date" id="start_date" name="start_date" class="">
+                        <input type="date" id="start_date" name="start_date" value="{$exsist_programme->start_date}}" class="">
                         </div>
                 	</div>
                     <div class="form-group"><label class="col-sm-2 control-label">End Date</label>
                     	<div class="col-sm-5">
-                        <input type="date" id="end_date" name="end_date" vale="31-12-2099" class="">
+                        <input type="date" id="end_date" name="end_date" value="{$exsist_programme->end_date}}" class="">
                         </div>
                 	</div>
                     <div class="form-group">
@@ -80,14 +92,22 @@
                     <div class="form-group"><label class="col-sm-2 control-label">Description</label>
                 	</div>
                     <div class="form-group"><label class="col-sm-2 control-label">English</label>
-                    	<div class="col-sm-5"><input type="text" class="form-control" name="programme_description_en"></div>
+                    	<div class="col-sm-5">
+                        <textarea class="form-control" name="programme_description_en">{!! $exsist_programme->description !!}</textarea>
+                        </div>
                 	</div>
+                    
                     <div class="form-group"><label class="col-sm-2 control-label">Sinhala</label>
-                    	<div class="col-sm-5"><input type="text" class="form-control" name="programme_description_si"></div>
+                    	<div class="col-sm-5">
+                        <textarea class="form-control" name="programme_description_si">{!! $exsist_programme->programmeDesc_si !!}</textarea>
+                        </div>
                 	</div>
                     <div class="form-group"><label class="col-sm-2 control-label">Tamil</label>
-                    	<div class="col-sm-5"><input type="text" class="form-control" name="programme_description_ta"></div>
+                    	<div class="col-sm-5">
+                        <textarea class="form-control" name="programme_description_ta">{!! $exsist_programme->programmeDesc_ta !!}</textarea>
+                        </div>
                 	</div>
+                    
                     <div class="form-group">
                         <label class="col-sm-2 control-label required">Cover Image</label>
                         <div class="col-sm-4">
@@ -97,7 +117,8 @@
                     <div class="form-group">
                         <label class="col-sm-2 control-label required"></label>
                         <div class="col-sm-4 form-check">
-                        <input type="checkbox" class="form-check-input" name="kids_channel" id="exampleCheck1">
+                        <input type="checkbox" class="form-check-input" name="kids_channel" 
+                        <?php if( $exsist_programme->kids){ ?> checked <?php } ?> id="exampleCheck1">
                         <label class="form-check-label"  for="exampleCheck1">Kids Channel</label>
                         </div>
                     </div>
@@ -118,7 +139,9 @@
                             <div class="col-md-5">
                                 <select class="form-control policy" id="content_policies" name="content_policies[]"
                                         style="width:90%;" multiple >
-
+                                        @foreach ($exsist_programme->getContentPolices as $policy)
+                                        <option value="{{$policy->PolicyID}}" selected>{{$policy->getPolicy->Name}}</option>
+                                        @endforeach
                                 </select>
                                 <label id="content_error" class="text-danger" for="content_policies"></label>
 
@@ -131,9 +154,13 @@
                     <div class="form-group"><label class="col-sm-2 control-label">Advertisment Policy</label>
                     	<div class="col-sm-5">
                         <select  name="advertisment_policy" class="form-control" >
-                        @foreach ($advertismentPolicies as $advertismentPolicy)
-                        <option value="{{$advertismentPolicy->PolicyID}}">{{$advertismentPolicy->Name}}</option>
-                        @endforeach
+                            @foreach ($advertismentPolicies as $advertismentPolicy)
+                                <?php if($advertismentPolicy->PolicyID == $exsist_programme->advertisementPolicy){?>
+                                    <option value="{{$advertismentPolicy->PolicyID}}" selected>{{$advertismentPolicy->Name}}</option>
+                                <?php }else{?>
+                                    <option value="{{$advertismentPolicy->PolicyID}}">{{$advertismentPolicy->Name}}</option>
+                                <?php }?>
+                            @endforeach
                       
                             </select>
                         </div>
@@ -141,23 +168,40 @@
                     <div class="form-group"><label class="col-sm-2 control-label">Likes </label>
                     	<div class="col-sm-5">
                         <select  name="likes" class="form-control" >
-                            <option value="1">enable</option>
-                            <option value="0">disable</option>
+                            @if($exsist_programme->likes)
+                            <option value="1" selected>enable</option>
+                            @else
+                            <option value="0" selected>disable</option>
+                            @endif
+                           
+                            
                             </select>
                         </div>
                 	</div>
                     <div class="form-group"><label class="col-sm-2 control-label">Subtitles </label>
                     	<div class="col-sm-5">
+                            @if($exsist_programme->subtitles)
                             <input type="radio" checked id="yes" name="subtitle" value="1">
                             <label for="yes">Yes</label><br>
                             <input type="radio" id="no" name="subtitle" value="0">
                             <label for="no">No</label><br>
+                            @else
+                            <input type="radio"  id="yes" name="subtitle" value="1">
+                            <label for="yes">Yes</label><br>
+                            <input type="radio" checked id="no" name="subtitle" value="0">
+                            <label for="no">No</label><br>
+                            @endif
+                            
+                            
                       
                         </div>
                 	</div>
                     <div class="form-group"><label class="col-sm-2 control-label">Search Tags</label>
                         <div class="col-sm-8">
                             <select class="select-simple-tag form-control" name="tags[]" multiple="multiple">
+                            @foreach (json_decode($exsist_programme->search_tag) as $tag)
+                            <option value="{{$tag}}" selected="selected">{{$tag}}</option>
+                            @endforeach
                             </select>
                         </div>
                     </div>
@@ -332,7 +376,9 @@
         minFileCount: 3,
         showRemove: true,
         showUpload:false,
-        allowedFileExtensions: ["jpg", "gif", "png", "jpeg", "jfif"]
+        allowedFileExtensions: ["jpg", "gif", "png", "jpeg", "jfif"],
+        initialPreview: <?php echo json_encode($thumb_image); ?>,
+        initialPreviewConfig: <?php echo json_encode($thumb_image_config) ?>
         
     });;
 	
@@ -343,7 +389,9 @@
         minFileCount: 2,
         showRemove: true,
         showUpload:false,
-        allowedFileExtensions: ["jpg", "gif", "png", "jpeg", "jfif"]
+        allowedFileExtensions: ["jpg", "gif", "png", "jpeg", "jfif"],
+        initialPreview: <?php echo json_encode($cover_image); ?>,
+        initialPreviewConfig: <?php echo json_encode($cover_image_config) ?>
         
     });;
 	
