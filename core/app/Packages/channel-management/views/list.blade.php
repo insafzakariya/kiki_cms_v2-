@@ -155,8 +155,7 @@
                         url: '{{url('channel/changeState')}}',
                         data:{ 'id' : id, 'state' : state  }
                     }).done(function( msg ) {
-                        console.log("CHANGED");
-                        table.ajax.reload();
+                       
                     });
                 } else {
                     swal("Cancelled", "Cancelled the status change", "error");

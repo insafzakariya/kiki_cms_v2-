@@ -25,6 +25,25 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'programme', 'namespace' => 
         'as' => 'programme.edit', 'uses' => 'ProgrammeController@changeStatus'
     ]);
 
+    Route::get('/sort', [
+        'as' => 'programme.sort', 'uses' => 'ProgrammeController@sortView'
+    ]);
+
+    //Get Unsorted & sorted List
+
+    Route::get('unsortedList', [
+        'as' => 'programme.sort', 'uses' => 'ProgrammeController@getUnsortedList'
+    ]);
+    Route::get('sortedList', [
+        'as' => 'programme.sort', 'uses' => 'ProgrammeController@getsortedList'
+    ]);
+
+    //Update Sorted & Unsorted List
+
+    Route::post('updateSortedProgrammes', [
+        'as' => 'programme.sort', 'uses' => 'ProgrammeController@updateSortedProgrammes'
+    ]);
+
 
     
 

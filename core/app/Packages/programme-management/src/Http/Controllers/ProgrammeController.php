@@ -414,6 +414,59 @@ class ProgrammeController extends Controller
         }
         return response()->json(['status' => 'invalid_id']);
     }
+
+    public function sortView()
+    {
+        $channels=Channel::get();
+        return view('ProgrammeManage::sort')->with(['channels'=>$channels]);
+    }
+
+    public function getUnsortedList(Request $request)
+    {
+        $channel_id= $request->get('channel_id');
+        $unsortedProgrammes=ProgrammeChannel::with(['getProgramme'])
+                                    ->where('channel_id',$channel_id)
+                                    ->where('order',0)
+                                    ->where('status',1)
+                                    ->get();
+        if($unsortedProgrammes){
+            return response($unsortedProgrammes, 200);
+        }else{
+            return response(null, 200);
+        }
+    }
+    public function getsortedList(Request $request)
+    {
+        $channel_id= $request->get('channel_id');
+        $sortedProgrammes=ProgrammeChannel::with(['getProgramme'])
+                                    ->where('channel_id',$channel_id)
+                                    ->where('order','!=',0)
+                                    ->where('status',1)
+                                    ->orderBy('order','asc')
+                                    ->get();
+        if($sortedProgrammes){
+            return response($sortedProgrammes, 200);
+        }else{
+            return response(null, 200);
+        }
+    }
+
+    //Update Sorted & Unsorted List to DB
+    public function updateSortedProgrammes(Request $request)
+    {
+        $sorted_list=$request->get('sorted_list');
+        $unsorted_list=$request->get('unsorted_list');
+        ProgrammeChannel::with(['getProgramme'])
+            ->whereIn('id',$unsorted_list)
+            ->update(['order'=>0]);
+        foreach ($sorted_list as $key => $value) {  
+            ProgrammeChannel::with(['getProgramme'])
+            ->where('id',$value)
+            ->update(['order'=>$key+1]);
+        }
+       
+       
+    }
  
    
   

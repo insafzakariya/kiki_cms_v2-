@@ -26,6 +26,10 @@ class ProgrammeChannel extends Model{
     {
         return $this->belongsTo('ChannelManage\Models\Channel', 'channel_id', 'channelId');
     }
+    public function getProgramme()
+    {
+        return $this->belongsTo('ProgrammeManage\Models\Programme', 'programme_id', 'programId');
+    }
 
 
     
