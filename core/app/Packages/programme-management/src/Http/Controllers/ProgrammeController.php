@@ -255,17 +255,20 @@ class ProgrammeController extends Controller
 
         if($exsist_programme){
             if(isset($request->channels)){
+                // return $request->channels;
+                ProgrammeChannel::whereNotIn('channel_id',$request->channels)->where('programme_id',$exsist_programme->programId)->update(['status' => 0]);
                 foreach ($request->channels as $key => $channel) {
-                    ProgrammeChannel::where('status', 1)
-                    ->where('programme_id', $exsist_programme->programId)
-                    ->where('channel_id', $channel)
-                    ->update(['status' => 0]);
+                    ProgrammeChannel::firstOrCreate(['programme_id' =>$exsist_programme->programId,'channel_id'=>$channel,'status'=>1]);
+                    // ProgrammeChannel::where('status', 1)
+                    // ->where('programme_id', $exsist_programme->programId)
+                    // ->where('channel_id', $channel)
+                    // ->update(['status' => 0]);
 
-                    ProgrammeChannel::create([
-                        'programme_id'=>$exsist_programme->programId,
-                        'channel_id'=>$channel,
-                        'status'=>1
-                    ]);
+                    // ProgrammeChannel::create([
+                    //     'programme_id'=>$exsist_programme->programId,
+                    //     'channel_id'=>$channel,
+                    //     'status'=>1
+                    // ]);
                 }
             }
             if($request->hasFile('cover_image')) {
