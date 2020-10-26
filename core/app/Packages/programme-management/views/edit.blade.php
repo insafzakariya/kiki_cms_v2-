@@ -2,6 +2,8 @@
 @section('css')
 <link rel="stylesheet" href="{{asset('assets/back/vendor/select2-3.5.2/select2.css')}}" />
 <link rel="stylesheet" href="{{asset('assets/back/vendor/select2-bootstrap/select2-bootstrap.css')}}" />
+<link rel="stylesheet" href="{{asset('assets/back/flatpicker/flatpickr.min.css')}}" />
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"> -->
 @stop
 @section('page_header')
  <div class="col-lg-9">
@@ -226,6 +228,8 @@
 @stop
 @section('js')
 <script src="{{asset('assets/back/vendor/jquery-validation/jquery.validate.min.js')}}"></script>
+<script src="{{asset('assets/back/flatpicker/flatpicker')}}"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script> -->
 <script type="text/javascript">
 	$(document).ready(function(){
         $('.select-simple-tag').select2({
@@ -235,6 +239,24 @@
         }).on('select2:open', function (e) {
             $('.select2-container--open .select2-dropdown--below').css('display', 'none');
         });
+
+        $("#start_date").flatpickr(
+            {
+                enableTime: true,
+                dateFormat: "Y-m-d H:i",
+                defaultDate: ["<?php echo $exsist_programme->start_date; ?> "],
+            }
+        );
+
+        $("#end_date").flatpickr(
+            {
+                enableTime: true,
+                dateFormat: "Y-m-d H:i",
+                // maxDate: "31.12.2099",
+                defaultDate: ["<?php echo $exsist_programme->end_date; ?> "],
+            }
+        );
+
 
         $('select[name="advertisment_policy"]').select2({
             // multiple: true,
