@@ -192,7 +192,7 @@ class NotificationController extends Controller
 
     public function addNotification(Request $request){
        
-        $URL=env('APP_URL');
+        $URL=env('NOTIFICATION_URL');
         $ImageUpLoadPath=env('IMAGE_UPLOAD_PATH');
         $folderName=env('FOLDER_NAME');
        
