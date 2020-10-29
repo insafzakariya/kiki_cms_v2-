@@ -285,14 +285,14 @@ class NotificationController extends Controller
 
              
             
-            $sql = "SELECT viewer_id FROM susila_db.user_groups_viewers where user_group_id='$usergrp'";
+            $sql = "SELECT viewer_id FROM user_groups_viewers where user_group_id='$usergrp'";
             $viewer_ids = DB::select($sql);
             Log::info($viewer_ids);
 
             $devices =array();
             foreach ($viewer_ids as $viewer_id_ob) {
                 $viewer_id = $viewer_id_ob->viewer_id;
-                $sql = "SELECT DeviceID FROM susila_db.viewers where ViewerID='$viewer_id'";
+                $sql = "SELECT DeviceID FROM viewers where ViewerID='$viewer_id'";
                 $device_ids = DB::select($sql);
                 Log::info($device_ids);
                 foreach ($device_ids as $device_id_ob) {
