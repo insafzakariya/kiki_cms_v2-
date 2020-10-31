@@ -9,6 +9,7 @@ return [
     'lyricist-images' => 'lyricist',
     'channel-images' => 'channel',
     'programme-images' => 'programme',
+    'episode-images' => 'episode',
     'song-composer-images' => 'composer',
     'project-images' => 'projects',
     'product-images' => 'product',
@@ -30,5 +31,6 @@ return [
         'song-smil' => env('IMAGE_UPLOAD_PATH', '') . '/smil/',
         'channel' => env('IMAGE_UPLOAD_PATH', '') . '/channel/',
         'programme' => env('IMAGE_UPLOAD_PATH', '') . '/programme/',
+        'episode' => env('IMAGE_UPLOAD_PATH', '') . '/episode/',
     ],
 ];

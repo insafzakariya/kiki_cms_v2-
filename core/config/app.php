@@ -163,6 +163,7 @@ return [
 		'SongManage\SongManageServiceProvider',
 		'ChannelManage\ChannelManageServiceProvider',
 		'ProgrammeManage\ProgrammeManageServiceProvider',
+		'EpisodeManage\EpisodeManageServiceProvider',
 		'PlaylistManage\PlaylistManageServiceProvider',
 		'NotificationManage\NotificationManageServiceProvider',
 
