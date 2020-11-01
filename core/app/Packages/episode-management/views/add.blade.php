@@ -92,7 +92,8 @@
 
                     <div class="form-group"><label class="col-sm-2 control-label">Video Quality </label>
                     	<div class="col-sm-5">
-                        <select  name="video_quality" class="form-control" multiple="multiple" >
+                        <select  name="video_quality[]" class="form-control" multiple="multiple" >
+                            <option value="auto">Auto</option>
                             <option value="720p">720p</option>
                             <option value="480p">480p</option>
                             <option value="360p">360p</option>
@@ -223,7 +224,7 @@
         });
 
 
-        $('select[name="video_quality"]').select2({
+        $('select[name="video_quality[]"]').select2({
             placeholder: "Choose Quality ",
             // multiple: true,
         });

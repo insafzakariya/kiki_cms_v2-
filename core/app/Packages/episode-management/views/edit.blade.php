@@ -7,13 +7,13 @@
 @stop
 @section('page_header')
  <div class="col-lg-9">
-    <h2>Programme Management</h2>
+    <h2>Episode Management</h2>
     <ol class="breadcrumb">
         <li>
             <a href="{{url('/')}}">Home</a>
         </li>
         <li class="active">
-            <strong>Programme/Edit</strong>
+            <strong>Episode/Edit</strong>
         </li>
     </ol>
 </div>                  
@@ -28,18 +28,29 @@
                 	{!!Form::token()!!}
                     <input type="hidden" name="thumb_image_removed" id="thumb_image_removed" value="0">
                     <input type="hidden" name="cover_image_removed" id="cover_image_removed" value="0">
-                	<div class="form-group"><label class="col-sm-2 control-label">Programme Name</label>
-                    	<div class="col-sm-10"></div>
+                	<div class="form-group"><label class="col-sm-2 control-label">Episode Name</label>
+                    	<div class="col-sm-8"><input type="text" class="form-control" name="episode_name_en" value="{{$exsist_episode->episodeName}}"></div>
+                	</div>
+                    <div class="form-group"><label class="col-sm-2 control-label">Description</label>
                 	</div>
                     <div class="form-group"><label class="col-sm-2 control-label">English</label>
-                    	<div class="col-sm-5"><input type="text" class="form-control" name="programme_name_en" value="{{$exsist_programme->programName}}"></div>
+                    	<div class="col-sm-5">
+                        <textarea class="form-control" name="episode_description_en">{!! $exsist_episode->description !!}</textarea>
+                        </div>
                 	</div>
+                    
                     <div class="form-group"><label class="col-sm-2 control-label">Sinhala</label>
-                    	<div class="col-sm-5"><input type="text" class="form-control" name="programme_name_si" value="{{$exsist_programme->programmeName_si}}"></div>
+                    	<div class="col-sm-5">
+                        <textarea class="form-control" name="episode_description_si">{!! $exsist_episode->episodeDesc_si !!}</textarea>
+                        </div>
                 	</div>
                     <div class="form-group"><label class="col-sm-2 control-label">Tamil</label>
-                    	<div class="col-sm-5"><input type="text" class="form-control" name="programme_name_ta" value="{{$exsist_programme->programmeName_ta}}"></div>
+                    	<div class="col-sm-5">
+                        <textarea class="form-control" name="episode_description_ta">{!! $exsist_episode->episodeDesc_ta !!}</textarea>
+                        </div>
                 	</div>
+                    
+                    
                     <div class="form-group"><label class="col-sm-2 control-label">Channels </label>
                     	<div class="col-sm-5">
                         <select  name="channels[]" class="form-control" >
@@ -50,40 +61,49 @@
                             </select>
                         </div>
                 	</div>
-                    <div class="form-group"><label class="col-sm-2 control-label">Programme Type </label>
-                    	<div class="col-sm-5">
-                        <select  name="programme_type" class="form-control" >
-                        @if($exsist_programme->programType =='live')
-                            <option value="live"  selected >Live</option>
-                        @else
-                            <option value="live"  selected >Live</option>
-                        @endif
 
-                        @if($exsist_programme->programType =='vod')
-                            <option value="vod" selected>VOD</option>
-                        @else
-                            <option value="vod">VOD</option>
+                    <div class="form-group"><label class="col-sm-2 control-label">Programme </label>
+                    	<div class="col-sm-5">
+                        <select  name="programme" id="programme" class="form-control select-simple" >
+                        @if(isset($exsist_episode->getProgramme))
+                        <option value="{{$exsist_episode->getProgramme->programId}}" selected="selected">{{$exsist_episode->getProgramme->programName}}</option>
                         @endif
-                       
-                        @if($exsist_programme->programType =='reality')
-                            <option value="reality" selected>Reality</option>
-                        @else
-                            <option value="reality">Reality</option>
-                        @endif
-                            
-                            
-                            
+                        
                             </select>
                         </div>
                 	</div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label required"></label>
+                        <div class="col-sm-4 form-check">
+                        <input type="checkbox" class="form-check-input" name="trailer" 
+                        <?php if( $exsist_episode->isTrailer){ ?> checked <?php } ?> id="exampleCheck1">
+                        <label class="form-check-label"  for="exampleCheck1">Trailer</label>
+                        </div>
+                    </div>
+                    
                     <div class="form-group"><label class="col-sm-2 control-label">Start Date</label>
                     	<div class="col-sm-5">
-                        <input type="date" id="start_date" name="start_date" value="{$exsist_programme->start_date}}" class="">
+                        <input type="date" id="start_date" name="start_date" value="{$exsist_episode->start_date}}" class="">
                         </div>
                 	</div>
                     <div class="form-group"><label class="col-sm-2 control-label">End Date</label>
                     	<div class="col-sm-5">
-                        <input type="date" id="end_date" name="end_date" value="{$exsist_programme->end_date}}" class="">
+                        <input type="date" id="end_date" name="end_date" value="{$exsist_episode->end_date}}" class="">
+                        </div>
+                	</div>
+                    <div class="form-group"><label class="col-sm-2 control-label">Publish Date</label>
+                    	<div class="col-sm-5">
+                        <input type="date" id="publish_date" name="publish_date" value="{$exsist_episode->publish_date}}" class="">
+                        </div>
+                	</div>
+                    <div class="form-group"><label class="col-sm-2 control-label">Video Quality </label>
+                    	<div class="col-sm-5">
+                        <select  name="video_quality[]" class="form-control" multiple="multiple" >
+                            @foreach($video_qualities as $key =>$video_quality  )
+                            <option value="{{$key}}">{{$video_quality}}</option>  
+                            @endforeach                          
+                            </select>
                         </div>
                 	</div>
                     <div class="form-group">
@@ -92,48 +112,15 @@
                             <input id="thumb_image" name="thumb_image[]" type="file" multiple class="form-control" accept="image/*">
                         </div>
                     </div>
-                    <div class="form-group"><label class="col-sm-2 control-label">Description</label>
-                	</div>
-                    <div class="form-group"><label class="col-sm-2 control-label">English</label>
-                    	<div class="col-sm-5">
-                        <textarea class="form-control" name="programme_description_en">{!! $exsist_programme->description !!}</textarea>
-                        </div>
-                	</div>
-                    
-                    <div class="form-group"><label class="col-sm-2 control-label">Sinhala</label>
-                    	<div class="col-sm-5">
-                        <textarea class="form-control" name="programme_description_si">{!! $exsist_programme->programmeDesc_si !!}</textarea>
-                        </div>
-                	</div>
-                    <div class="form-group"><label class="col-sm-2 control-label">Tamil</label>
-                    	<div class="col-sm-5">
-                        <textarea class="form-control" name="programme_description_ta">{!! $exsist_programme->programmeDesc_ta !!}</textarea>
-                        </div>
-                	</div>
-                    
+      
                     <div class="form-group">
-                        <label class="col-sm-2 control-label required">Cover Image</label>
-                        <div class="col-sm-4">
-                            <input id="cover_image" name="cover_image[]" type="file" multiple class="form-control" accept="image/*">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label required"></label>
-                        <div class="col-sm-4 form-check">
-                        <input type="checkbox" class="form-check-input" name="kids_programme" 
-                        <?php if( $exsist_programme->kids){ ?> checked <?php } ?> id="exampleCheck1">
-                        <label class="form-check-label"  for="exampleCheck1">Kids Channel</label>
-                        </div>
-                    </div>
-                 
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">Programme Policies</label>
+                        <label class="col-sm-2 control-label">Episode Policies</label>
                         <div class="col-sm-8" style="display: inline">
                             <div class="col-md-5 no-padding">
                                 <select class="form-control policy" id="policySelector" name="content_policies_lft" style="width: 90%;" multiple="multiple">
                                   
-                                @foreach ($programmeContentPolicies as $programmeContentPolicy)
-                                <option value="{{$programmeContentPolicy->PolicyID}}">{{$programmeContentPolicy->Name}}</option>
+                                @foreach ($episodeContentPolicies as $episodeContentPolicy)
+                                <option value="{{$episodeContentPolicy->PolicyID}}">{{$episodeContentPolicy->Name}}</option>
                                 @endforeach
                                   
                                 </select>
@@ -142,7 +129,7 @@
                             <div class="col-md-5">
                                 <select class="form-control policy" id="content_policies" name="content_policies[]"
                                         style="width:90%;" multiple >
-                                        @foreach ($exsist_programme->getContentPolices as $policy)
+                                        @foreach ($exsist_episode->getContentPolices as $policy)
                                         <option value="{{$policy->PolicyID}}" selected>{{$policy->getPolicy->Name}}</option>
                                         @endforeach
                                 </select>
@@ -154,58 +141,14 @@
 
                         </div>
                     </div>
-                    <div class="form-group"><label class="col-sm-2 control-label">Advertisment Policy</label>
-                    	<div class="col-sm-5">
-                        <select  name="advertisment_policy" class="form-control" >
-                            @foreach ($advertismentPolicies as $advertismentPolicy)
-                                <?php if($advertismentPolicy->PolicyID == $exsist_programme->advertisementPolicy){?>
-                                    <option value="{{$advertismentPolicy->PolicyID}}" selected>{{$advertismentPolicy->Name}}</option>
-                                <?php }else{?>
-                                    <option value="{{$advertismentPolicy->PolicyID}}">{{$advertismentPolicy->Name}}</option>
-                                <?php }?>
-                            @endforeach
-                      
-                            </select>
-                        </div>
-                	</div>
-                    <div class="form-group"><label class="col-sm-2 control-label">Likes </label>
-                    	<div class="col-sm-5">
-                        <select  name="likes" class="form-control" >
-                            @if($exsist_programme->likes)
-                            <option value="1" selected>enable</option>
-                            <option value="0" >disable</option>
-                            @else
-                            <option value="1" >enable</option>
-                            <option value="0" selected>disable</option>
-                            @endif
-                           
-                            
-                            </select>
-                        </div>
-                	</div>
-                    <div class="form-group"><label class="col-sm-2 control-label">Subtitles </label>
-                    	<div class="col-sm-5">
-                            @if($exsist_programme->subtitles)
-                            <input type="radio" checked id="yes" name="subtitle" value="1">
-                            <label for="yes">Yes</label><br>
-                            <input type="radio" id="no" name="subtitle" value="0">
-                            <label for="no">No</label><br>
-                            @else
-                            <input type="radio"  id="yes" name="subtitle" value="1">
-                            <label for="yes">Yes</label><br>
-                            <input type="radio" checked id="no" name="subtitle" value="0">
-                            <label for="no">No</label><br>
-                            @endif
-                            
-                            
-                      
-                        </div>
-                	</div>
+                    
+                    
+                   
                     <div class="form-group"><label class="col-sm-2 control-label">Search Tags</label>
                         <div class="col-sm-8">
                             <select class="select-simple-tag form-control" name="tags[]" multiple="multiple">
-                            @if(json_decode($exsist_programme->search_tag) !== null)
-                            @foreach (json_decode($exsist_programme->search_tag) as $tag)
+                            @if(json_decode($exsist_episode->search_tag) !== null)
+                            @foreach (json_decode($exsist_episode->search_tag) as $tag)
                             <option value="{{$tag}}" selected="selected">{{$tag}}</option>
                             @endforeach
                             @endif
@@ -244,7 +187,7 @@
             {
                 enableTime: true,
                 dateFormat: "Y-m-d H:i",
-                defaultDate: ["<?php echo $exsist_programme->start_date; ?> "],
+                defaultDate: ["<?php echo $exsist_episode->start_date; ?> "],
             }
         );
 
@@ -253,10 +196,49 @@
                 enableTime: true,
                 dateFormat: "Y-m-d H:i",
                 // maxDate: "31.12.2099",
-                defaultDate: ["<?php echo $exsist_programme->end_date; ?> "],
+                defaultDate: ["<?php echo $exsist_episode->end_date; ?> "],
+            }
+        );
+        $("#publish_date").flatpickr(
+            {
+                enableTime: true,
+                dateFormat: "Y-m-d H:i",
+                // maxDate: "31.12.2099",
+                defaultDate: ["<?php echo $exsist_episode->publish_date; ?> "],
             }
         );
 
+        $('#programme').select2({
+            placeholder: "Please select a program",
+            tokenSeparators: [','],
+            tags: true,
+            minimumInputLength: 3,
+            multiple: false,
+            ajax: {
+                type: "GET",
+                url: '{{url('episode/search/programme')}}',
+                dataType: 'json',
+                contentType: "application/json",
+                delay: 250,
+                data: function (params) {
+                    return  'term='+params.term;
+                     /*JSON.stringify({
+                        term: params.term
+                    });*/
+                },
+                processResults: function (data) {
+                    return {
+                        results: $.map(data, function (item, i) {
+                            return {
+                                text: item.programName,
+                                id: item.programId
+                            }
+                        })
+                    };
+                },
+                cache: true
+            },
+        });
 
         $('select[name="advertisment_policy"]').select2({
             // multiple: true,
@@ -267,16 +249,15 @@
             
         }).select2('val', <?php echo json_encode($used_channel_ids); ?>);
 
-        $('select[name="programme_type"]').select2({
+        $('select[name="video_quality[]"]').select2({
+            placeholder: "Choose Quality ",
             // multiple: true,
-        });
-        $('select[name="likes"]').select2({
-            // multiple: true,
-        });
+        }).select2('val', <?php echo $exsist_episode->video_quality; ?>);;
+        
 
 		$("#form").validate({
             rules: {
-                programme_name_en: {
+                episode_name_en: {
                     required:  {
                         depends:function(){
                             $(this).val($.trim($(this).val()));
@@ -285,7 +266,8 @@
                     },
                   
                 },
-                programme_name_si: {
+               
+                episode_description_en: {
                     required:  {
                         depends:function(){
                             $(this).val($.trim($(this).val()));
@@ -294,7 +276,7 @@
                     },
                   
                 },
-                programme_name_ta: {
+                episode_description_si: {
                     required:  {
                         depends:function(){
                             $(this).val($.trim($(this).val()));
@@ -303,25 +285,7 @@
                     },
                   
                 },
-                programme_description_en: {
-                    required:  {
-                        depends:function(){
-                            $(this).val($.trim($(this).val()));
-                            return true;
-                        }
-                    },
-                  
-                },
-                programme_description_si: {
-                    required:  {
-                        depends:function(){
-                            $(this).val($.trim($(this).val()));
-                            return true;
-                        }
-                    },
-                  
-                },
-                programme_description_ta: {
+                episode_description_ta: {
                     required:  {
                         depends:function(){
                             $(this).val($.trim($(this).val()));
@@ -398,9 +362,9 @@
 
     $("#thumb_image").fileinput({
         uploadUrl: "", // server upload action
-        dropZoneEnabled: true,
+        dropZoneEnabled: false,
         uploadAsync: false,
-        minFileCount: 3,
+        minFileCount: 1,
         showRemove: false,
         showUpload:false,
         overwriteInitial: true,
@@ -412,22 +376,7 @@
         $("#thumb_image_removed").val(1);
     });;
 	
-    $("#cover_image").fileinput({
-        uploadUrl: "", // server upload action
-        dropZoneEnabled: true,
-        uploadAsync: false,
-        minFileCount: 2,
-        showRemove: false,
-        showUpload:false,
-        overwriteInitial: true,
-        allowedFileExtensions: ["jpg", "gif", "png", "jpeg", "jfif"],
-        initialPreview: <?php echo json_encode($cover_image); ?>,
-        initialPreviewConfig: <?php echo json_encode($cover_image_config) ?>
-        
-    }).on('filecleared', function() {
-        $("#cover_image_removed").val(1);
-    });
-	
+    
 	
 </script>
 @stop

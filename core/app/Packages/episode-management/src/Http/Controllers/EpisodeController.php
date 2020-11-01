@@ -19,7 +19,7 @@ use Response;
 use Session;
 use ChannelManage\Models\Channel;
 use ProgrammeManage\Models\Programme;
-use ProgrammeManage\Models\ProgrammeChannel;
+use EpisodeManage\Models\EpisodeChannel;
 use EpisodeManage\Models\Episode;
 use Sentinel;
 
@@ -76,91 +76,75 @@ class EpisodeController extends Controller
             $isTrailer=1;
         }
         
-        return $episode=Episode::create([
+        $episode=Episode::create([
             'episodeName'=>$request->episode_name_en,
             'description'=>$request->episode_description_en,
             // 'advertisementPolicy'=>$request->advertisment_policy,
+            'video_quality'=>json_encode($request->video_quality),
             'status'=>1,
             'isTrailer'=>$isTrailer,
-            // 'programmeName_si'=>$request->programme_name_si,
-            // 'programmeName_ta'=>$request->programme_name_ta,
-            // 'programmeDesc_si'=>$request->programme_description_si,
-            // 'programmeDesc_ta'=>$request->programme_description_ta,
+            'episodeDesc_si'=>$request->episode_description_si,
+            'episodeDesc_ta'=>$request->episode_description_ta,
+            'programId'=>$request->programme,
             'start_date'=>$request->start_date,
-            'end_date'=>$request->end_date,
             'end_date'=>$request->end_date,
             'publish_date'=>$request->publish_date,
             'search_tag'=>json_encode($request->tags)
         ]);
 
-        // if($programme){
-        //     if(isset($request->channels)){
-        //         foreach ($request->channels as $key => $channel) {
-        //             ProgrammeChannel::create([
-        //                 'programme_id'=>$programme->programId,
-        //                 'channel_id'=>$channel,
-        //                 'status'=>1
-        //             ]);
-        //         }
-        //     }
+        if($episode){
+            if(isset($request->channels)){
+                foreach ($request->channels as $key => $channel) {
+                    EpisodeChannel::create([
+                        'episode_id'=>$episode->episodeId,
+                        'channel_id'=>$channel,
+                        'status'=>1
+                    ]);
+                }
+            }
 
-        //     // Insert to Content Policy Table
-        //     if(isset($request->content_policies)){
-        //         foreach ($request->content_policies as $key => $contentpolicy) {
-        //             ContentPolicy::create([
-        //                 'ContentID'=>$programme->programId,
-        //                 'PolicyID'=>$contentpolicy,
-        //                 'ContentType'=>2,
-        //                 'Status'=>1,
-        //                 'type'=>null
-        //             ]);
-        //         }
-        //     }
+            // Insert to Content Policy Table
+            if(isset($request->content_policies)){
+                foreach ($request->content_policies as $key => $contentpolicy) {
+                    ContentPolicy::create([
+                        'ContentID'=>$episode->episodeId,
+                        'PolicyID'=>$contentpolicy,
+                        'ContentType'=>4,
+                        'Status'=>1,
+                        'type'=>null
+                    ]);
+                }
+            }
 
-        //     //Cover Image Upload
-        //     if($request->hasFile('cover_image')) {
-        //         $cover_images=$request->file('cover_image');
-        //         foreach ($cover_images as $key => $aImage) {
-        //             $ext = $aImage->getClientOriginalExtension();
-        //             $fileName = 'programme-cover-image-' . rand(0, 999999) . '-' . date('YmdHis') . '.' . $ext;
-        //             $filePath = $this->imageController->Upload($this->programmeImagePath, $aImage, $fileName, "-");
-        //             MasterImage::create([
-        //                 'parent_type'=>'programme',
-        //                 'parent_id'=>$programme->programId,
-        //                 'image_type'=>'cover_image',
-        //                 'file_name'=>$fileName
-        //             ]);
-        //         }
+            
+            //Thumb Image Upload
+            if($request->hasFile('thumb_image')) {
+                $cover_images=$request->file('thumb_image');
+                foreach ($cover_images as $key => $aImage) {
+                    $ext = $aImage->getClientOriginalExtension();
+                    $fileName = 'episode-thumb-image-' . rand(0, 999999) . '-' . date('YmdHis') . '.' . $ext;
+                    $filePath = $this->imageController->Upload($this->programmeImagePath, $aImage, $fileName, "-");
+                    MasterImage::create([
+                        'parent_type'=>'episode',
+                        'parent_id'=>$episode->episodeId,
+                        'image_type'=>'thumb_image',
+                        'file_name'=>$fileName
+                    ]);
+                }
                 
-        //     }
-        //     //Cover Image Upload
-        //     if($request->hasFile('thumb_image')) {
-        //         $cover_images=$request->file('thumb_image');
-        //         foreach ($cover_images as $key => $aImage) {
-        //             $ext = $aImage->getClientOriginalExtension();
-        //             $fileName = 'programme-thumb-image-' . rand(0, 999999) . '-' . date('YmdHis') . '.' . $ext;
-        //             $filePath = $this->imageController->Upload($this->programmeImagePath, $aImage, $fileName, "-");
-        //             MasterImage::create([
-        //                 'parent_type'=>'programme',
-        //                 'parent_id'=>$programme->programId,
-        //                 'image_type'=>'thumb_image',
-        //                 'file_name'=>$fileName
-        //             ]);
-        //         }
-                
-        //     }
+            }
 
-        // return redirect('programme/add')->with(['success' => true,
-        //     'success.message' => 'Programme Created successfully!',
-        //     'success.title' => 'Well Done!']);
+        return redirect('episode/add')->with(['success' => true,
+            'success.message' => 'Episode Created successfully!',
+            'success.title' => 'Well Done!']);
            
-        // }else{
-        //     return redirect('programme/add')->with([
-        //         'error' => true,
-        //         'error.message'=> 'Error adding new Programme. Please try again.',
-        //         'error.title' => 'Oops !!'
-        //     ]);
-        // }
+        }else{
+            return redirect('episode/add')->with([
+                'error' => true,
+                'error.message'=> 'Error adding new Episode. Please try again.',
+                'error.title' => 'Oops !!'
+            ]);
+        }
 
        
        
@@ -168,29 +152,28 @@ class EpisodeController extends Controller
     // Programme Edit View Load
     public function editView($id)
     {
-        $exsist_programme=Programme::with([
+        $video_qualities=array('auto'=>'Auto','720p'=>'720p','480p'=>'480p','360p'=>'360p','240p'=>'240p','144p'=>'144p');
+        
+        $exsist_episode=Episode::with([
+            'getProgramme',
             'getContentPolices.getPolicy',
-            'getProgrammeThumbImages',
-            'getProgrammeCoverImages',
-            'getProgrammeChannels.getChannel'
+            'getEpisodeThumbImages',
+            'getEpisodeChannels.getChannel'
             ])
         ->find($id);
         $channels=Channel::where('status',1)->get();
         $thumb_image = [];
         $thumb_image_config = [];
-        $cover_image = [];
-        $cover_image_config = [];
-       
         
-        if($exsist_programme){
+        if($exsist_episode){
             $advertismentPolicies=Policy::getAdvertisementPolicies();
-            $used_channel_ids=array_column(json_decode($exsist_programme->getProgrammeChannels), 'channel_id');
-            $used_content_policy_ids = array_column(json_decode($exsist_programme->getContentPolices), 'PolicyID');
-            $programmeContentPolicies=Policy::getProgrammeContentPoliciesByFilterIds($used_content_policy_ids);
+            $used_channel_ids=array_column(json_decode($exsist_episode->getEpisodeChannels), 'channel_id');
+            $used_content_policy_ids = array_column(json_decode($exsist_episode->getContentPolices), 'PolicyID');
+            $episodeContentPolicies=Policy::getEpisodeContentPoliciesByFilterIds($used_content_policy_ids);
 
-            if ($exsist_programme->getProgrammeThumbImages) {
-                foreach ($exsist_programme->getProgrammeThumbImages as $key => $thumb_image_value) {
-                    array_push($thumb_image, "<img style='height:190px' src='" . Config('constants.bucket.url') . Config('filePaths.front.programme') . $thumb_image_value->file_name . "'>");
+            if ($exsist_episode->getEpisodeThumbImages) {
+                foreach ($exsist_episode->getEpisodeThumbImages as $key => $thumb_image_value) {
+                    array_push($thumb_image, "<img style='height:190px' src='" . Config('constants.bucket.url') . Config('filePaths.front.episode') . $thumb_image_value->file_name . "'>");
                     array_push($thumb_image_config, array(
                         'caption' => '',
                         'type' => 'image',
@@ -200,39 +183,25 @@ class EpisodeController extends Controller
                 }
                 
             }
-            if ($exsist_programme->getProgrammeCoverImages) {
-                foreach ($exsist_programme->getProgrammeCoverImages as $key => $cover_image_value) {
-                    array_push($cover_image, "<img style='height:190px' src='" . Config('constants.bucket.url') . Config('filePaths.front.programme') . $cover_image_value->file_name . "'>");
-                    array_push($cover_image_config, array(
-                        'caption' => '',
-                        'type' => 'image',
-                        'key' => $cover_image_value->id,
-                        // 'url' => url('admin/channel/image-delete'),
-                    ));
-                }
-                
-            }
-          
-            
-         
-            return view('ProgrammeManage::edit')
+           
+        //  return $thumb_image;
+            return view('EpisodeManage::edit')
             ->with(
-                ['programmeContentPolicies'=>$programmeContentPolicies,
-                'advertismentPolicies'=>$advertismentPolicies,
-                'exsist_programme'=>$exsist_programme,
+                ['episodeContentPolicies'=>$episodeContentPolicies,
+                // 'advertismentPolicies'=>$advertismentPolicies,
+                'exsist_episode'=>$exsist_episode,
                 'thumb_image'=>$thumb_image,
                 'thumb_image_config'=>$thumb_image_config,
-                'cover_image'=>$cover_image,
-                'cover_image_config'=>$cover_image_config,
                 'channels'=>$channels,
-                'used_channel_ids'=>$used_channel_ids
+                'used_channel_ids'=>$used_channel_ids,
+                'video_qualities'=>$video_qualities
                 
                 ]
             );
 
-            return $exsist_channel;
+           
         }else{
-            return "Channel Not Found.";
+            return "Episode Not Found.";
         }
        
     }
@@ -241,94 +210,53 @@ class EpisodeController extends Controller
     {
 
         //   return $request->all();
-        $exsist_programme=Programme::with(['getContentPolices.getPolicy'])->find($id);
+        $exsist_episode=Episode::with(['getContentPolices.getPolicy'])->find($id);
         
-        $kids=0;
-        if($request->kids_programme=="on"){
-            $kids=1;
+        //Trailer On Validation
+        $isTrailer=0;
+        if($request->trailer=="on"){
+            $isTrailer=1;
         }
-        
 
-        $exsist_programme->programName=$request->programme_name_en;
-        $exsist_programme->description=$request->programme_description_en;
-        $exsist_programme->advertisementPolicy=$request->advertisment_policy;
-        $exsist_programme->kids=$kids;
-        $exsist_programme->programmeName_si=$request->programme_name_si;
-        $exsist_programme->programmeName_ta=$request->programme_name_ta;
-        $exsist_programme->programmeDesc_si=$request->programme_description_si;
-        $exsist_programme->programmeDesc_ta=$request->programme_description_ta;
-        $exsist_programme->start_date=$request->start_date;
-        $exsist_programme->end_date=$request->end_date;
-        $exsist_programme->subtitles=$request->subtitle;
-        $exsist_programme->likes=$request->likes;
-        $exsist_programme->programType=$request->programme_type;
-        $exsist_programme->search_tag=json_encode($request->tags);
+        $exsist_episode->episodeName=$request->episode_name_en;
+        $exsist_episode->description=$request->episode_description_en;
+        $exsist_episode->video_quality=json_encode($request->video_quality);
+        $exsist_episode->isTrailer=$isTrailer;
+        $exsist_episode->episodeDesc_si=$request->episode_description_si;
+        $exsist_episode->episodeDesc_ta=$request->episode_description_ta;
+        $exsist_episode->programId=$request->programme;
+        $exsist_episode->start_date=$request->start_date;
+        $exsist_episode->end_date=$request->end_date;
+        $exsist_episode->publish_date=$request->publish_date;
+        $exsist_episode->search_tag=json_encode($request->tags);
 
-        $exsist_programme->save();
+        $exsist_episode->save();
 
-        if($exsist_programme){
+        if($exsist_episode){
             if(isset($request->channels)){
                 // return $request->channels;
-                ProgrammeChannel::whereNotIn('channel_id',$request->channels)->where('programme_id',$exsist_programme->programId)->update(['status' => 0]);
+                EpisodeChannel::whereNotIn('channel_id',$request->channels)->where('episode_id',$exsist_episode->episodeId)->update(['status' => 0]);
                 foreach ($request->channels as $key => $channel) {
-                    ProgrammeChannel::firstOrCreate(['programme_id' =>$exsist_programme->programId,'channel_id'=>$channel,'status'=>1]);
-                    // ProgrammeChannel::where('status', 1)
-                    // ->where('programme_id', $exsist_programme->programId)
-                    // ->where('channel_id', $channel)
-                    // ->update(['status' => 0]);
-
-                    // ProgrammeChannel::create([
-                    //     'programme_id'=>$exsist_programme->programId,
-                    //     'channel_id'=>$channel,
-                    //     'status'=>1
-                    // ]);
+                    EpisodeChannel::firstOrCreate(['episode_id' =>$exsist_episode->episodeId,'channel_id'=>$channel,'status'=>1]);
                 }
             }
-            if($request->hasFile('cover_image')) {
-                $cover_images=$request->file('cover_image');
-
-                MasterImage::where('status', 1)
-                    ->where('parent_type', "programme")
-                    ->where('parent_id', $exsist_programme->programId)
-                    ->where('image_type', "cover_image")
-                    ->update(['status' => 0]);
-
-                foreach ($cover_images as $key => $aImage) {
-                    $ext = $aImage->getClientOriginalExtension();
-                    $fileName = 'programme-cover-image-' . rand(0, 999999) . '-' . date('YmdHis') . '.' . $ext;
-                    $filePath = $this->imageController->Upload($this->programmeImagePath, $aImage, $fileName, "-");
-
-                    MasterImage::create([
-                        'parent_type'=>'programme',
-                        'parent_id'=>$exsist_programme->programId,
-                        'image_type'=>'cover_image',
-                        'file_name'=>$fileName
-                    ]);
-                }
-            }else if($request->has('cover_image_removed') && $request->get('cover_image_removed') == 1){
-                MasterImage::where('status', 1)
-                ->where('parent_type', "programme")
-                ->where('parent_id', $exsist_programme->programId)
-                ->where('image_type', "cover_image")
-                ->update(['status' => 0]);
-            }
-
+            
             if($request->hasFile('thumb_image')) {
                 $cover_images=$request->file('thumb_image');
                 MasterImage::where('status', 1)
-                    ->where('parent_type', "programme")
-                    ->where('parent_id', $exsist_programme->programId)
+                    ->where('parent_type', "episode")
+                    ->where('parent_id', $exsist_episode->episodeId)
                     ->where('image_type', "thumb_image")
                     ->update(['status' => 0]);
 
                 foreach ($cover_images as $key => $aImage) {
                     $ext = $aImage->getClientOriginalExtension();
-                    $fileName = 'programme-thumb-image-' . rand(0, 999999) . '-' . date('YmdHis') . '.' . $ext;
+                    $fileName = 'episode-thumb-image-' . rand(0, 999999) . '-' . date('YmdHis') . '.' . $ext;
                     $filePath = $this->imageController->Upload($this->programmeImagePath, $aImage, $fileName, "-");
                     
                     MasterImage::create([
-                        'parent_type'=>'programme',
-                        'parent_id'=>$exsist_programme->programId,
+                        'parent_type'=>'episode',
+                        'parent_id'=>$exsist_episode->episodeId,
                         'image_type'=>'thumb_image',
                         'file_name'=>$fileName
                     ]);
@@ -336,23 +264,23 @@ class EpisodeController extends Controller
             }else if($request->has('thumb_image_removed') && $request->get('thumb_image_removed') == 1){
                 MasterImage::where('status', 1)
                 ->where('parent_type', "programme")
-                ->where('parent_id', $exsist_programme->programId)
+                ->where('parent_id', $exsist_episode->episodeId)
                 ->where('image_type', "thumb_image")
                 ->update(['status' => 0]);
             }
             
             ContentPolicy::where('status', 1)
-                ->where('ContentID', $exsist_programme->programId)
-                ->where('ContentType', 2)
+                ->where('ContentID', $exsist_episode->episodeId)
+                ->where('ContentType', 4)
                 ->update(['status' => 0]);
              // Insert to Content Policy Table
             // return $request->content_policies;
             if(isset($request->content_policies)){
                 foreach ($request->content_policies as $key => $contentpolicy) {
                      ContentPolicy::create([
-                        'ContentID'=>$exsist_programme->programId,
+                        'ContentID'=>$exsist_episode->episodeId,
                         'PolicyID'=>$contentpolicy,
-                        'ContentType'=>2,
+                        'ContentType'=>4,
                         'Status'=>1,
                         'type'=>null
                     ]);
@@ -361,13 +289,13 @@ class EpisodeController extends Controller
                 
             }
 
-            return redirect('programme/'.$id.'/edit')->with(['success' => true,
-            'success.message' => 'Channel Created successfully!',
+            return redirect('episode/'.$id.'/edit')->with(['success' => true,
+            'success.message' => 'Episode Created successfully!',
             'success.title' => 'Well Done!']);
         }else{
-            return redirect('programme/'.$id.'/edit')->with([
+            return redirect('episode/'.$id.'/edit')->with([
                 'error' => true,
-                'error.message'=> 'Error adding new Channel. Please try again.',
+                'error.message'=> 'Error adding new Episode. Please try again.',
                 'error.title' => 'Oops !!'
             ]);
         }

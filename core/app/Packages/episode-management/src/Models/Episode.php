@@ -28,26 +28,26 @@ class Episode extends Model{
         'publish_date',
         'programId',
         'likes',
-        'programType',
+        'video_quality',
        
     ];
     public function getContentPolices()
     {
-        return $this->hasMany('App\Models\ContentPolicy', 'ContentID', 'programId')->where('ContentType',2)->where('status',1);
+        return $this->hasMany('App\Models\ContentPolicy', 'ContentID', 'episodeId')->where('ContentType',4)->where('status',1);
     }
-    public function getProgrammeThumbImages()
+    public function getEpisodeThumbImages()
     {
-        return $this->hasMany('App\Models\MasterImage', 'parent_id', 'programId')->where('parent_type','programme')->where('image_type','thumb_image')->where('status',1);   
+        return $this->hasMany('App\Models\MasterImage', 'parent_id', 'episodeId')->where('parent_type','episode')->where('image_type','thumb_image')->where('status',1);   
     }
-    public function getProgrammeCoverImages()
+   
+    public function getEpisodeChannels()
     {
-        return $this->hasMany('App\Models\MasterImage', 'parent_id', 'programId')->where('parent_type','programme')->where('image_type','cover_image')->where('status',1);   
+        return $this->hasMany('EpisodeManage\Models\EpisodeChannel', 'episode_id', 'episodeId')->where('status',1);   
     }
-    public function getProgrammeChannels()
+    public function getProgramme()
     {
-        return $this->hasMany('ProgrammeManage\Models\ProgrammeChannel', 'programme_id', 'programId')->where('status',1);   
+        return $this->belongsTo('ProgrammeManage\Models\Programme', 'programId', 'programId');
     }
-
 
     
 }
