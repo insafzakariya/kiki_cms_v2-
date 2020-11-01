@@ -20,6 +20,7 @@ use Session;
 use ChannelManage\Models\Channel;
 use ProgrammeManage\Models\Programme;
 use ProgrammeManage\Models\ProgrammeChannel;
+use EpisodeManage\Models\Episode;
 use Sentinel;
 
 
@@ -68,99 +69,98 @@ class EpisodeController extends Controller
     {
 
        
-        return $request->all();
-        //Kids On Validation
-        $kids=0;
-        if($request->kids_channel=="on"){
-            $kids=1;
+        // return $request->all();
+        //Trailer On Validation
+        $isTrailer=0;
+        if($request->trailer=="on"){
+            $isTrailer=1;
         }
         
-        $programme=Programme::create([
-            'programName'=>$request->programme_name_en,
-            'description'=>$request->programme_description_en,
-            'advertisementPolicy'=>$request->advertisment_policy,
+        return $episode=Episode::create([
+            'episodeName'=>$request->episode_name_en,
+            'description'=>$request->episode_description_en,
+            // 'advertisementPolicy'=>$request->advertisment_policy,
             'status'=>1,
-            'kids'=>$kids,
-            'programmeName_si'=>$request->programme_name_si,
-            'programmeName_ta'=>$request->programme_name_ta,
-            'programmeDesc_si'=>$request->programme_description_si,
-            'programmeDesc_ta'=>$request->programme_description_ta,
+            'isTrailer'=>$isTrailer,
+            // 'programmeName_si'=>$request->programme_name_si,
+            // 'programmeName_ta'=>$request->programme_name_ta,
+            // 'programmeDesc_si'=>$request->programme_description_si,
+            // 'programmeDesc_ta'=>$request->programme_description_ta,
             'start_date'=>$request->start_date,
             'end_date'=>$request->end_date,
-            'subtitles'=>$request->subtitle,
-            'likes'=>$request->likes,
-            'search_tag'=>json_encode($request->tags),
-            'programType'=>$request->programme_type,
+            'end_date'=>$request->end_date,
+            'publish_date'=>$request->publish_date,
+            'search_tag'=>json_encode($request->tags)
         ]);
 
-        if($programme){
-            if(isset($request->channels)){
-                foreach ($request->channels as $key => $channel) {
-                    ProgrammeChannel::create([
-                        'programme_id'=>$programme->programId,
-                        'channel_id'=>$channel,
-                        'status'=>1
-                    ]);
-                }
-            }
+        // if($programme){
+        //     if(isset($request->channels)){
+        //         foreach ($request->channels as $key => $channel) {
+        //             ProgrammeChannel::create([
+        //                 'programme_id'=>$programme->programId,
+        //                 'channel_id'=>$channel,
+        //                 'status'=>1
+        //             ]);
+        //         }
+        //     }
 
-            // Insert to Content Policy Table
-            if(isset($request->content_policies)){
-                foreach ($request->content_policies as $key => $contentpolicy) {
-                    ContentPolicy::create([
-                        'ContentID'=>$programme->programId,
-                        'PolicyID'=>$contentpolicy,
-                        'ContentType'=>2,
-                        'Status'=>1,
-                        'type'=>null
-                    ]);
-                }
-            }
+        //     // Insert to Content Policy Table
+        //     if(isset($request->content_policies)){
+        //         foreach ($request->content_policies as $key => $contentpolicy) {
+        //             ContentPolicy::create([
+        //                 'ContentID'=>$programme->programId,
+        //                 'PolicyID'=>$contentpolicy,
+        //                 'ContentType'=>2,
+        //                 'Status'=>1,
+        //                 'type'=>null
+        //             ]);
+        //         }
+        //     }
 
-            //Cover Image Upload
-            if($request->hasFile('cover_image')) {
-                $cover_images=$request->file('cover_image');
-                foreach ($cover_images as $key => $aImage) {
-                    $ext = $aImage->getClientOriginalExtension();
-                    $fileName = 'programme-cover-image-' . rand(0, 999999) . '-' . date('YmdHis') . '.' . $ext;
-                    $filePath = $this->imageController->Upload($this->programmeImagePath, $aImage, $fileName, "-");
-                    MasterImage::create([
-                        'parent_type'=>'programme',
-                        'parent_id'=>$programme->programId,
-                        'image_type'=>'cover_image',
-                        'file_name'=>$fileName
-                    ]);
-                }
+        //     //Cover Image Upload
+        //     if($request->hasFile('cover_image')) {
+        //         $cover_images=$request->file('cover_image');
+        //         foreach ($cover_images as $key => $aImage) {
+        //             $ext = $aImage->getClientOriginalExtension();
+        //             $fileName = 'programme-cover-image-' . rand(0, 999999) . '-' . date('YmdHis') . '.' . $ext;
+        //             $filePath = $this->imageController->Upload($this->programmeImagePath, $aImage, $fileName, "-");
+        //             MasterImage::create([
+        //                 'parent_type'=>'programme',
+        //                 'parent_id'=>$programme->programId,
+        //                 'image_type'=>'cover_image',
+        //                 'file_name'=>$fileName
+        //             ]);
+        //         }
                 
-            }
-            //Cover Image Upload
-            if($request->hasFile('thumb_image')) {
-                $cover_images=$request->file('thumb_image');
-                foreach ($cover_images as $key => $aImage) {
-                    $ext = $aImage->getClientOriginalExtension();
-                    $fileName = 'programme-thumb-image-' . rand(0, 999999) . '-' . date('YmdHis') . '.' . $ext;
-                    $filePath = $this->imageController->Upload($this->programmeImagePath, $aImage, $fileName, "-");
-                    MasterImage::create([
-                        'parent_type'=>'programme',
-                        'parent_id'=>$programme->programId,
-                        'image_type'=>'thumb_image',
-                        'file_name'=>$fileName
-                    ]);
-                }
+        //     }
+        //     //Cover Image Upload
+        //     if($request->hasFile('thumb_image')) {
+        //         $cover_images=$request->file('thumb_image');
+        //         foreach ($cover_images as $key => $aImage) {
+        //             $ext = $aImage->getClientOriginalExtension();
+        //             $fileName = 'programme-thumb-image-' . rand(0, 999999) . '-' . date('YmdHis') . '.' . $ext;
+        //             $filePath = $this->imageController->Upload($this->programmeImagePath, $aImage, $fileName, "-");
+        //             MasterImage::create([
+        //                 'parent_type'=>'programme',
+        //                 'parent_id'=>$programme->programId,
+        //                 'image_type'=>'thumb_image',
+        //                 'file_name'=>$fileName
+        //             ]);
+        //         }
                 
-            }
+        //     }
 
-        return redirect('programme/add')->with(['success' => true,
-            'success.message' => 'Programme Created successfully!',
-            'success.title' => 'Well Done!']);
+        // return redirect('programme/add')->with(['success' => true,
+        //     'success.message' => 'Programme Created successfully!',
+        //     'success.title' => 'Well Done!']);
            
-        }else{
-            return redirect('programme/add')->with([
-                'error' => true,
-                'error.message'=> 'Error adding new Programme. Please try again.',
-                'error.title' => 'Oops !!'
-            ]);
-        }
+        // }else{
+        //     return redirect('programme/add')->with([
+        //         'error' => true,
+        //         'error.message'=> 'Error adding new Programme. Please try again.',
+        //         'error.title' => 'Oops !!'
+        //     ]);
+        // }
 
        
        

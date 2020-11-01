@@ -104,7 +104,7 @@
                 	</div>
                     
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">Programme Policies</label>
+                        <label class="col-sm-2 control-label">content Policies</label>
                         <div class="col-sm-8" style="display: inline">
                             <div class="col-md-5 no-padding">
                                 <select class="form-control policy" id="policySelector" name="content_policies_lft" style="width: 90%;" multiple="multiple">

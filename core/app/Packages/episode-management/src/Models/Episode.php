@@ -1,33 +1,32 @@
 <?php
-namespace ProgrammeManage\Models;
+namespace EpisodeManage\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Programme extends Model{
+class Episode extends Model{
 
 	/**
 	 * The database table used by the model.
 	 *
 	 * @var string
 	 */
-	protected $table = 'tbl_program';
-	protected $primaryKey = 'programId';
-    public $timestamps = false;
+	protected $table = 'tbl_episode';
+	protected $primaryKey = 'episodeId';
+    public $timestamps = true;
 
     protected $fillable = [
-        'programName',
+        'episodeName',
         'description',
         'advertisementPolicy',
         'status',
-        'kids',
-        'programmeName_si',
-        'programmeName_ta',
-        'programmeDesc_si',
-        'programmeDesc_ta',
+        'isTrailer',
+        'episodeDesc_si',
+        'episodeDesc_ta',
         'search_tag',
         'start_date',
         'end_date',
-        'subtitles',
+        'publish_date',
+        'programId',
         'likes',
         'programType',
        
