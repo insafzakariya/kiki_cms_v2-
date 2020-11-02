@@ -98,7 +98,7 @@
                 "columns": [
                     { "data": "episodeId" },
                     { "data": "episodeName" },
-                    { "data": "programId" },
+                    { "data": "programme" },
                     { "data": "status" },
                     { "data": "edit" }
                 ],

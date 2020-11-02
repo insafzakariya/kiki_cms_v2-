@@ -308,29 +308,64 @@ class EpisodeController extends Controller
     }
     public function listJson()
     {
+        $ep=Episode::with(['getProgramme'])->select('episodeId', 'episodeName','programId','status')->get();
+
         // try {
             $user = Sentinel::getUser();
-            return Datatables::usingCollection(
-                Episode::select('episodeId', 'episodeName','programId','status')->get()
-            )
-                ->editColumn('status', function ($value){
-                    if($value->status==1){
-                        return '<center><a href="javascript:void(0)" form="noForm" class="blue episode-status-toggle " data-id="'.$value->episodeId.'" data-status="0"  data-toggle="tooltip" data-placement="top" title="Deactivate"><i class="fa fa-toggle-on"></i></a></><center>';
-                    }else{
-                        return '<center><a href="javascript:void(0)" form="noForm" class="blue episode-status-toggle " data-id="' . $value->episodeId . '" data-status="1"  data-toggle="tooltip" data-placement="top" title="Activate"><i class="fa fa-toggle-off"></i></a></><center>';
-                    }
-                    return $value->status == 1 ? 'Activated' : 'Inactivated';
-                })
-                
-                ->addColumn('edit', function ($value) use ($user){
-                    if($user->hasAnyAccess(['episode.edit', 'admin'])){
-                        return '<center><a href="#" class="blue" onclick="window.location.href=\''.url('episode/'.$value->episodeId.'/edit').'\'" data-toggle="tooltip" data-placement="top" title="View/ Edit Episode"><i class="fa fa-pencil"></i></a></center>';
-                    }else{
-                        return '<center><a href="#" class="disabled" data-toggle="tooltip" data-placement="top" title="Edit Disabled"><i class="fa fa-pencil"></i></a></center>';
-                    }
+            $query=Episode::with(['getProgramme'])->select('tbl_episode.*');
+
+            return Datatables::eloquent($query)
+
+            ->editColumn('status', function (Episode $value){
+                if($value->status==1){
+                    return '<center><a href="javascript:void(0)" form="noForm" class="blue episode-status-toggle " data-id="'.$value->episodeId.'" data-status="0"  data-toggle="tooltip" data-placement="top" title="Deactivate"><i class="fa fa-toggle-on"></i></a></><center>';
+                }else{
+                    return '<center><a href="javascript:void(0)" form="noForm" class="blue episode-status-toggle " data-id="' . $value->episodeId . '" data-status="1"  data-toggle="tooltip" data-placement="top" title="Activate"><i class="fa fa-toggle-off"></i></a></><center>';
+                }
+                return $value->status == 1 ? 'Activated' : 'Inactivated';
+            })
+            ->addColumn('programme', function (Episode $value) {
+
+                return  $value->getProgramme ? $value->getProgramme->programName : "-";
+
+            })
+
+            ->addColumn('edit', function (Episode $value) use ($user){
+                if($user->hasAnyAccess(['episode.edit', 'admin'])){
+                    return '<center><a href="#" class="blue" onclick="window.location.href=\''.url('episode/'.$value->episodeId.'/edit').'\'" data-toggle="tooltip" data-placement="top" title="View/ Edit Episode"><i class="fa fa-pencil"></i></a></center>';
+                }else{
+                    return '<center><a href="#" class="disabled" data-toggle="tooltip" data-placement="top" title="Edit Disabled"><i class="fa fa-pencil"></i></a></center>';
+                }
+                    
+            })
+            ->make(true);
+
+            // return Datatables::usingCollection(
+            //     Episode::with(['getProgramme'])->select('episodeId', 'episodeName','programId','status')->get()
+            // )
+            //     ->editColumn('status', function ($value){
+            //         if($value->status==1){
+            //             return '<center><a href="javascript:void(0)" form="noForm" class="blue episode-status-toggle " data-id="'.$value->episodeId.'" data-status="0"  data-toggle="tooltip" data-placement="top" title="Deactivate"><i class="fa fa-toggle-on"></i></a></><center>';
+            //         }else{
+            //             return '<center><a href="javascript:void(0)" form="noForm" class="blue episode-status-toggle " data-id="' . $value->episodeId . '" data-status="1"  data-toggle="tooltip" data-placement="top" title="Activate"><i class="fa fa-toggle-off"></i></a></><center>';
+            //         }
+            //         return $value->status == 1 ? 'Activated' : 'Inactivated';
+            //     })
+            //     ->addColumn('programme', function ($value) {
+
+            //         return $value->getProgramme->programName;
+
+            //     })
+
+            //     ->addColumn('edit', function ($value) use ($user){
+            //         if($user->hasAnyAccess(['episode.edit', 'admin'])){
+            //             return '<center><a href="#" class="blue" onclick="window.location.href=\''.url('episode/'.$value->episodeId.'/edit').'\'" data-toggle="tooltip" data-placement="top" title="View/ Edit Episode"><i class="fa fa-pencil"></i></a></center>';
+            //         }else{
+            //             return '<center><a href="#" class="disabled" data-toggle="tooltip" data-placement="top" title="Edit Disabled"><i class="fa fa-pencil"></i></a></center>';
+            //         }
                         
-                })
-                ->make(true);
+            //     })
+            //     ->make(true);
         // }catch (\Throwable $exception){
         //     $exceptionId = rand(0, 99999999);
         //     Log::error("Ex " . $exceptionId . " | Error in " . __CLASS__ . "::" . __FUNCTION__ .":" .$exception->getLine()." | " . $exception->getMessage());
