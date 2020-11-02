@@ -309,7 +309,13 @@ class NotificationController extends Controller
             }
             if($typeDesc === "VIDEO"){
                 $type="0";
-                $contentType="episoid";
+                if($contentid==''){
+                    $contentid=$contentType;
+                    $contentType="programid";
+                }else{
+                    $contentType="episoid";
+                }
+                
             }
             if($typeDesc === "GENERAL"){
                 $type="2";
@@ -328,7 +334,7 @@ class NotificationController extends Controller
             $first=$showimage[0];
              //return $first;
 
-            $finel_array=array(
+            return $finel_array=array(
                 "deviceid" =>$devices,
                 "title"  =>$title,
                 "body" => $description,

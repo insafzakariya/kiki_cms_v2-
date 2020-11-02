@@ -580,7 +580,7 @@
                 allowedFileTypes: ['image'],
                 allowedFileExtensions: ["jpg", "gif", "png", "jpeg", "jfif"],
                 overwriteInitial: true,
-                maxFileSize: {{ env('Upload_Image_Size') }}
+                // maxFileSize: {{ env('Upload_Image_Size') }}
             });
 
 
