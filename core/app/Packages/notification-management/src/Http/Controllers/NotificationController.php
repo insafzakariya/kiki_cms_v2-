@@ -334,7 +334,7 @@ class NotificationController extends Controller
             $first=$showimage[0];
              //return $first;
 
-            return $finel_array=array(
+            $finel_array=array(
                 "deviceid" =>$devices,
                 "title"  =>$title,
                 "body" => $description,
