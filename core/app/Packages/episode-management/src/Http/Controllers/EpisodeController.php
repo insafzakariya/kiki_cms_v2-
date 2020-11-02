@@ -304,33 +304,27 @@ class EpisodeController extends Controller
     }
     public function listView()
     {
-        return view('ProgrammeManage::list');
+        return view('EpisodeManage::list');
     }
     public function listJson()
     {
         // try {
             $user = Sentinel::getUser();
             return Datatables::usingCollection(
-                Programme::select('programId', 'programName', 'programmeName_si','programmeName_ta', 'kids','status')->get()
+                Episode::select('episodeId', 'episodeName','programId','status')->get()
             )
                 ->editColumn('status', function ($value){
                     if($value->status==1){
-                        return '<center><a href="javascript:void(0)" form="noForm" class="blue programme-status-toggle " data-id="'.$value->programId.'" data-status="0"  data-toggle="tooltip" data-placement="top" title="Deactivate"><i class="fa fa-toggle-on"></i></a></><center>';
+                        return '<center><a href="javascript:void(0)" form="noForm" class="blue episode-status-toggle " data-id="'.$value->episodeId.'" data-status="0"  data-toggle="tooltip" data-placement="top" title="Deactivate"><i class="fa fa-toggle-on"></i></a></><center>';
                     }else{
-                        return '<center><a href="javascript:void(0)" form="noForm" class="blue programme-status-toggle " data-id="' . $value->programId . '" data-status="1"  data-toggle="tooltip" data-placement="top" title="Activate"><i class="fa fa-toggle-off"></i></a></><center>';
+                        return '<center><a href="javascript:void(0)" form="noForm" class="blue episode-status-toggle " data-id="' . $value->episodeId . '" data-status="1"  data-toggle="tooltip" data-placement="top" title="Activate"><i class="fa fa-toggle-off"></i></a></><center>';
                     }
                     return $value->status == 1 ? 'Activated' : 'Inactivated';
                 })
-                ->editColumn('kids', function ($value){
-                    if($value->kids == 1){
-                        return '<center><i class="fa fa-check"></i><center>';
-                    }else{
-                        return '<center><i class="fa fa-remove"></i></center>';
-                    }
-                })
+                
                 ->addColumn('edit', function ($value) use ($user){
-                    if($user->hasAnyAccess(['programme.edit', 'admin'])){
-                        return '<center><a href="#" class="blue" onclick="window.location.href=\''.url('programme/'.$value->programId.'/edit').'\'" data-toggle="tooltip" data-placement="top" title="View/ Edit Channel"><i class="fa fa-pencil"></i></a></center>';
+                    if($user->hasAnyAccess(['episode.edit', 'admin'])){
+                        return '<center><a href="#" class="blue" onclick="window.location.href=\''.url('episode/'.$value->episodeId.'/edit').'\'" data-toggle="tooltip" data-placement="top" title="View/ Edit Episode"><i class="fa fa-pencil"></i></a></center>';
                     }else{
                         return '<center><a href="#" class="disabled" data-toggle="tooltip" data-placement="top" title="Edit Disabled"><i class="fa fa-pencil"></i></a></center>';
                     }
@@ -349,7 +343,7 @@ class EpisodeController extends Controller
         $id = $request->id;
         $state = $request->state;
 
-        $programme = Programme::find($id);
+        $episode = Episode::find($id);
         if ($programme) {
             $programme->status = $state;
             $programme->save();
@@ -359,58 +353,58 @@ class EpisodeController extends Controller
         return response()->json(['status' => 'invalid_id']);
     }
 
-    public function sortView()
-    {
-        $channels=Channel::get();
-        return view('ProgrammeManage::sort')->with(['channels'=>$channels]);
-    }
+    // public function sortView()
+    // {
+    //     $channels=Channel::get();
+    //     return view('ProgrammeManage::sort')->with(['channels'=>$channels]);
+    // }
 
-    public function getUnsortedList(Request $request)
-    {
-        $channel_id= $request->get('channel_id');
-        $unsortedProgrammes=ProgrammeChannel::with(['getProgramme'])
-                                    ->where('channel_id',$channel_id)
-                                    ->where('order',0)
-                                    ->where('status',1)
-                                    ->get();
-        if($unsortedProgrammes){
-            return response($unsortedProgrammes, 200);
-        }else{
-            return response(null, 200);
-        }
-    }
-    public function getsortedList(Request $request)
-    {
-        $channel_id= $request->get('channel_id');
-        $sortedProgrammes=ProgrammeChannel::with(['getProgramme'])
-                                    ->where('channel_id',$channel_id)
-                                    ->where('order','!=',0)
-                                    ->where('status',1)
-                                    ->orderBy('order','asc')
-                                    ->get();
-        if($sortedProgrammes){
-            return response($sortedProgrammes, 200);
-        }else{
-            return response(null, 200);
-        }
-    }
+    // public function getUnsortedList(Request $request)
+    // {
+    //     $channel_id= $request->get('channel_id');
+    //     $unsortedProgrammes=ProgrammeChannel::with(['getProgramme'])
+    //                                 ->where('channel_id',$channel_id)
+    //                                 ->where('order',0)
+    //                                 ->where('status',1)
+    //                                 ->get();
+    //     if($unsortedProgrammes){
+    //         return response($unsortedProgrammes, 200);
+    //     }else{
+    //         return response(null, 200);
+    //     }
+    // }
+    // public function getsortedList(Request $request)
+    // {
+    //     $channel_id= $request->get('channel_id');
+    //     $sortedProgrammes=ProgrammeChannel::with(['getProgramme'])
+    //                                 ->where('channel_id',$channel_id)
+    //                                 ->where('order','!=',0)
+    //                                 ->where('status',1)
+    //                                 ->orderBy('order','asc')
+    //                                 ->get();
+    //     if($sortedProgrammes){
+    //         return response($sortedProgrammes, 200);
+    //     }else{
+    //         return response(null, 200);
+    //     }
+    // }
 
-    //Update Sorted & Unsorted List to DB
-    public function updateSortedProgrammes(Request $request)
-    {
-        $sorted_list=$request->get('sorted_list');
-        $unsorted_list=$request->get('unsorted_list');
-        ProgrammeChannel::with(['getProgramme'])
-            ->whereIn('id',$unsorted_list)
-            ->update(['order'=>0]);
-        foreach ($sorted_list as $key => $value) {  
-            ProgrammeChannel::with(['getProgramme'])
-            ->where('id',$value)
-            ->update(['order'=>$key+1]);
-        }
+    // //Update Sorted & Unsorted List to DB
+    // public function updateSortedProgrammes(Request $request)
+    // {
+    //     $sorted_list=$request->get('sorted_list');
+    //     $unsorted_list=$request->get('unsorted_list');
+    //     ProgrammeChannel::with(['getProgramme'])
+    //         ->whereIn('id',$unsorted_list)
+    //         ->update(['order'=>0]);
+    //     foreach ($sorted_list as $key => $value) {  
+    //         ProgrammeChannel::with(['getProgramme'])
+    //         ->where('id',$value)
+    //         ->update(['order'=>$key+1]);
+    //     }
        
        
-    }
+    // }
  
    
   
