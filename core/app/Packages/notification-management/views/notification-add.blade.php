@@ -548,7 +548,12 @@
             contentType: false,
             processData: false,
             success: function(response){
-               
+                swal({
+                    title: "Good job!",
+                    text: "Notification Succesfully Sent!",
+                    icon: "success",
+                });
+                location.reload(); 
             },
         });
 
@@ -927,27 +932,28 @@
 
         
 
-        $('#form').on('submit',(function(e) {
-            e.preventDefault();
+        // $('#form').on('submit',(function(e) {
+        //     // e.preventDefault();
                
-                $.ajax({
-                    url: '{{ url('admin/notification/notification-add')}}',
-                    method: "POST",
-                    data: new FormData(this),
-                    success: function (resp) {
+        //         $.ajax({
+        //             url: '{{ url('admin/notification/notification-add')}}',
+        //             method: "POST",
+        //             data: new FormData(this),
+        //             success: function (resp) {
 
-                        alert("Done!");
-                    },
-                    error: function (resp) {
-                        if (resp.status == 401) {
-                            $.ajax(this);
-                        }
+        //                 console.log(resp);
+        //             },
+        //             error: function (resp) {
+        //                 console.log(resp);
+        //                 if (resp.status == 401) {
+        //                     $.ajax(this);
+        //                 }
                     
-                        alert("Fail!");
-                    }
-                });
+        //                 alert("Fail!");
+        //             }
+        //         });
 
-        }));
+        // }));
 
         // $(document).ready(function () {
             
