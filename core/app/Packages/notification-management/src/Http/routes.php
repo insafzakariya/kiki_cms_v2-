@@ -1,6 +1,6 @@
 <?php
 
-Route::group(['middleware' => [], 'prefix' => 'admin', 'namespace' => 'NotificationManage\Http\Controllers'], function()
+Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'namespace' => 'NotificationManage\Http\Controllers'], function()
 {
     Route::get('user-group', [
         'as' => 'user-group.index', 'uses' => 'BulkUploadController@listView'

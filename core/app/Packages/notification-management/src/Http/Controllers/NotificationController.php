@@ -356,9 +356,10 @@ class NotificationController extends Controller
                 ], 'json' => $finel_array,
             ]);
             $contents = $response->getBody();
-            $contents = json_decode($contents);
-             Log::info($contents);
-             return view('NotificationManage::notification-add');
+            return $contents = json_decode($contents);
+            //  Log::info($contents);
+
+            //  return view('NotificationManage::notification-add');
             // return view('notification-add');
     
           
