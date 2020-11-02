@@ -403,6 +403,8 @@
         minFileCount: 3,
         showRemove: false,
         showUpload:false,
+        initialPreviewCount :1,
+        validateInitialCount : true,
         overwriteInitial: true,
         allowedFileExtensions: ["jpg", "gif", "png", "jpeg", "jfif"],
         initialPreview: <?php echo json_encode($thumb_image); ?>,
