@@ -16,7 +16,7 @@ class EpisodeTableModify extends Migration
             $table->string('episodeName_si')->nullable();
             $table->string('video_quality')->nullable();
             $table->string('episodeName_ta')->nullable();
-            $table->longText('Desc_si')->nullable();
+            $table->longText('episodeDesc_si')->nullable();
             $table->longText('episodeDesc_ta')->nullable();
             $table->longText('search_tag')->nullable();
             $table->timestamps();
