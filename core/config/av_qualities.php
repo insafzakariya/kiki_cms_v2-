@@ -1,0 +1,36 @@
+<?php
+return [
+    'video'=>[
+        '720p'=>[
+            'videoBitrate'=>1750000,
+            'audioBitrate'=>44100,
+            'width'=>345,
+            'height'=>720
+        ],
+        '480p'=>[
+            'videoBitrate'=>1750000,
+            'audioBitrate'=>44100,
+            'width'=>345,
+            'height'=>480
+        ],
+        '360p'=>[
+            'videoBitrate'=>1750000,
+            'audioBitrate'=>44100,
+            'width'=>345,
+            'height'=>360
+        ],
+        '240p'=>[
+            'videoBitrate'=>1750000,
+            'audioBitrate'=>44100,
+            'width'=>345,
+            'height'=>240
+        ],
+        '144p'=>[
+            'videoBitrate'=>1750000,
+            'audioBitrate'=>44100,
+            'width'=>345,
+            'height'=>144
+        ]
+    ]
+];
+?>

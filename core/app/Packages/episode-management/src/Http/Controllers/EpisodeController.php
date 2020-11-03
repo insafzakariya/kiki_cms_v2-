@@ -27,6 +27,7 @@ use Sentinel;
 class EpisodeController extends Controller
 {
     private $programmeImagePath ;
+    private $video_qualities;
 
     /**
      * @var ImageController
@@ -36,6 +37,7 @@ class EpisodeController extends Controller
     public function __construct()
     {
       $this->programmeImagePath = Config::get('filePaths.episode-images');
+      $this->video_qualities = Config::get('av_qualities.video');
       $this->imageController = new ImageController();   
     }
 
@@ -134,6 +136,7 @@ class EpisodeController extends Controller
                 
             }
 
+            $this->smilFileCreator($episode);
         return redirect('episode/add')->with(['success' => true,
             'success.message' => 'Episode Created successfully!',
             'success.title' => 'Well Done!']);
@@ -152,7 +155,7 @@ class EpisodeController extends Controller
     // Programme Edit View Load
     public function editView($id)
     {
-        $video_qualities=array('auto'=>'Auto','720p'=>'720p','480p'=>'480p','360p'=>'360p','240p'=>'240p','144p'=>'144p');
+        $video_qualities=array('720p'=>'720p','480p'=>'480p','360p'=>'360p','240p'=>'240p','144p'=>'144p');
         
         $exsist_episode=Episode::with([
             'getProgramme',
@@ -210,6 +213,7 @@ class EpisodeController extends Controller
     {
 
         //   return $request->all();
+        
         $exsist_episode=Episode::with(['getContentPolices.getPolicy'])->find($id);
         
         //Trailer On Validation
@@ -217,7 +221,7 @@ class EpisodeController extends Controller
         if($request->trailer=="on"){
             $isTrailer=1;
         }
-
+        
         $exsist_episode->episodeName=$request->episode_name_en;
         $exsist_episode->description=$request->episode_description_en;
         $exsist_episode->video_quality=json_encode($request->video_quality);
@@ -288,7 +292,8 @@ class EpisodeController extends Controller
                 }
                 
             }
-
+           
+            $this->smilFileCreator($exsist_episode);
             return redirect('episode/'.$id.'/edit')->with(['success' => true,
             'success.message' => 'Episode Created successfully!',
             'success.title' => 'Well Done!']);
@@ -440,6 +445,49 @@ class EpisodeController extends Controller
        
        
     // }
+
+    private function smilFileCreator($episode){
+        
+        //Quality Getting Method
+        //$this->video_qualities['480p']['height'];
+
+        //Smil File Body Genarate
+        $text = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+    	<smil title=\"Test SMIL for VOD\">
+    	<body>
+        <switch>";
+        
+        foreach (json_decode($episode->video_quality) as $key => $value) {
+          
+           $text .= "<video height=\"" .$this->video_qualities[$value]['height'] . "\" src=\"" . $episode->episodeId."_".$value.".mp4" . "\"
+           systemLanguage=\"eng,tam,sin,deu,nor\" width=\"" . $this->video_qualities[$value]['width']. "\">
+           <param name=\"videoBitrate\" value=\"" . $this->video_qualities[$value]['videoBitrate']. "\" valuetype=\"data\"></param>
+           <param name=\"audioBitrate\" value=\"".$this->video_qualities[$value]['audioBitrate']."\" valuetype=\"data\"></param>
+           </video>";
+        }
+
+        $text .= "<textstream src=\"" . $episode->episodeId . ".ttml\" system-language=\"eng,sin,tam\">
+                    <param name=\"isWowzaCaptionStream\" value=\"true\" /></textstream>
+                </switch></body></smil>";
+
+        $smilfile = fopen("newfile.smil", "w") or die(Log::error("something went wrong"));
+        fwrite($smilfile, $text);
+        fclose($smilfile);
+        // $random_digit = rand(0000, 9999);
+        // $file_name = $random_digit . date('Ymd') . "_" . "_" . $episode->episodeId . ".smil";
+        $file_name = $episode->episodeId . ".smil";
+
+      
+        $trackPath = $this->imageController->UploadSmil('SMIL', $smilfile, $file_name, $episode->episodeId);
+
+        $live_url = "vod/smil:" . $file_name . "/playlist.m3u8";
+
+        $episode->liveUrl=$live_url;
+        $episode->smilFile=$file_name;
+        $episode->save();
+
+               
+    }
  
    
   

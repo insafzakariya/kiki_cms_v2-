@@ -99,6 +99,21 @@ class ImageController extends Controller
         return $path;
 
     }
+    public function UploadSmilWithContent($folder, $contents, $file_name, $id = null)
+    {
+        $upload_path = env('IMAGE_UPLOAD_PATH', '');
+        // $upload_path = 'test';
+        $disk = Storage::disk('gcs');
+
+        // $path = $upload_path . '/' . $folder . '/' . $id;
+        $path = $upload_path . '/' . $folder;
+        // $smilFile=file_put_contents($id.".smil",$contents);
+        // $slimFile = file_get_contents('newfile.smil');
+       
+        $disk->put($path . '/' . $file_name, $contents);
+        return $path;
+
+    }
     public function UploadSmil($folder, $file, $file_name, $id = null)
     {
         $upload_path = env('IMAGE_UPLOAD_PATH', '');

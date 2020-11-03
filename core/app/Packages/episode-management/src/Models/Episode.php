@@ -29,6 +29,8 @@ class Episode extends Model{
         'programId',
         'likes',
         'video_quality',
+        'liveUrl',
+        'smilFile'
        
     ];
     public function getContentPolices()
