@@ -121,6 +121,7 @@ class ChannelController extends Controller
     public function editView($id)
     {
         $exsist_channel=Channel::with(['getContentPolices.getPolicy'])->find($id);
+   
         $image = [];
         $image_config = [];
         $intro_vedio = [];

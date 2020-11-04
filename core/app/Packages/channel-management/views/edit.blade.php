@@ -125,11 +125,13 @@
                     <div class="form-group"><label class="col-sm-2 control-label">Search Tags</label>
                         <div class="col-sm-8">
                             <select class="select-simple-tag form-control" name="tags[]" multiple="multiple" >
-                           
+                            <?php if(is_null(json_decode($exsist_channel->search_tag))){ ?>
+                               
+                           <?PHP  }else{ ?>
                             @foreach (json_decode($exsist_channel->search_tag) as $tag)
-                            <option value="{{$tag}}" selected="selected">{{$tag}}</option>
-                            @endforeach
-                           
+                                <option value="{{$tag}}" selected="selected">{{$tag}}</option>
+                                @endforeach
+                            <?php } ?>
                             </select>
                         </div>
                     </div>
