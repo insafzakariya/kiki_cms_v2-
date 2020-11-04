@@ -57,7 +57,7 @@ class EpisodeController extends Controller
 
     public function programmeSearch(Request $request)
     {
-        $search = $request->get('term');
+        $search = $request->get('q');
         $program = [];
         if($search){
             $program =  Programme::where('programName', 'like', '%' . $search . '%')->where('status', 1)->limit(10)->orderBy('programName', 'asc')->get();
@@ -95,15 +95,15 @@ class EpisodeController extends Controller
         ]);
 
         if($episode){
-            if(isset($request->channels)){
-                foreach ($request->channels as $key => $channel) {
-                    EpisodeChannel::create([
-                        'episode_id'=>$episode->episodeId,
-                        'channel_id'=>$channel,
-                        'status'=>1
-                    ]);
-                }
-            }
+            // if(isset($request->channels)){
+            //     foreach ($request->channels as $key => $channel) {
+            //         EpisodeChannel::create([
+            //             'episode_id'=>$episode->episodeId,
+            //             'channel_id'=>$channel,
+            //             'status'=>1
+            //         ]);
+            //     }
+            // }
 
             // Insert to Content Policy Table
             if(isset($request->content_policies)){
@@ -136,10 +136,8 @@ class EpisodeController extends Controller
                 
             }
 
-            $this->smilFileCreator($episode);
-        return redirect('episode/add')->with(['success' => true,
-            'success.message' => 'Episode Created successfully!',
-            'success.title' => 'Well Done!']);
+        $created_file_list=$this->smilFileCreator($episode);
+        return redirect('episode')->with('episode-details', "Episode Added Sucessfully,File Names :".$created_file_list);
            
         }else{
             return redirect('episode/add')->with([
@@ -164,7 +162,7 @@ class EpisodeController extends Controller
             'getEpisodeChannels.getChannel'
             ])
         ->find($id);
-        $channels=Channel::where('status',1)->get();
+        // $channels=Channel::where('status',1)->get();
         $thumb_image = [];
         $thumb_image_config = [];
         
@@ -195,7 +193,7 @@ class EpisodeController extends Controller
                 'exsist_episode'=>$exsist_episode,
                 'thumb_image'=>$thumb_image,
                 'thumb_image_config'=>$thumb_image_config,
-                'channels'=>$channels,
+                // 'channels'=>$channels,
                 'used_channel_ids'=>$used_channel_ids,
                 'video_qualities'=>$video_qualities
                 
@@ -326,6 +324,11 @@ class EpisodeController extends Controller
 
             return Datatables::eloquent($query)
 
+            ->editColumn('checklist', function (Episode $value){
+                
+                    return '<center><input type="checkbox" class="form-check-input"><center>';
+               
+            })
             ->editColumn('status', function (Episode $value){
                 if($value->status==1){
                     return '<center><a href="javascript:void(0)" form="noForm" class="blue episode-status-toggle " data-id="'.$value->episodeId.'" data-status="0"  data-toggle="tooltip" data-placement="top" title="Deactivate"><i class="fa fa-toggle-on"></i></a></><center>';
@@ -455,7 +458,7 @@ class EpisodeController extends Controller
         
         //Quality Getting Method
         //$this->video_qualities['480p']['height'];
-
+        $created_file_list='';
         //Smil File Body Genarate
         $text = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
     	<smil title=\"Test SMIL for VOD\">
@@ -463,14 +466,16 @@ class EpisodeController extends Controller
         <switch>";
         
         foreach (json_decode($episode->video_quality) as $key => $value) {
-          
-           $text .= "<video height=\"" .$this->video_qualities[$value]['height'] . "\" src=\"" . $episode->episodeId."_".$value.".mp4" . "\"
+           $created_file_list .=$episode->episodeId."_".$this->video_qualities[$value]['height'].".mp4 ,";
+           
+           $text .= "<video height=\"" .$this->video_qualities[$value]['height'] . "\" src=\"" . $episode->episodeId."_".$this->video_qualities[$value]['height'].".mp4" . "\"
            systemLanguage=\"eng,tam,sin,deu,nor\" width=\"" . $this->video_qualities[$value]['width']. "\">
            <param name=\"videoBitrate\" value=\"" . $this->video_qualities[$value]['videoBitrate']. "\" valuetype=\"data\"></param>
            <param name=\"audioBitrate\" value=\"".$this->video_qualities[$value]['audioBitrate']."\" valuetype=\"data\"></param>
            </video>";
         }
 
+        $created_file_list .= $episode->episodeId . ".ttml";
         $text .= "<textstream src=\"" . $episode->episodeId . ".ttml\" system-language=\"eng,sin,tam\">
                     <param name=\"isWowzaCaptionStream\" value=\"true\" /></textstream>
                 </switch></body></smil>";
@@ -490,6 +495,8 @@ class EpisodeController extends Controller
         $episode->liveUrl=$live_url;
         $episode->smilFile=$file_name;
         $episode->save();
+
+        return $created_file_list;
 
                
     }

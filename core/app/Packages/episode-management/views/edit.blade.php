@@ -50,17 +50,6 @@
                         </div>
                 	</div>
                     
-                    
-                    <div class="form-group"><label class="col-sm-2 control-label">Channels </label>
-                    	<div class="col-sm-5">
-                        <select  name="channels[]" class="form-control" >
-                        @foreach ($channels as $channel)
-                            <option value="{{$channel->channelId}}" >{{$channel->channelName}}</option>
-                        @endforeach
-                      
-                            </select>
-                        </div>
-                	</div>
 
                     <div class="form-group"><label class="col-sm-2 control-label">Programme </label>
                     	<div class="col-sm-5">
@@ -243,11 +232,7 @@
         $('select[name="advertisment_policy"]').select2({
             // multiple: true,
         });
-        $('select[name="channels[]"]').select2({
-            // placeholder: "Choose Channels ",
-            multiple: true,
-            
-        }).select2('val', <?php echo json_encode($used_channel_ids); ?>);
+       
 
         $('select[name="video_quality[]"]').select2({
             placeholder: "Choose Quality ",
@@ -365,7 +350,10 @@
         dropZoneEnabled: false,
         uploadAsync: false,
         minFileCount: 1,
+        maxFileCount: 1,
+
         showRemove: false,
+        validateInitialCount: true,
         showUpload:false,
         overwriteInitial: true,
         allowedFileExtensions: ["jpg", "gif", "png", "jpeg", "jfif"],

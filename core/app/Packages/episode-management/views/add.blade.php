@@ -13,7 +13,7 @@
             <a href="{{url('/')}}">Home</a>
         </li>
         <li class="active">
-            <strong>Episode/ADD</strong>
+            <strong>Episode/ ADD</strong>
         </li>
     </ol>
 </div>                  
@@ -43,7 +43,7 @@
                     	<div class="col-sm-5"><input type="text" class="form-control" name="episode_description_ta"></div>
                 	</div>
                     
-                    <div class="form-group"><label class="col-sm-2 control-label">Channels </label>
+                    <!-- <div class="form-group"><label class="col-sm-2 control-label">Channels </label>
                     	<div class="col-sm-5">
                         <select  name="channels[]" class="form-control" multiple="multiple">
                         <option></option>
@@ -53,7 +53,7 @@
                       
                             </select>
                         </div>
-                	</div>
+                	</div> -->
                     <div class="form-group"><label class="col-sm-2 control-label">Programme </label>
                     	<div class="col-sm-5">
                         <select  name="programme" id="programme" class="form-control select-simple" >
@@ -93,7 +93,7 @@
                     <div class="form-group"><label class="col-sm-2 control-label">Video Quality </label>
                     	<div class="col-sm-5">
                         <select  name="video_quality[]" class="form-control" multiple="multiple" >
-                            <option value="auto">Auto</option>
+                           
                             <option value="720p">720p</option>
                             <option value="480p">480p</option>
                             <option value="360p">360p</option>
@@ -192,24 +192,43 @@
 
   
         $('#programme').select2({
-            placeholder: "Please select a program",
-            tokenSeparators: [','],
-            tags: true,
-            minimumInputLength: 3,
-            multiple: false,
-            ajax: {
-                type: "GET",
-                url: '{{url('episode/search/programme')}}',
-                dataType: 'json',
-                contentType: "application/json",
-                delay: 250,
-                data: function (params) {
-                    return  'term='+params.term;
-                     /*JSON.stringify({
-                        term: params.term
-                    });*/
-                },
-                processResults: function (data) {
+            // placeholder: "Please select a program",
+            // tokenSeparators: [','],
+            // tags: true,
+            // minimumInputLength: 3,
+            // multiple: false,
+            // ajax: {
+            //     type: "GET",
+            //     url: '{{url('episode/search/programme')}}',
+            //     dataType: 'json',
+            //     contentType: "application/json",
+            //     delay: 250,
+            //     data: function (params) {
+            //         return  'term='+params.term;
+            //          /*JSON.stringify({
+            //             term: params.term
+            //         });*/
+            //     },
+            //     processResults: function (data) {
+            //         return {
+            //             results: $.map(data, function (item, i) {
+            //                 return {
+            //                     text: item.programName,
+            //                     id: item.programId
+            //                 }
+            //             })
+            //         };
+            //     },
+            //     // cache: true
+            // },
+
+            ajax               : 
+            {
+                url            : '{{url('episode/search/programme')}}',
+                type           : 'GET',
+                dataType       : 'json',
+                delay          : 250,
+                processResults : function (data) {
                     return {
                         results: $.map(data, function (item, i) {
                             return {
@@ -218,9 +237,8 @@
                             }
                         })
                     };
-                },
-                cache: true
-            },
+                }
+            }
         });
 
 
@@ -275,18 +293,26 @@
                     },
                   
                 },
-                // tags: {
-                //     required: true
+                programme: {
+                    required: true
 
-                // }
-                // ,
-                // 'thumb_image[]': {
-                //     required: true,
-                //     accept: "image/*",
-                //     dimension: [175,175],
-                //     filesize_max_kb: {{ env('Upload_Image_Size') }}
+                },
+                'video_quality[]': {
+                    required: true
 
-                // }
+                },
+                'tags[]': {
+                    required: true
+
+                }
+                ,
+                'thumb_image[]': {
+                    required: true,
+                    accept: "image/*",
+                    dimension: [175,175],
+                    filesize_max_kb: {{ env('Upload_Image_Size') }}
+
+                }
                 // ,
                 // 'cover_image[]': {
                 //     required: true,
@@ -346,6 +372,7 @@
         dropZoneEnabled: true,
         uploadAsync: false,
         minFileCount: 1,
+        maxFileCount: 1,
         showRemove: true,
         showUpload:false,
         allowedFileExtensions: ["jpg", "gif", "png", "jpeg", "jfif"]

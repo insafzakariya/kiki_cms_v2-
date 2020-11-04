@@ -36,8 +36,12 @@ class Policy extends Model{
             ->get();
     }
     static function  getEpisodeContentPolicies(){
-        return SELF::where('policyType',4)
-            ->where('validFrom', '<=', date("Y-m-d"))
+        // return SELF::where('policyType',4)
+        //     ->where('validFrom', '<=', date("Y-m-d"))
+        //     ->where('validTo', '>=', date("Y-m-d"))
+        //     ->whereStatus(1)
+        //     ->get();
+        return SELF::where('validFrom', '<=', date("Y-m-d"))
             ->where('validTo', '>=', date("Y-m-d"))
             ->whereStatus(1)
             ->get();
@@ -59,8 +63,13 @@ class Policy extends Model{
             ->get();
     }
     static function  getEpisodeContentPoliciesByFilterIds($used_content_policy_ids){
-        return SELF::where('policyType',4)
-            ->where('validFrom', '<=', date("Y-m-d"))
+        // return SELF::where('policyType',4)
+        //     ->where('validFrom', '<=', date("Y-m-d"))
+        //     ->where('validTo', '>=', date("Y-m-d"))
+        //     ->whereStatus(1)
+        //     ->whereNotIn('PolicyID', $used_content_policy_ids)
+        //     ->get();
+        return SELF::where('validFrom', '<=', date("Y-m-d"))
             ->where('validTo', '>=', date("Y-m-d"))
             ->whereStatus(1)
             ->whereNotIn('PolicyID', $used_content_policy_ids)

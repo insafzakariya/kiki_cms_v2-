@@ -68,6 +68,11 @@
             <p class="plus">+</p>
         </div>
     @endif -->
+    @if (session('episode-details'))
+    <div class="alert alert-success">
+        {{ session('episode-details') }}
+    </div>
+    @endif
     <div class="row">
         <div class="col-lg-12 margins">
             <div class="ibox-content">
@@ -76,6 +81,7 @@
                         <thead>
                         <tr>
                         
+                            <th style="align:center"><center><input type="checkbox" class="form-check-input"><center></th>
                             <th>ID</th>
                             <th>Episode Name en</th>
                             <th>Programme</th>
@@ -97,6 +103,7 @@
             table=$('#example1').DataTable( {
                 "ajax": '{{url('episode/list/json')}}',
                 "columns": [
+                    { "data": "checklist" ,'orderable' : false, 'searchable' : false},
                     { "data": "episodeId" },
                     { "data": "episodeName" },
                     { name : 'getProgramme.programName',"data": "programme" },
@@ -117,7 +124,7 @@
                     {extend: 'print',className: 'btn-sm'}
                 ],
                 "autoWidth": false,
-                "order": [[ 0, "desc" ]]
+                "order": [[ 1, "desc" ]]
             });
 
             table.on( 'draw.dt', function () {
