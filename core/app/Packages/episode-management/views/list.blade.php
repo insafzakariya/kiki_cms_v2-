@@ -75,6 +75,7 @@
                     <table id="example1" class="table table-striped table-bordered table-hover" width="100%">
                         <thead>
                         <tr>
+                        
                             <th>ID</th>
                             <th>Episode Name en</th>
                             <th>Programme</th>
@@ -98,9 +99,9 @@
                 "columns": [
                     { "data": "episodeId" },
                     { "data": "episodeName" },
-                    { "data": "programme" },
+                    { name : 'getProgramme.programName',"data": "programme" },
                     { "data": "status" },
-                    { "data": "edit" }
+                    { "data": "edit" ,searchable : false}
                 ],
                 "columnDefs": [
                     { "orderable": false, "targets": [3, 4] }

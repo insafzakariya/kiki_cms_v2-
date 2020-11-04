@@ -311,8 +311,13 @@ class EpisodeController extends Controller
     {
         return view('EpisodeManage::list');
     }
-    public function listJson()
+    public function listJson(Request $request)
     {
+        $searchField = $request->get('field_name');
+        $searchParam = $request->get('search_param');
+        if ($searchField AND $searchParam) {
+            return "dd";
+        }
         $ep=Episode::with(['getProgramme'])->select('episodeId', 'episodeName','programId','status')->get();
 
         // try {
