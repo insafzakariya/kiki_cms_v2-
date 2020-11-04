@@ -102,11 +102,11 @@ class ChannelController extends Controller
                 }
             }
 
-            return redirect('admin/channel/add')->with(['success' => true,
+            return redirect('channel/add')->with(['success' => true,
             'success.message' => 'Channel Created successfully!',
             'success.title' => 'Well Done!']);
         }else{
-            return redirect('admin/channel/add')->with([
+            return redirect('channel/add')->with([
                 'error' => true,
                 'error.message'=> 'Error adding new Channel. Please try again.',
                 'error.title' => 'Oops !!'
@@ -237,7 +237,7 @@ class ChannelController extends Controller
             'success.message' => 'Channel Created successfully!',
             'success.title' => 'Well Done!']);
         }else{
-            return redirect('admin/channel/'.$id.'/edit')->with([
+            return redirect('channel/'.$id.'/edit')->with([
                 'error' => true,
                 'error.message'=> 'Error adding new Channel. Please try again.',
                 'error.title' => 'Oops !!'
