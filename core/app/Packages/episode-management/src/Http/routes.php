@@ -21,8 +21,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'episode', 'namespace' => 'E
     Route::get('list/json', [
         'as' => 'episode.list', 'uses' => 'EpisodeController@listJson'
     ]);
-    Route::post('changeState', [
-        'as' => 'episode.edit', 'uses' => 'EpisodeController@changeStatus'
+    Route::post('delete', [
+        'as' => 'episode.edit', 'uses' => 'EpisodeController@delete'
     ]);
 
     //Get Programme Search 

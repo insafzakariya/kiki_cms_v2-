@@ -311,16 +311,12 @@ class EpisodeController extends Controller
     }
     public function listJson(Request $request)
     {
-        $searchField = $request->get('field_name');
-        $searchParam = $request->get('search_param');
-        if ($searchField AND $searchParam) {
-            return "dd";
-        }
-        $ep=Episode::with(['getProgramme'])->select('episodeId', 'episodeName','programId','status')->get();
+       
+
 
         // try {
             $user = Sentinel::getUser();
-            $query=Episode::with(['getProgramme'])->select('tbl_episode.*');
+            $query=Episode::with(['getProgramme'])->where('status',1)->select('tbl_episode.*');
 
             return Datatables::eloquent($query)
 
@@ -331,9 +327,9 @@ class EpisodeController extends Controller
             })
             ->editColumn('status', function (Episode $value){
                 if($value->status==1){
-                    return '<center><a href="javascript:void(0)" form="noForm" class="blue episode-status-toggle " data-id="'.$value->episodeId.'" data-status="0"  data-toggle="tooltip" data-placement="top" title="Deactivate"><i class="fa fa-toggle-on"></i></a></><center>';
+                    return '<center><a href="javascript:void(0)" form="noForm" class="blue episode-status-toggle " data-id="'.$value->episodeId.'" data-status="0"  data-toggle="tooltip" data-placement="top" title="Deactivate"><i class="fa fa-trash"></i></a></><center>';
                 }else{
-                    return '<center><a href="javascript:void(0)" form="noForm" class="blue episode-status-toggle " data-id="' . $value->episodeId . '" data-status="1"  data-toggle="tooltip" data-placement="top" title="Activate"><i class="fa fa-toggle-off"></i></a></><center>';
+                    return '<center><a href="javascript:void(0)" form="noForm" class="blue episode-status-toggle " data-id="' . $value->episodeId . '" data-status="1"  data-toggle="tooltip" data-placement="top" title="Activate"><i class="fa fa-trash"></i></a></><center>';
                 }
                 return $value->status == 1 ? 'Activated' : 'Inactivated';
             })
@@ -386,15 +382,15 @@ class EpisodeController extends Controller
         // }
     }
   
-    public function changeStatus(Request $request)
+    public function delete(Request $request)
     {
         $id = $request->id;
-        $state = $request->state;
+        $state = 0;
 
         $episode = Episode::find($id);
-        if ($programme) {
-            $programme->status = $state;
-            $programme->save();
+        if ($episode) {
+            $episode->status = $state;
+            $episode->save();
             
             return response()->json(['status' => 'success']);
         }

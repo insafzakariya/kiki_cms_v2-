@@ -85,7 +85,7 @@
                             <th>ID</th>
                             <th>Episode Name en</th>
                             <th>Programme</th>
-                            <th width="1%">Active/ Deactivate</th>
+                            <th width="1%">Delete</th>
                             <th width="1%">Edit</th>
                         </tr>
                         </thead>
@@ -156,7 +156,7 @@
                 if (isConfirm) {
                     $.ajax({
                         method: "POST",
-                        url: '{{url('episode/changeState')}}',
+                        url: '{{url('episode/delete')}}',
                         data:{ 'id' : id, 'state' : state  }
                     }).done(function( msg ) {
                         console.log("CHANGED");
