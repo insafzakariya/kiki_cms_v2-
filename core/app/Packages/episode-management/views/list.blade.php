@@ -81,7 +81,7 @@
                         <thead>
                         <tr>
                         
-                            <th style="align:center"><center><input type="checkbox" class="form-check-input"><center></th>
+                            <th style="align:center"><center><input type="checkbox" id="select-all" class="form-check-input select-all"><center></th>
                             <th>ID</th>
                             <th>Episode Name en</th>
                             <th>Programme</th>
@@ -98,6 +98,7 @@
 @section('js')
 
     <script type="text/javascript">
+        var selected_ids=[];
         let table;
         $(document).ready(function(){
             table=$('#example1').DataTable( {
@@ -141,6 +142,21 @@
 
 
 
+        });
+
+        //Select All Checkbox
+        $('#select-all').click(function(event) {   
+            if(this.checked) {
+                // Iterate each checkbox
+                $('.episode-check').each(function() {
+                    this.checked = true;   
+                    console.log(this.value);                    
+                });
+            } else {
+                $(':checkbox').each(function() {
+                    this.checked = false;                       
+                });
+            }
         });
 
         function changeStatus(id, state) {

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
     	<smil title="Test SMIL for VOD">
     	<body>
-        <switch><video height="360" src="16818_360.mp4"
+        <switch><video height="360" src="16819_360.mp4"
            systemLanguage="eng,tam,sin,deu,nor" width="345">
            <param name="videoBitrate" value="1750000" valuetype="data"></param>
            <param name="audioBitrate" value="44100" valuetype="data"></param>
-           </video><video height="144" src="16818_144.mp4"
+           </video><video height="240" src="16819_240.mp4"
            systemLanguage="eng,tam,sin,deu,nor" width="345">
            <param name="videoBitrate" value="1750000" valuetype="data"></param>
            <param name="audioBitrate" value="44100" valuetype="data"></param>
-           </video><textstream src="16818.ttml" system-language="eng,sin,tam">
+           </video><textstream src="16819.ttml" system-language="eng,sin,tam">
                     <param name="isWowzaCaptionStream" value="true" /></textstream>
                 </switch></body></smil>

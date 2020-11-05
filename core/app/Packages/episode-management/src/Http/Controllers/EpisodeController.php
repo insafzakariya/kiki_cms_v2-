@@ -81,7 +81,7 @@ class EpisodeController extends Controller
         $episode=Episode::create([
             'episodeName'=>$request->episode_name_en,
             'description'=>$request->episode_description_en,
-            // 'advertisementPolicy'=>$request->advertisment_policy,
+            'advertisement_policy'=>$request->advertisment_policy,
             'video_quality'=>json_encode($request->video_quality),
             'status'=>1,
             'isTrailer'=>$isTrailer,
@@ -189,7 +189,7 @@ class EpisodeController extends Controller
             return view('EpisodeManage::edit')
             ->with(
                 ['episodeContentPolicies'=>$episodeContentPolicies,
-                // 'advertismentPolicies'=>$advertismentPolicies,
+                'advertismentPolicies'=>$advertismentPolicies,
                 'exsist_episode'=>$exsist_episode,
                 'thumb_image'=>$thumb_image,
                 'thumb_image_config'=>$thumb_image_config,
@@ -226,6 +226,7 @@ class EpisodeController extends Controller
         $exsist_episode->isTrailer=$isTrailer;
         $exsist_episode->episodeDesc_si=$request->episode_description_si;
         $exsist_episode->episodeDesc_ta=$request->episode_description_ta;
+        $exsist_episode->advertisement_policy=$request->advertisment_policy;
         $exsist_episode->programId=$request->programme;
         $exsist_episode->start_date=$request->start_date;
         $exsist_episode->end_date=$request->end_date;
@@ -322,7 +323,7 @@ class EpisodeController extends Controller
 
             ->editColumn('checklist', function (Episode $value){
                 
-                    return '<center><input type="checkbox" class="form-check-input"><center>';
+                    return '<center><input type="checkbox" class="form-check-input episode-check" value="'.$value->episodeId.'"><center>';
                
             })
             ->editColumn('status', function (Episode $value){

@@ -17,7 +17,7 @@ class Episode extends Model{
     protected $fillable = [
         'episodeName',
         'description',
-        'advertisementPolicy',
+        'advertisement_policy',
         'status',
         'isTrailer',
         'episodeDesc_si',

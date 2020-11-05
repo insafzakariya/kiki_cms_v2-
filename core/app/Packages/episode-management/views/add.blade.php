@@ -130,6 +130,16 @@
 
                         </div>
                     </div>
+                    <div class="form-group"><label class="col-sm-2 control-label">Advertisment Policy</label>
+                    	<div class="col-sm-5">
+                        <select  name="advertisment_policy" class="form-control" >
+                        @foreach ($advertismentPolicies as $advertismentPolicy)
+                        <option value="{{$advertismentPolicy->PolicyID}}">{{$advertismentPolicy->Name}}</option>
+                        @endforeach
+                      
+                            </select>
+                        </div>
+                	</div>
                     <div class="form-group"><label class="col-sm-2 control-label">Search Tags</label>
                         <div class="col-sm-8">
                             <select class="select-simple-tag form-control" name="tags[]" multiple="multiple">
@@ -189,6 +199,10 @@
                 defaultDate: [ "2099-12-31"]
             }
         );
+
+        $('select[name="advertisment_policy"]').select2({
+            // multiple: true,
+        });
 
   
         $('#programme').select2({

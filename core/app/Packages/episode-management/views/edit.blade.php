@@ -131,7 +131,20 @@
                         </div>
                     </div>
                     
-                    
+                    <div class="form-group"><label class="col-sm-2 control-label">Advertisment Policy</label>
+                    	<div class="col-sm-5">
+                        <select  name="advertisment_policy" class="form-control" >
+                            @foreach ($advertismentPolicies as $advertismentPolicy)
+                                <?php if($advertismentPolicy->PolicyID == $exsist_episode->advertisement_policy){?>
+                                    <option value="{{$advertismentPolicy->PolicyID}}" selected>{{$advertismentPolicy->Name}}</option>
+                                <?php }else{?>
+                                    <option value="{{$advertismentPolicy->PolicyID}}">{{$advertismentPolicy->Name}}</option>
+                                <?php }?>
+                            @endforeach
+                      
+                            </select>
+                        </div>
+                	</div>
                    
                     <div class="form-group"><label class="col-sm-2 control-label">Search Tags</label>
                         <div class="col-sm-8">
