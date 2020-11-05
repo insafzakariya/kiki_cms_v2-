@@ -253,6 +253,21 @@
         }).select2('val', <?php echo $exsist_episode->video_quality; ?>);;
         
 
+        jQuery.validator.addMethod("programmeSelect", function(value, element){
+            if (value) {
+                return true;
+            }else{
+                return false;
+            }
+            // console.log(value);
+            // // if (/^[0-9]{9}[vVxX]$/.test(value)) {
+            //     return false;  // FAIL validation when REGEX matches
+            // // } else {
+            // //     return true;   // PASS validation otherwise
+            // // };
+        }, "No Programme selected"); 
+        
+
 		$("#form").validate({
             rules: {
                 episode_name_en: {
@@ -292,10 +307,20 @@
                     },
                   
                 },
-                // tags: {
-                //     required: true
+                
+                programme: {
+                    required: true,
+                    programmeSelect: true
 
-                // }
+                },
+                'video_quality[]': {
+                    required: true
+
+                },
+                'tags[]': {
+                    required: true
+
+                }
                 // ,
                 // 'thumb_image[]': {
                 //     required: true,

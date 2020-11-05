@@ -56,7 +56,7 @@
                 	</div> -->
                     <div class="form-group"><label class="col-sm-2 control-label">Programme </label>
                     	<div class="col-sm-5">
-                        <select  name="programme" id="programme" class="form-control select-simple" >
+                        <select  name="programme" id="programme" required class="form-control select-simple" >
                             
                             </select>
                         </div>
@@ -200,10 +200,6 @@
             }
         );
 
-        $('select[name="advertisment_policy"]').select2({
-            // multiple: true,
-        });
-
   
         $('#programme').select2({
             // placeholder: "Please select a program",
@@ -267,6 +263,20 @@
             
         });
 
+
+        jQuery.validator.addMethod("programmeSelect", function(value, element){
+            if (value) {
+                return true;
+            }else{
+                return false;
+            }
+            // console.log(value);
+            // // if (/^[0-9]{9}[vVxX]$/.test(value)) {
+            //     return false;  // FAIL validation when REGEX matches
+            // // } else {
+            // //     return true;   // PASS validation otherwise
+            // // };
+        }, "No Programme selected"); 
       
 
 		$("#form").validate({
@@ -308,7 +318,8 @@
                   
                 },
                 programme: {
-                    required: true
+                    required: true,
+                    programmeSelect: true
 
                 },
                 'video_quality[]': {
@@ -323,26 +334,14 @@
                 'thumb_image[]': {
                     required: true,
                     accept: "image/*",
-                    dimension: [175,175],
-                    filesize_max_kb: {{ env('Upload_Image_Size') }}
+                    // dimension: [175,175],
+                    // filesize_max_kb: {{ env('Upload_Image_Size') }}
 
                 }
-                // ,
-                // 'cover_image[]': {
-                //     required: true,
-                //     accept: "image/*",
-                //     dimension: [175,175],
-                //     filesize_max_kb: {{ env('Upload_Image_Size') }}
-
-                // }
-                // ,
-                // tags: {
-                //     required: true
-
-                // }
                
             },
             submitHandler: function(form) {
+
                 form.submit();
             }
         });
