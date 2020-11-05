@@ -30,7 +30,9 @@ class Episode extends Model{
         'likes',
         'video_quality',
         'liveUrl',
-        'smilFile'
+        'smilFile',
+        'new_image',
+        'file_name'
        
     ];
     public function getContentPolices()

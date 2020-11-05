@@ -26,7 +26,7 @@ use Sentinel;
 
 class EpisodeController extends Controller
 {
-    private $programmeImagePath ;
+    private $episodeImagePath ;
     private $video_qualities;
 
     /**
@@ -36,7 +36,7 @@ class EpisodeController extends Controller
 
     public function __construct()
     {
-      $this->programmeImagePath = Config::get('filePaths.episode-images');
+      $this->episodeImagePath = Config::get('filePaths.episode-images');
       $this->video_qualities = Config::get('av_qualities.video');
       $this->imageController = new ImageController();   
     }
@@ -125,13 +125,16 @@ class EpisodeController extends Controller
                 foreach ($cover_images as $key => $aImage) {
                     $ext = $aImage->getClientOriginalExtension();
                     $fileName = 'episode-thumb-image-' . rand(0, 999999) . '-' . date('YmdHis') . '.' . $ext;
-                    $filePath = $this->imageController->Upload($this->programmeImagePath, $aImage, $fileName, "-");
+                    $filePath = $this->imageController->Upload($this->episodeImagePath, $aImage, $fileName, "-");
                     MasterImage::create([
                         'parent_type'=>'episode',
                         'parent_id'=>$episode->episodeId,
                         'image_type'=>'thumb_image',
                         'file_name'=>$fileName
                     ]);
+                    $episode->new_image=1;
+                    $episode->save();
+
                 }
                 
             }
@@ -171,19 +174,29 @@ class EpisodeController extends Controller
             $used_channel_ids=array_column(json_decode($exsist_episode->getEpisodeChannels), 'channel_id');
             $used_content_policy_ids = array_column(json_decode($exsist_episode->getContentPolices), 'PolicyID');
             $episodeContentPolicies=Policy::getEpisodeContentPoliciesByFilterIds($used_content_policy_ids);
-
-            if ($exsist_episode->getEpisodeThumbImages) {
-                foreach ($exsist_episode->getEpisodeThumbImages as $key => $thumb_image_value) {
-                    array_push($thumb_image, "<img style='height:190px' src='" . Config('constants.bucket.url') . Config('filePaths.front.episode') . $thumb_image_value->file_name . "'>");
-                    array_push($thumb_image_config, array(
-                        'caption' => '',
-                        'type' => 'image',
-                        'key' => $thumb_image_value->id,
-                        // 'url' => url('admin/channel/image-delete'),
-                    ));
+            if($exsist_episode->new_image){
+                if ($exsist_episode->getEpisodeThumbImages) {
+                    foreach ($exsist_episode->getEpisodeThumbImages as $key => $thumb_image_value) {
+                        array_push($thumb_image, "<img style='height:190px' src='" . Config('constants.bucket.url') . Config('filePaths.front.episode') . $thumb_image_value->file_name . "'>");
+                        array_push($thumb_image_config, array(
+                            'caption' => '',
+                            'type' => 'image',
+                            'key' => $thumb_image_value->id,
+                            // 'url' => url('admin/channel/image-delete'),
+                        ));
+                    }
+                    
                 }
-                
+            }else{
+                array_push($thumb_image, "<img style='height:190px' src='" . Config('constants.bucket.url') . Config('filePaths.front.episode') . $exsist_episode->file_name . "'>");
+                array_push($thumb_image_config, array(
+                    'caption' => '',
+                    'type' => 'image',
+                    // 'key' => $file_name->id,
+                    // 'url' => url('admin/channel/image-delete'),
+                ));
             }
+            
            
         //  return $thumb_image;
             return view('EpisodeManage::edit')
@@ -255,7 +268,7 @@ class EpisodeController extends Controller
                 foreach ($cover_images as $key => $aImage) {
                     $ext = $aImage->getClientOriginalExtension();
                     $fileName = 'episode-thumb-image-' . rand(0, 999999) . '-' . date('YmdHis') . '.' . $ext;
-                    $filePath = $this->imageController->Upload($this->programmeImagePath, $aImage, $fileName, "-");
+                    $filePath = $this->imageController->Upload($this->episodeImagePath, $aImage, $fileName, "-");
                     
                     MasterImage::create([
                         'parent_type'=>'episode',
@@ -263,6 +276,8 @@ class EpisodeController extends Controller
                         'image_type'=>'thumb_image',
                         'file_name'=>$fileName
                     ]);
+                    $exsist_episode->new_image=1;
+                    $exsist_episode->save();
                 }
             }else if($request->has('thumb_image_removed') && $request->get('thumb_image_removed') == 1){
                 MasterImage::where('status', 1)
