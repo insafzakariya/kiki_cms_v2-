@@ -249,13 +249,13 @@ class EpisodeController extends Controller
         $exsist_episode->save();
 
         if($exsist_episode){
-            if(isset($request->channels)){
-                // return $request->channels;
-                EpisodeChannel::whereNotIn('channel_id',$request->channels)->where('episode_id',$exsist_episode->episodeId)->update(['status' => 0]);
-                foreach ($request->channels as $key => $channel) {
-                    EpisodeChannel::firstOrCreate(['episode_id' =>$exsist_episode->episodeId,'channel_id'=>$channel,'status'=>1]);
-                }
-            }
+            // if(isset($request->channels)){
+            //     // return $request->channels;
+            //     EpisodeChannel::whereNotIn('channel_id',$request->channels)->where('episode_id',$exsist_episode->episodeId)->update(['status' => 0]);
+            //     foreach ($request->channels as $key => $channel) {
+            //         EpisodeChannel::firstOrCreate(['episode_id' =>$exsist_episode->episodeId,'channel_id'=>$channel,'status'=>1]);
+            //     }
+            // }
             
             if($request->hasFile('thumb_image')) {
                 $cover_images=$request->file('thumb_image');
@@ -515,6 +515,7 @@ class EpisodeController extends Controller
     public function policyBulkUpdate($ids)
     {
         $episode_ids=json_decode($ids);
+        $episode_ids=Episode::whereIn('episodeId', $episode_ids)->get();
     //    return $episode_ids;
        $episodeContentPolicies=Policy::getEpisodeContentPolicies();
        return view('EpisodeManage::bulkPolicyUpdate')
@@ -525,6 +526,30 @@ class EpisodeController extends Controller
         
         ]);
 
+    }
+    public function updatePolicyBulkUpdate(Request $request,$ids)
+    {
+        $episode_ids=json_decode($ids);
+        $content_array=array();
+        
+
+        if(isset($request->content_policies)){
+            ContentPolicy::where('status', 1)
+                ->whereIn('ContentID', $episode_ids)
+                ->where('ContentType', 4)
+                ->update(['status' => 0]);
+            foreach($episode_ids AS $single_episode){
+                foreach ($request->content_policies as $key => $contentpolicy) {
+                    $single_array=array('ContentID'=>$single_episode,'PolicyID'=>$contentpolicy,'ContentType'=>4,'Status'=>1,'type'=>null);
+                    array_push($content_array,$single_array);
+                    
+                }
+            }
+        }
+        
+        ContentPolicy::insert($content_array);
+        return redirect('episode')->with('episode-details', "Policy Added Sucessfully");
+       
     }
  
    

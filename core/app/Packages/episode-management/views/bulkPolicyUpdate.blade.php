@@ -29,11 +29,11 @@
 
                 
                     <div class="form-group">
-                    <input type="text" value="{{$selected_episode}}"></input>
-                    <div class="form-group"><label class="col-sm-2 control-label">Episode Name</label>
+                    <input type="hidden" value="{{$selected_episode}}"></input>
+                    <div class="form-group"><label class="col-sm-2 control-label">Episodes </label>
                     	<div class="col-sm-8">
                         @foreach ($episode_list as $value)
-                        <a href="#" class="badge badge-default">Default</a>
+                        <a class="badge badge-primary">{{$value->episodeName."(".$value->episodeId.")"}}</a>
                         @endforeach
                        
                         </div>
@@ -118,6 +118,22 @@
             //$('#content_count').val($('#content_policies').find('option').length);
         }
     });
+
+    $("#form").validate({
+            rules: {
+              
+                'content_policies[]': {
+                    required: true
+
+                }
+                
+               
+            },
+            submitHandler: function(form) {
+
+                form.submit();
+            }
+        });
 
     
 	

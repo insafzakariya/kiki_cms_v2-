@@ -27,6 +27,9 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'episode', 'namespace' => 'E
     Route::get('policyupdate/{ids}', [
         'as' => 'episode.list', 'uses' => 'EpisodeController@policyBulkUpdate'
     ]);
+    Route::post('policyupdate/{ids}', [
+        'as' => 'episode.list', 'uses' => 'EpisodeController@updatePolicyBulkUpdate'
+    ]);
 
     //Get Programme Search 
     Route::get('search/programme', [
