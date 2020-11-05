@@ -323,7 +323,7 @@ class EpisodeController extends Controller
 
             ->editColumn('checklist', function (Episode $value){
                 
-                    return '<center><input type="checkbox" class="form-check-input episode-check" value="'.$value->episodeId.'"><center>';
+                    return '<center><input  type="checkbox" class="form-check-input episode-check"  value="'.$value->episodeId.'"><center>';
                
             })
             ->editColumn('status', function (Episode $value){
@@ -496,6 +496,20 @@ class EpisodeController extends Controller
         return $created_file_list;
 
                
+    }
+    public function policyBulkUpdate($ids)
+    {
+        $episode_ids=json_decode($ids);
+    //    return $episode_ids;
+       $episodeContentPolicies=Policy::getEpisodeContentPolicies();
+       return view('EpisodeManage::bulkPolicyUpdate')
+       ->with([
+        'episodeContentPolicies'=>$episodeContentPolicies,
+        'selected_episode'=>$ids,
+        'episode_list'=>$episode_ids
+        
+        ]);
+
     }
  
    

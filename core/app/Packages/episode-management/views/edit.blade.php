@@ -384,7 +384,7 @@
     });
 
     $("#thumb_image").fileinput({
-        uploadUrl: "", // server upload action
+        // uploadUrl: "", // server upload action
         dropZoneEnabled: false,
         uploadAsync: false,
         minFileCount: 1,

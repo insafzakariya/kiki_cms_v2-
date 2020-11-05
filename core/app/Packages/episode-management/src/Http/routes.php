@@ -24,6 +24,9 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'episode', 'namespace' => 'E
     Route::post('delete', [
         'as' => 'episode.edit', 'uses' => 'EpisodeController@delete'
     ]);
+    Route::get('policyupdate/{ids}', [
+        'as' => 'episode.list', 'uses' => 'EpisodeController@policyBulkUpdate'
+    ]);
 
     //Get Programme Search 
     Route::get('search/programme', [

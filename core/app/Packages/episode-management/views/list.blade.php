@@ -73,10 +73,20 @@
         {{ session('episode-details') }}
     </div>
     @endif
+    
     <div class="row">
         <div class="col-lg-12 margins">
             <div class="ibox-content">
+              
+                    <div class="col-sm-10 col-sm-offset-2" style="padding-bottom:10px"> 
+                       
+                        <button class="btn btn-primary pull-right" type="button" id="btn-bulk-policy-update">Bulk Policy Update</button>
+                    </div>
+                    
+                
+
                 <div class="panel-body">
+                
                     <table id="example1" class="table table-striped table-bordered table-hover" width="100%">
                         <thead>
                         <tr>
@@ -98,7 +108,7 @@
 @section('js')
 
     <script type="text/javascript">
-        var selected_ids=[];
+        // var selected_ids=[];
         let table;
         $(document).ready(function(){
             table=$('#example1').DataTable( {
@@ -122,7 +132,12 @@
                     {extend: 'copy',className: 'btn-sm'},
                     {extend: 'csv',title: 'Menu List', className: 'btn-sm'},
                     {extend: 'pdf', title: 'Menu List', className: 'btn-sm'},
-                    {extend: 'print',className: 'btn-sm'}
+                    {extend: 'print',className: 'btn-sm'},
+                    {text: 'Reload',
+                        action: function ( e, dt, node, config ) {
+                            dt.ajax.reload();
+                        }
+                    }
                 ],
                 "autoWidth": false,
                 "order": [[ 1, "desc" ]]
@@ -145,18 +160,57 @@
         });
 
         //Select All Checkbox
-        $('#select-all').click(function(event) {   
+        $('.select-all').click(function(event) {   
             if(this.checked) {
                 // Iterate each checkbox
                 $('.episode-check').each(function() {
                     this.checked = true;   
-                    console.log(this.value);                    
+                    // selected_ids.push(this.value);
+                                       
                 });
             } else {
                 $(':checkbox').each(function() {
-                    this.checked = false;                       
+                    this.checked = false;   
+                    // selected_ids.pop(this.value);                    
                 });
             }
+
+            
+        });
+        
+        
+
+        
+        //Bulk Policy Update button function
+
+        $('#btn-bulk-policy-update').click(function(event){
+            var selected_ids=[];
+            $('.episode-check').each(function() {
+                if(this.checked){
+                    selected_ids.push(this.value);
+                }
+            
+                                    
+            });
+            if(selected_ids.length >0){
+                swal({
+                    title: "Are you sure?",
+                    text:"Bulk Policy Update",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, change it!"
+
+                }).then(function (isConfirm) {
+                    var episode_list_arry = '/episode/policyupdate/'+encodeURIComponent(JSON.stringify(selected_ids));
+                    window.location.href = '{{url('/')}}'+episode_list_arry;
+                
+                    console.log(selected_ids);
+                });
+            }else{
+                swal("No Episode Selected", "Please select atleast one episode", "error");
+            }
+           
         });
 
         function changeStatus(id, state) {
