@@ -537,10 +537,18 @@ class EpisodeController extends Controller
             ContentPolicy::where('status', 1)
                 ->whereIn('ContentID', $episode_ids)
                 ->where('ContentType', 4)
-                ->update(['status' => 0]);
+                ->delete();
             foreach($episode_ids AS $single_episode){
                 foreach ($request->content_policies as $key => $contentpolicy) {
-                    $single_array=array('ContentID'=>$single_episode,'PolicyID'=>$contentpolicy,'ContentType'=>4,'Status'=>1,'type'=>null);
+                    $single_array=array(
+                        'ContentID'=>$single_episode,
+                        'PolicyID'=>$contentpolicy,
+                        'ContentType'=>4,
+                        'Status'=>1,
+                        'type'=>null,
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'updated_at' => date('Y-m-d H:i:s')
+                    );
                     array_push($content_array,$single_array);
                     
                 }

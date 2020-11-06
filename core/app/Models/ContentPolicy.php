@@ -7,6 +7,7 @@ class ContentPolicy extends Model{
 
     protected $table = 'content_policies';
     protected $primaryKey = "RowID";
+    public $timestamps = true;
 
 
     protected $fillable = [
