@@ -20,7 +20,9 @@ use Session;
 use ChannelManage\Models\Channel;
 use ProgrammeManage\Models\Programme;
 use ProgrammeManage\Models\ProgrammeChannel;
+use EpisodeManage\Models\Episode;
 use Sentinel;
+
 
 
 class ProgrammeController extends Controller
@@ -395,6 +397,15 @@ class ProgrammeController extends Controller
                     }
                         
                 })
+
+                ->addColumn('bulk-update', function ($value) use ($user){
+                    if($user->hasAnyAccess(['programme.edit', 'admin'])){
+                        return '<center><a href="#" class="blue" onclick="window.location.href=\''.url('programme/'.$value->programId.'/policy').'\'" data-toggle="tooltip" data-placement="top" title="View/ Edit Channel"><i class="fa fa-universal-access"></i></a></center>';
+                    }else{
+                        return '<center><a href="#" class="disabled" data-toggle="tooltip" data-placement="top" title="Edit Disabled"><i class="fa fa-pencil"></i></a></center>';
+                    }
+                        
+                })
                 ->make(true);
         // }catch (\Throwable $exception){
         //     $exceptionId = rand(0, 99999999);
@@ -469,6 +480,60 @@ class ProgrammeController extends Controller
         }
        
        
+    }
+    public function policyView($id)
+    {
+        $programme=Programme::find($id);
+        $episode_count= Episode::where('programId', $id)->count();
+        if($episode_count>0){
+            $episodeContentPolicies=Policy::getEpisodeContentPolicies();
+            
+            return view('ProgrammeManage::bulkPolicyUpdate')
+            ->with(
+                [
+                'episodeContentPolicies'=>$episodeContentPolicies,
+                'programme'=>$programme,
+                'episode_count'=>$episode_count
+                
+                ]
+            );
+
+        }else{
+            return redirect('programme')->with('programme-error-details', "No Episodes for :".$programme->programName . "[".$programme->programId."]");
+        }
+        
+    }
+
+    public function policy(Request $request,$id)
+    {
+        $episode_ids=Episode::where('programId', $id)->where('status',1)->lists('episodeId')->toArray();
+        $content_array=array();
+        
+
+        if(isset($request->content_policies)){
+            ContentPolicy::where('status', 1)
+                ->whereIn('ContentID', $episode_ids)
+                ->where('ContentType', 4)
+                ->delete();
+            foreach($episode_ids AS $single_episode){
+                foreach ($request->content_policies as $key => $contentpolicy) {
+                    $single_array=array(
+                        'ContentID'=>$single_episode,
+                        'PolicyID'=>$contentpolicy,
+                        'ContentType'=>4,
+                        'Status'=>1,
+                        'type'=>null,
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'updated_at' => date('Y-m-d H:i:s')
+                    );
+                    array_push($content_array,$single_array);
+                    
+                }
+            }
+        }
+        // return $content_array;
+        ContentPolicy::insert($content_array);
+        return redirect('programme')->with('programme-details', "Policy Added Sucessfully");
     }
  
    

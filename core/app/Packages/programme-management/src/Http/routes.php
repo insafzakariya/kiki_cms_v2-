@@ -15,6 +15,12 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'programme', 'namespace' => 
     Route::post('{id}/edit', [
         'as' => 'programme.edit', 'uses' => 'ProgrammeController@edit'
     ]);
+    Route::get('{id}/policy', [
+        'as' => 'programme.edit', 'uses' => 'ProgrammeController@policyView'
+    ]);
+    Route::post('{id}/policy', [
+        'as' => 'programme.edit', 'uses' => 'ProgrammeController@policy'
+    ]);
     Route::get('/', [
         'as' => 'programme.list', 'uses' => 'ProgrammeController@listView'
     ]);

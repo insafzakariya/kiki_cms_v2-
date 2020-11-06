@@ -51,13 +51,13 @@
 @stop
 @section('page_header')
     <div class="col-lg-9">
-        <h2>Channel Management</h2>
+        <h2>Programme Management</h2>
         <ol class="breadcrumb">
             <li>
                 <a href="{{url('/')}}">Home</a>
             </li>
             <li class="active">
-                <strong>Channel List</strong>
+                <strong>Programme List</strong>
             </li>
         </ol>
     </div>
@@ -68,6 +68,16 @@
             <p class="plus">+</p>
         </div>
     @endif -->
+    @if (session('programme-error-details'))
+    <div class="alert alert-danger">
+        {{ session('programme-error-details') }}
+    </div>
+    @endif
+    @if (session('programme-details'))
+    <div class="alert alert-success">
+        {{ session('programme-details') }}
+    </div>
+    @endif
     <div class="row">
         <div class="col-lg-12 margins">
             <div class="ibox-content">
@@ -82,6 +92,7 @@
                             <th>Kids</th>
                             <th width="1%">Active/ Deactivate</th>
                             <th width="1%">Edit</th>
+                            <th width="1%">Bulk Policy Update</th>
                         </tr>
                         </thead>
                     </table>
@@ -104,7 +115,8 @@
                     { "data": "programmeName_ta" },
                     { "data": "kids" },
                     { "data": "status" },
-                    { "data": "edit" }
+                    { "data": "edit" },
+                    { "data": "bulk-update" }
                 ],
                 "columnDefs": [
                     { "orderable": false, "targets": [4, 5] }
