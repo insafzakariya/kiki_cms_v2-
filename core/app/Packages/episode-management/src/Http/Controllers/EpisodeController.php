@@ -158,7 +158,7 @@ class EpisodeController extends Controller
     {
         $video_qualities=array('720p'=>'720p','480p'=>'480p','360p'=>'360p','240p'=>'240p','144p'=>'144p');
         
-        $exsist_episode=Episode::with([
+         $exsist_episode=Episode::with([
             'getProgramme',
             'getContentPolices.getPolicy',
             'getEpisodeThumbImages',
