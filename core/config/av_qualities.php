@@ -2,9 +2,9 @@
 return [
     'video'=>[
         '720p'=>[
-            'videoBitrate'=>1750000,
+            'videoBitrate'=>4000000,
             'audioBitrate'=>44100,
-            'width'=>345,
+            'width'=>1280,
             'height'=>720
         ],
         '480p'=>[

@@ -95,6 +95,17 @@ return [
             'path_prefix' => env('GOOGLE_CLOUD_STORAGE_PATH_PREFIX', null), // optional: /default/path/to/apply/in/bucket
             'storage_api_uri' => env('GOOGLE_CLOUD_STORAGE_API_URI', 'storage.googleapis.com'), // see: Public URLs below
         ],
+        'gcs3' => [
+            'driver' => 'gcs',
+            // 'project_id' => env('GOOGLE_CLOUD_PROJECT_ID', 'your-project-id'),
+            'project_id' => env('GOOGLE_CLOUD_PROJECT_ID', 'kiki-227408'),
+            'key_file' => env('GOOGLE_CLOUD_KEY_FILE', './kiki-f0b907b9427f.json'), // optional: /path/to/service-account.json
+            // 'bucket' => env('GOOGLE_CLOUD_STORAGE_BUCKET', 'your-bucket'),
+            // 'bucket' => env('GOOGLE_CLOUD_STORAGE_BUCKET', 'samboleimages'),
+            'bucket' => env('GOOGLE_CLOUD_STORAGE_BUCKET', 'kiki-wowza'),
+            'path_prefix' => env('GOOGLE_CLOUD_STORAGE_PATH_PREFIX', null), // optional: /default/path/to/apply/in/bucket
+            'storage_api_uri' => env('GOOGLE_CLOUD_STORAGE_API_URI', 'storage.googleapis.com'), // see: Public URLs below
+        ],
 
     ],
 

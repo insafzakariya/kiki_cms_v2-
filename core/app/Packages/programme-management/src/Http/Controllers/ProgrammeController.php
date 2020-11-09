@@ -157,7 +157,7 @@ class ProgrammeController extends Controller
     // Programme Edit View Load
     public function editView($id)
     {
-        $exsist_programme=Programme::with([
+         $exsist_programme=Programme::with([
             'getContentPolices.getPolicy',
             'getProgrammeThumbImages',
             'getProgrammeCoverImages',

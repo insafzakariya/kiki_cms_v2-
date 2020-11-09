@@ -50,6 +50,10 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'programme', 'namespace' => 
         'as' => 'programme.sort', 'uses' => 'ProgrammeController@updateSortedProgrammes'
     ]);
 
+    Route::delete('image-delete', [
+        'as' => 'programme.edit', 'uses' => 'ProgrammeController@deleteImage'
+    ]);
+
 
     
 
