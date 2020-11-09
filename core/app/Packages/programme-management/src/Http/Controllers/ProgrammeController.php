@@ -184,7 +184,7 @@ class ProgrammeController extends Controller
                         'caption' => '',
                         'type' => 'image',
                         'key' => $thumb_image_value->id,
-                        // 'url' => url('admin/channel/image-delete'),
+                        'url' => url('programme/image-delete'),
                     ));
                 }
                 
@@ -513,14 +513,14 @@ class ProgrammeController extends Controller
         if(isset($request->content_policies)){
             ContentPolicy::where('status', 1)
                 ->whereIn('ContentID', $episode_ids)
-                ->where('ContentType', 4)
+                ->where('ContentType', 3)
                 ->delete();
             foreach($episode_ids AS $single_episode){
                 foreach ($request->content_policies as $key => $contentpolicy) {
                     $single_array=array(
                         'ContentID'=>$single_episode,
                         'PolicyID'=>$contentpolicy,
-                        'ContentType'=>4,
+                        'ContentType'=>3,
                         'Status'=>1,
                         'type'=>null,
                         'created_at' => date('Y-m-d H:i:s'),
@@ -534,6 +534,11 @@ class ProgrammeController extends Controller
         // return $content_array;
         ContentPolicy::insert($content_array);
         return redirect('programme')->with('programme-details', "Policy Added Sucessfully");
+    }
+
+    public function deleteImage(Request $request)
+    {
+        return $request->key;
     }
  
    
