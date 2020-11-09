@@ -361,13 +361,14 @@
                 'tags[]': {
                     required: true
 
-                },
-                'thumb_image[]': {
-                    // required: true,
-                    thumb_image_va:true
+                }
+                // ,
+                // 'thumb_image[]': {
+                //     // required: true,
+                //     thumb_image_va:true
                    
 
-                }
+                // }
                 // ,
                 // 'cover_image[]': {
                 //     // required: true,
