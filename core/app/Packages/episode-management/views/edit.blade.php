@@ -12,8 +12,11 @@
         <li>
             <a href="{{url('/')}}">Home</a>
         </li>
+        <li>
+            <a href="{{url('/episode')}}">Episode</a>
+        </li>
         <li class="active">
-            <strong>Episode/Edit</strong>
+            <strong>Edit</strong>
         </li>
     </ol>
 </div>                  
