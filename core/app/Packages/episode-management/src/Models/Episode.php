@@ -37,7 +37,7 @@ class Episode extends Model{
     ];
     public function getContentPolices()
     {
-        return $this->hasMany('App\Models\ContentPolicy', 'ContentID', 'episodeId')->where('status',1);
+        return $this->hasMany('App\Models\ContentPolicy', 'ContentID', 'episodeId')->where('ContentType',3)->where('status',1);
     }
     public function getEpisodeThumbImages()
     {
