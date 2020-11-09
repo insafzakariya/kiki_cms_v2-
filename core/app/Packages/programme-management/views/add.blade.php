@@ -222,6 +222,31 @@
             // multiple: true,
         });
 
+        //Custom Validation
+
+
+        jQuery.validator.addMethod("thumb_image_va", function(value, element){
+            const min_file_count = $('#thumb_image').data("fileinput").options.minFileCount;
+            const exsist_file_count = $('#thumb_image').data("fileinput").filestack.length;
+            if(exsist_file_count >=min_file_count){
+                return true;
+            }else{
+                return false;
+            }
+         
+        }, "You must select at least 3 files to upload. Please retry your upload!"); 
+
+        jQuery.validator.addMethod("cover_image_va", function(value, element){
+            const min_file_count = $('#cover_image').data("fileinput").options.minFileCount;
+            const exsist_file_count = $('#cover_image').data("fileinput").filestack.length;
+            if(exsist_file_count >=min_file_count){
+                return true;
+            }else{
+                return false;
+            }
+         
+        }, "You must select at least 2 files to upload. Please retry your upload!"); 
+
 		$("#form").validate({
             rules: {
                 programme_name_en: {
@@ -278,18 +303,23 @@
                     },
                   
                 },
-                // tags: {
-                //     required: true
+                'tags[]': {
+                    required: true
 
-                // }
-                // ,
-                // 'thumb_image[]': {
-                //     required: true,
-                //     accept: "image/*",
-                //     dimension: [175,175],
-                //     filesize_max_kb: {{ env('Upload_Image_Size') }}
+                }
+                ,
+                'thumb_image[]': {
+                    // required: true,
+                    thumb_image_va:true
+                   
 
-                // }
+                },
+                'cover_image[]': {
+                    // required: true,
+                    cover_image_va:true
+                   
+
+                }
                 // ,
                 // 'cover_image[]': {
                 //     required: true,
@@ -306,6 +336,7 @@
                
             },
             submitHandler: function(form) {
+               
                 form.submit();
             }
         });
