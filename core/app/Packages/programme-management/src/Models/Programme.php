@@ -30,6 +30,8 @@ class Programme extends Model{
         'subtitles',
         'likes',
         'programType',
+        'thumb_image',
+        'cover_image',
        
     ];
     public function getContentPolices()

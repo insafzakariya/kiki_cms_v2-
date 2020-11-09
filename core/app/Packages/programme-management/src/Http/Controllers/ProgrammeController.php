@@ -119,6 +119,8 @@ class ProgrammeController extends Controller
                         'image_type'=>'cover_image',
                         'file_name'=>$fileName
                     ]);
+                    $programme->cover_image=1;
+                    $programme->save();
                 }
                 
             }
@@ -135,6 +137,8 @@ class ProgrammeController extends Controller
                         'image_type'=>'thumb_image',
                         'file_name'=>$fileName
                     ]);
+                    $programme->thumb_image=1;
+                    $programme->save();
                 }
                 
             }
@@ -176,19 +180,29 @@ class ProgrammeController extends Controller
             $used_channel_ids=array_column(json_decode($exsist_programme->getProgrammeChannels), 'channel_id');
             $used_content_policy_ids = array_column(json_decode($exsist_programme->getContentPolices), 'PolicyID');
             $programmeContentPolicies=Policy::getProgrammeContentPoliciesByFilterIds($used_content_policy_ids);
-
-            if ($exsist_programme->getProgrammeThumbImages) {
-                foreach ($exsist_programme->getProgrammeThumbImages as $key => $thumb_image_value) {
-                    array_push($thumb_image, "<img style='height:190px' src='" . Config('constants.bucket.url') . Config('filePaths.front.programme') . $thumb_image_value->file_name . "'>");
-                    array_push($thumb_image_config, array(
-                        'caption' => '',
-                        'type' => 'image',
-                        'key' => $thumb_image_value->id,
-                        // 'url' => url('admin/channel/image-delete'),
-                    ));
+            if($exsist_programme->cover_image){
+                if ($exsist_programme->getProgrammeThumbImages) {
+                    foreach ($exsist_programme->getProgrammeThumbImages as $key => $thumb_image_value) {
+                        array_push($thumb_image, "<img style='height:190px' src='" . Config('constants.bucket.url') . Config('filePaths.front.programme') . $thumb_image_value->file_name . "'>");
+                        array_push($thumb_image_config, array(
+                            'caption' => '',
+                            'type' => 'image',
+                            'key' => $thumb_image_value->id,
+                            // 'url' => url('admin/channel/image-delete'),
+                        ));
+                    }
+                    
                 }
-                
+            }else{
+                array_push($thumb_image, "<img style='height:190px' src='" . Config('constants.bucket.url') . Config('filePaths.front.programme') . $exsist_programme->logo . "'>");
+                array_push($thumb_image_config, array(
+                    'caption' => '',
+                    'type' => 'image',
+                    // 'key' => $file_name->id,
+                    // 'url' => url('admin/channel/image-delete'),
+                ));
             }
+            
             if ($exsist_programme->getProgrammeCoverImages) {
                 foreach ($exsist_programme->getProgrammeCoverImages as $key => $cover_image_value) {
                     array_push($cover_image, "<img style='height:190px' src='" . Config('constants.bucket.url') . Config('filePaths.front.programme') . $cover_image_value->file_name . "'>");
@@ -293,6 +307,8 @@ class ProgrammeController extends Controller
                         'image_type'=>'cover_image',
                         'file_name'=>$fileName
                     ]);
+                    $exsist_programme->cover_image=1;
+                    $exsist_programme->save();
                 }
             }else if($request->has('cover_image_removed') && $request->get('cover_image_removed') == 1){
                 MasterImage::where('status', 1)
@@ -321,6 +337,8 @@ class ProgrammeController extends Controller
                         'image_type'=>'thumb_image',
                         'file_name'=>$fileName
                     ]);
+                    $exsist_programme->thumb_image=1;
+                    $exsist_programme->save();
                 }
             }else if($request->has('thumb_image_removed') && $request->get('thumb_image_removed') == 1){
                 MasterImage::where('status', 1)
