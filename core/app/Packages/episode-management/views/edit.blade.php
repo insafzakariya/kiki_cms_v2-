@@ -270,6 +270,18 @@
             // // };
         }, "No Programme selected"); 
         
+        jQuery.validator.addMethod("thumb_image_va", function(value, element){
+            const min_file_count = $('#thumb_image').data("fileinput").options.minFileCount;
+            const exsist_file_count = $('#thumb_image').data("fileinput").filestack.length;
+            const initialPreview_file_count = $('#thumb_image').data("fileinput").initialPreview.length;
+            console.log($('#thumb_image').data("fileinput"));
+            if((exsist_file_count+initialPreview_file_count) >=1){
+                return true;
+            }else{
+                return false;
+            }
+         
+        }, "You must select at least 1 files to upload. Please retry your upload!"); 
 
 		$("#form").validate({
             rules: {
@@ -323,6 +335,11 @@
                 'tags[]': {
                     required: true
 
+                },
+                
+                'thumb_image[]': {
+                    // required: true,
+                    thumb_image_va:true
                 }
                 // ,
                 // 'thumb_image[]': {
@@ -390,7 +407,7 @@
         // uploadUrl: "", // server upload action
         dropZoneEnabled: false,
         uploadAsync: false,
-        minFileCount: 1,
+        // minFileCount: 1,
         maxFileCount: 1,
 
         showRemove: false,
