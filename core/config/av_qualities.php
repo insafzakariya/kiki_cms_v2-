@@ -10,7 +10,7 @@ return [
         '480p'=>[
             'videoBitrate'=>1750000,
             'audioBitrate'=>44100,
-            'width'=>345,
+            'width'=>854,
             'height'=>480
         ],
         '360p'=>[
