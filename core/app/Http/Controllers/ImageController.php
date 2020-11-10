@@ -116,8 +116,8 @@ class ImageController extends Controller
     }
     public function UploadSmil($folder, $file, $file_name, $id = null)
     {
-        // $upload_path = env('IMAGE_UPLOAD_PATH', '');
-        $upload_path = '';
+        $upload_path = env('SMIL_UPLOAD_PATH', '');
+        // $upload_path = '';
         // $upload_path = 'test';
         $disk = Storage::disk('gcs3');
 
