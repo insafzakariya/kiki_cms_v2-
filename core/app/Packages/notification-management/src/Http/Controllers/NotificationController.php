@@ -34,11 +34,13 @@ class NotificationController extends Controller
     private $client;
     private $imagePath;
     private  $URL;
+    private $notificationImagePath;
 
     public function __construct()
     {
         $this->client = new \GuzzleHttp\Client();
         $this->URL =env('APP_URL');
+        $this->notificationImagePath = Config::get('filePaths.notification-images');
     }
 
     public function listView()
@@ -328,7 +330,7 @@ class NotificationController extends Controller
             $image_config = [];
            
             if ($fileName) {
-                array_push($showimage, Config('constants.bucket.url') .$ImageUpLoadPath."/". $folderName ."/".$fileName );
+                array_push($showimage, Config('constants.bucket.url') .Config('filePaths.front.notification') .$fileName );
               
             }
             $first=$showimage[0];
