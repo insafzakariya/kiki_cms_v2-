@@ -313,7 +313,7 @@ class NotificationController extends Controller
                     $contentid=$contentType;
                     $contentType="programid";
                 }else{
-                    $contentType="episoid";
+                    $contentType="episodeid";
                 }
                 
             }
