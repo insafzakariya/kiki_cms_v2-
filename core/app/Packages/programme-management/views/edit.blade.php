@@ -28,6 +28,9 @@
                 	{!!Form::token()!!}
                     <input type="hidden" name="thumb_image_removed" id="thumb_image_removed" value="0">
                     <input type="hidden" name="cover_image_removed" id="cover_image_removed" value="0">
+                    <input type="hidden" name="thumb_image_preview_deleted" id="thumb_image_preview_deleted" value="">
+                    <input type="hidden" name="cover_image_preview_deleted" id="cover_image_preview_deleted" value="">
+
                 	<div class="form-group"><label class="col-sm-2 control-label">Programme Name</label>
                     	<div class="col-sm-10"></div>
                 	</div>
@@ -231,6 +234,8 @@
 <script src="{{asset('assets/back/flatpicker/flatpicker')}}"></script>
 <!-- <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script> -->
 <script type="text/javascript">
+    var thumb_image_preview_deleted_list=[];
+    var cover_image_preview_deleted_list=[];
 	$(document).ready(function(){
         $('.select-simple-tag').select2({
             tags: true,
@@ -281,8 +286,9 @@
             const min_file_count = $('#thumb_image').data("fileinput").options.minFileCount;
             const exsist_file_count = $('#thumb_image').data("fileinput").filestack.length;
             const initialPreview_file_count = $('#thumb_image').data("fileinput").initialPreview.length;
-  
-            if((exsist_file_count+initialPreview_file_count) >=1){
+            console.log($('#thumb_image').data("fileinput"));
+            // console.log(thumb_image_preview_deleted_list.length);
+            if((exsist_file_count+(initialPreview_file_count-thumb_image_preview_deleted_list.length)) >=1){
                 return true;
             }else{
                 return false;
@@ -293,8 +299,9 @@
         jQuery.validator.addMethod("cover_image_va", function(value, element){
             const min_file_count = $('#cover_image').data("fileinput").options.minFileCount;
             const exsist_file_count = $('#cover_image').data("fileinput").filestack.length;
-            console.log(exsist_file_count);
-            if(exsist_file_count >=1){
+            const initialPreview_file_count = $('#cover_image').data("fileinput").initialPreview.length;
+            console.log(cover_image_preview_deleted_list);
+            if((exsist_file_count+(initialPreview_file_count-cover_image_preview_deleted_list.length)) >=1){
                 return true;
             }else{
                 return false;
@@ -355,27 +362,19 @@
                             $(this).val($.trim($(this).val()));
                             return true;
                         }
-                    },
-                  
+                    },  
                 },
                 'tags[]': {
                     required: true
-
+                },
+                'thumb_image[]': {
+                    // required: true,
+                    thumb_image_va:true
+                },
+                'cover_image[]': {
+                    // required: true,
+                    cover_image_va:true
                 }
-                // ,
-                // 'thumb_image[]': {
-                //     // required: true,
-                //     thumb_image_va:true
-                   
-
-                // }
-                // ,
-                // 'cover_image[]': {
-                //     // required: true,
-                //     cover_image_va:true
-                   
-
-                // }
                 // 'thumb_image[]': {
                 //     required: true,
                 //     accept: "image/*",
@@ -399,6 +398,8 @@
                
             },
             submitHandler: function(form) {
+                $('#thumb_image_preview_deleted').val(JSON.stringify(thumb_image_preview_deleted_list));
+                $('#cover_image_preview_deleted').val(JSON.stringify(cover_image_preview_deleted_list));
                 form.submit();
             }
         });
@@ -453,24 +454,31 @@
         
     }).on('filecleared', function() {
         $("#thumb_image_removed").val(1);
-    });;
+    }).on('filedeleted', function(event, key, jqXHR, data) {
+        thumb_image_preview_deleted_list.push(key);
+        console.log('Key = ' + key);
+    });
 	
     $("#cover_image").fileinput({
         uploadUrl: "", // server upload action
         dropZoneEnabled: true,
         uploadAsync: false,
         // minFileCount: 2,
-        showRemove: false,
+        showRemove: true,
         showUpload:false,
-        overwriteInitial: true,
+        overwriteInitial: false,
         allowedFileExtensions: ["jpg", "gif", "png", "jpeg", "jfif"],
         initialPreview: <?php echo json_encode($cover_image); ?>,
         initialPreviewConfig: <?php echo json_encode($cover_image_config) ?>
         
     }).on('filecleared', function() {
         $("#cover_image_removed").val(1);
+    }).on('filedeleted', function(event, key, jqXHR, data) {
+        cover_image_preview_deleted_list.push(key);
+        console.log('Key = ' + key);
     });
 	
+    
 	
 </script>
 @stop

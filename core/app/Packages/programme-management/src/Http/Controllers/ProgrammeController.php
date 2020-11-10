@@ -196,7 +196,7 @@ class ProgrammeController extends Controller
                         'caption' => '',
                         'type' => 'image',
                         'key' => $cover_image_value->id,
-                        // 'url' => url('admin/channel/image-delete'),
+                        'url' => url('programme/image-delete')
                     ));
                 }
                 
@@ -228,8 +228,8 @@ class ProgrammeController extends Controller
 
     public function edit(Request $request,$id )
     {
-
         //   return $request->all();
+      
         $exsist_programme=Programme::with(['getContentPolices.getPolicy'])->find($id);
         
         $kids=0;
@@ -261,26 +261,16 @@ class ProgrammeController extends Controller
                 ProgrammeChannel::whereNotIn('channel_id',$request->channels)->where('programme_id',$exsist_programme->programId)->update(['status' => 0]);
                 foreach ($request->channels as $key => $channel) {
                     ProgrammeChannel::firstOrCreate(['programme_id' =>$exsist_programme->programId,'channel_id'=>$channel,'status'=>1]);
-                    // ProgrammeChannel::where('status', 1)
-                    // ->where('programme_id', $exsist_programme->programId)
-                    // ->where('channel_id', $channel)
-                    // ->update(['status' => 0]);
-
-                    // ProgrammeChannel::create([
-                    //     'programme_id'=>$exsist_programme->programId,
-                    //     'channel_id'=>$channel,
-                    //     'status'=>1
-                    // ]);
                 }
             }
             if($request->hasFile('cover_image')) {
                 $cover_images=$request->file('cover_image');
 
-                MasterImage::where('status', 1)
-                    ->where('parent_type', "programme")
-                    ->where('parent_id', $exsist_programme->programId)
-                    ->where('image_type', "cover_image")
-                    ->update(['status' => 0]);
+                // MasterImage::where('status', 1)
+                //     ->where('parent_type', "programme")
+                //     ->where('parent_id', $exsist_programme->programId)
+                //     ->where('image_type', "cover_image")
+                //     ->update(['status' => 0]);
 
                 foreach ($cover_images as $key => $aImage) {
                     $ext = $aImage->getClientOriginalExtension();
@@ -304,11 +294,11 @@ class ProgrammeController extends Controller
 
             if($request->hasFile('thumb_image')) {
                 $cover_images=$request->file('thumb_image');
-                MasterImage::where('status', 1)
-                    ->where('parent_type', "programme")
-                    ->where('parent_id', $exsist_programme->programId)
-                    ->where('image_type', "thumb_image")
-                    ->update(['status' => 0]);
+                // MasterImage::where('status', 1)
+                //     ->where('parent_type', "programme")
+                //     ->where('parent_id', $exsist_programme->programId)
+                //     ->where('image_type', "thumb_image")
+                //     ->update(['status' => 0]);
 
                 foreach ($cover_images as $key => $aImage) {
                     $ext = $aImage->getClientOriginalExtension();
@@ -329,6 +319,23 @@ class ProgrammeController extends Controller
                 ->where('image_type', "thumb_image")
                 ->update(['status' => 0]);
             }
+
+            //Image Delete
+            
+            if(isset($request->cover_image_preview_deleted) & $request->cover_image_preview_deleted !=""){
+                foreach (json_decode($request->cover_image_preview_deleted) as $key => $image) {
+                    MasterImage::where('id', $image)
+                        ->update(['status' => 0]);
+                }
+            }
+
+            if(isset($request->thumb_image_preview_deleted) & $request->thumb_image_preview_deleted !=""){
+                foreach (json_decode($request->thumb_image_preview_deleted) as $key => $image) {
+                    MasterImage::where('id', $image)
+                        ->update(['status' => 0]);
+                }
+            }
+
             
             ContentPolicy::where('status', 1)
                 ->where('ContentID', $exsist_programme->programId)
