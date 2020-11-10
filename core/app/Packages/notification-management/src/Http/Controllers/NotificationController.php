@@ -17,6 +17,7 @@ use Datatables;
 use Response;
 use Session;
 use Sentinel;
+use Config;
 use Illuminate\Support\Facades\Validator;
 use NotificationManage\Models\UserGroup;
 use NotificationManage\Models\UserGroupsViewer;
