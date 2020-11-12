@@ -402,7 +402,8 @@ class SongController extends Controller
 
     public function step3Save(Request $request)
     {
-        try {
+        // return $request->all();
+        // try {
             $songId = $request->song_id ? $request->song_id : null;
             /*if (\Session::has('create_song_id')) {
             $songId = \Session::get('create_song_id');
@@ -422,10 +423,12 @@ class SongController extends Controller
                     $song->image = $song_fileName;
                 }
 
-                $track = $request->file('track');
+               
                 $track_fileName = null;
                 $trackPath = null;
+                $track = $request->file('track');
                 if (File::exists($track)) {
+                    $track = $request->file('track');
                     $extn = $track->getClientOriginalExtension();
                     $track_fileName = $song->songId . '_song' . '.' . $extn;
                     $trackPath = $this->imageController->UploadAudio('kiki_music/mp3_files/', $track, $track_fileName, $songId);
@@ -444,7 +447,8 @@ class SongController extends Controller
                     $song->status = 1;
                 }
 
-                $song->durations = ($request->duration_minutes * 60) + $request->duration_seconds;
+                // $song->durations = ($request->duration_minutes * 60) + $request->duration_seconds;
+                $song->durations = $request->duration_minutes;
                 $song->save();
 
                 if ($song) {
@@ -473,10 +477,10 @@ class SongController extends Controller
             } else {
                 return view('errors.404');
             }
-        } catch (Exception $exception) {
-            Log::error(" Song step-3 save| Error in " . __CLASS__ . "::" . __FUNCTION__ . ":" . $exception->getLine() . " | " . $exception->getMessage());
-            return redirect('admin/song')->withErrors($exception->getMessage());
-        }
+        // } catch (Exception $exception) {
+        //     Log::error(" Song step-3 save| Error in " . __CLASS__ . "::" . __FUNCTION__ . ":" . $exception->getLine() . " | " . $exception->getMessage());
+        //     return redirect('admin/song')->withErrors($exception->getMessage());
+        // }
 
     }
 

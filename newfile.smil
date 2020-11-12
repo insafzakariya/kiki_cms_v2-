@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-    	<smil title="Test SMIL for VOD">
-    	<body>
-        <switch><video height="480" src="13980_480.mp4"
-           systemLanguage="eng,tam,sin,deu,nor" width="345">
-           <param name="videoBitrate" value="1750000" valuetype="data"></param>
-           <param name="audioBitrate" value="44100" valuetype="data"></param>
-           </video><textstream src="13980.ttml" system-language="eng,sin,tam">
-                    <param name="isWowzaCaptionStream" value="true" /></textstream>
-                </switch></body></smil>
+                <smil title="Audio SMIL">
+                <body>
+                <switch><audio src="mp3:28676_song.mp3"> 
+                <param name="audioBitrate" value="128000" valuetype="data"></param> 
+                </audio>
+                </switch>
+                </body>
+                </smil>

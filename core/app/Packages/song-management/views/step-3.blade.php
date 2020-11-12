@@ -233,8 +233,12 @@
 
                         var mins = $('#txtHours').val() ? $('#txtHours').val() : 0;
                         var secs = $('#txtMinutes').val() ? $('#txtMinutes').val() : 0;
-                        $('#durationMin').val(mins);
-                        $('#durationSec').val(secs);
+                       
+                        // $('#durationMin').val(mins);
+                        // $('#durationSec').val(secs);
+
+                        var total_minutes=$("#durationPicker").timesetter().getTotalMinutes();
+                        $('#durationMin').val(total_minutes);
                         form.submit();
                                             }
                // }
@@ -275,8 +279,8 @@
                 validateInitialCount: true,
                 overwriteInitial: false,
                 initialPreviewAsData: false,
-                //allowedFileTypes: ['audio'],
-               // allowedFileExtensions: ["mp3"],
+            //     allowedFileTypes: ['audio'],
+            //    allowedFileExtensions: ["mp3"],
                 initialPreview: <?php echo json_encode($track); ?>,
                 initialPreviewConfig: <?php echo json_encode($track_config) ?>,
                 deleteExtraData: {
