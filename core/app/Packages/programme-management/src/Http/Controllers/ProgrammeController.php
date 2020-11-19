@@ -221,11 +221,7 @@ class ProgrammeController extends Controller
                     'url' => url('programme/image-delete'),
                 ));
             }
-            
-            
-          
-            
-         
+        
             return view('ProgrammeManage::edit')
             ->with(
                 ['programmeContentPolicies'=>$programmeContentPolicies,
