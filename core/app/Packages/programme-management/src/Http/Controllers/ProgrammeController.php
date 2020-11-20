@@ -468,6 +468,9 @@ class ProgrammeController extends Controller
         if ($programme) {
             $programme->status = $state;
             $programme->save();
+           
+            ProgrammeChannel::where('programme_id',$programme->programId)
+            ->update(['status'=>$state]);
             
             return response()->json(['status' => 'success']);
         }
