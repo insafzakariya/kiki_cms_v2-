@@ -164,6 +164,7 @@ return [
 		'ChannelManage\ChannelManageServiceProvider',
 		'ProgrammeManage\ProgrammeManageServiceProvider',
 		'EpisodeManage\EpisodeManageServiceProvider',
+		'ProgrammeSliderManage\ProgrammeSliderManageServiceProvider',
 		'PlaylistManage\PlaylistManageServiceProvider',
 		'NotificationManage\NotificationManageServiceProvider',
 
