@@ -15,6 +15,8 @@ use Log;
 use Response;
 use Session;
 use ScratchCardManage\Models\Package;
+use ScratchCardManage\Models\ScratchCards;
+use ScratchCardManage\Models\ScratchCardsCodes;
 use Sentinel;
 
 
@@ -28,6 +30,33 @@ class ScratchCardController extends Controller
     {
         
     }
+    private function generateCodes($quantity,$card_id)
+    {
+       $card_list=array();
+        for($i=0;$i<$quantity;$i++){
+            
+            $total_length = 16;
+            $time_value = time () + mt_rand ( 1000, 99999 );
+            $time_value_length = strlen ( $time_value );
+            $constant_value_length = 1; // For 2
+            $incrementer_value_length = strlen ( $i );
+            
+            $balance_length = $total_length - ($time_value_length + $constant_value_length + $incrementer_value_length);       
+            $min_mt = pow ( 10, ($balance_length - 1) );
+            $max_mt = pow ( 10, $balance_length ) - 1;
+            $mt_random_value = mt_rand ( $min_mt, $max_mt );
+            
+            $card_code = $time_value . $mt_random_value . "2" . $i;
+            
+            $card_rec = array(
+                    'CardID' => $card_id,
+                    'CardCode' => $card_code							
+            );
+            array_push($card_list,$card_rec);
+                                    
+        }
+        ScratchCardsCodes::insert($card_list);
+    }
 
     public function index()
     {
@@ -37,7 +66,22 @@ class ScratchCardController extends Controller
  
     public function store(Request $request)
     {
-        return $request->all();
+        // return $request->all();
+        $card=ScratchCards::create([
+            'PackageID'=>$request->get('package'),
+            'CardType'=>$request->get('type'),
+            'ActivityStartDate'=>$request->get('start_date'),
+            'ActivityEndDate'=>$request->get('end_date')
+      
+        ]);
+        if($card){
+            if($request->get('type')==1){
+                $this->generateCodes(1,$card->CardID);
+            }else if($request->get('type')==2){
+                $this->generateCodes($request->get('card_count'),$card->CardID);
+            }
+            
+        }
     }
     // Programme Slider Edit View Load
     public function editView($id)

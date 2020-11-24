@@ -28,8 +28,8 @@
                     <div class="form-group"><label class="col-sm-2 control-label">Type </label>
                     	<div class="col-sm-5">
                             <select  name="type" id="type" required class="form-control select-simple" >
-                                <option>Single</option>
-                                <option>Bulk</option>
+                                <option value="1">Single</option>
+                                <option value="2">Bulk</option>
                                 
                             </select>
                         </div>
@@ -133,12 +133,15 @@
     $('#package').select2();
     $('#type').select2({minimumResultsForSearch: Infinity}).on('select2:select', function (e) {
         var data = e.params.data;
-        if(data.id=='Single'){
+    
+        if(data.id==1){
+            console.log("one");
             $('#card_count_div').hide();
-        }else if(data.id=='Bulk'){
+        }else if(data.id==2){
             $('#card_count_div').show();
+            console.log("two");
         }
-        console.log(data.id);
+       
     });
     $('#card_count').select2({minimumResultsForSearch: Infinity});
 	
