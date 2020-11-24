@@ -166,6 +166,7 @@ return [
 		'EpisodeManage\EpisodeManageServiceProvider',
 		'ProgrammeSliderManage\ProgrammeSliderManageServiceProvider',
 		'PlaylistManage\PlaylistManageServiceProvider',
+		'ScratchCardManage\ScratchCardManageServiceProvider',
 		'NotificationManage\NotificationManageServiceProvider',
 
 
