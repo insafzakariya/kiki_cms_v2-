@@ -166,7 +166,8 @@
                 confirmButtonText: "Yes, change it!"
 
             }).then(function (isConfirm) {
-                if (isConfirm) {
+            
+                if (isConfirm.value) {
                     $.ajax({
                         method: "POST",
                         url: '{{url('programme-slider/deleteSlider')}}',

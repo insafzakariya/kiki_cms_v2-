@@ -202,10 +202,13 @@
                     confirmButtonText: "Yes, change it!"
 
                 }).then(function (isConfirm) {
-                    var episode_list_arry = '/episode/policyupdate/'+encodeURIComponent(JSON.stringify(selected_ids));
+                    if(isConfirm.value){
+                        var episode_list_arry = '/episode/policyupdate/'+encodeURIComponent(JSON.stringify(selected_ids));
                     window.location.href = '{{url('/')}}'+episode_list_arry;
                 
                     console.log(selected_ids);
+                    }
+                    
                 });
             }else{
                 swal("No Episode Selected", "Please select atleast one episode", "error");
