@@ -42,12 +42,12 @@
                 	</div>
                     <div class="form-group"><label class="col-sm-2 control-label">Start Date</label>
                     	<div class="col-sm-5">
-                        <input type="date" id="start_date" name="start_date" value="{$exsist_programme_slider->start_date_time}}" class="">
+                        <input type="date" id="start_date" name="start_date" value="{{$exsist_programme_slider->start_date_time}}" class="">
                         </div>
                 	</div>
                     <div class="form-group"><label class="col-sm-2 control-label">End Date</label>
                     	<div class="col-sm-5">
-                        <input type="date" id="end_date" name="end_date" value="{$exsist_programme_slider->end_date_time}}" class="">
+                        <input type="date" id="end_date" name="end_date" value="{{$exsist_programme_slider->end_date_time}}" class="">
                         </div>
                 	</div>
                     <div class="form-group">
@@ -82,7 +82,7 @@
             {
                 enableTime: true,
                 dateFormat: "Y-m-d H:i",
-                defaultDate: ["<?php echo $exsist_programme_slider->start_date_time; ?> "],
+                
             }
         );
 
@@ -91,7 +91,8 @@
                 enableTime: true,
                 dateFormat: "Y-m-d H:i",
                 // maxDate: "31.12.2099",
-                defaultDate: ["<?php echo $exsist_programme_slider->end_date_time; ?> "],
+                
+               
             }
         );
 
