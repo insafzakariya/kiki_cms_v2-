@@ -31,7 +31,7 @@ class ProgrammeSliderController extends Controller
 
     public function __construct()
     {
-      $this->programmeSliderImagePath = Config::get('filePaths.programme-images');
+      $this->programmeSliderImagePath = Config::get('filePaths.programme-slider');
       $this->imageController = new ImageController();   
     }
 
@@ -88,7 +88,7 @@ class ProgrammeSliderController extends Controller
 
         if($exsist_programme_slider){
         
-            array_push($thumb_image, "<img style='height:190px' src='" . Config('constants.bucket.url') . Config('filePaths.front.programme') . $exsist_programme_slider->image_path . "'>");
+            array_push($thumb_image, "<img style='height:190px' src='" . Config('constants.bucket.url') . Config('filePaths.front.programme-slider') . $exsist_programme_slider->image_path . "'>");
             array_push($thumb_image_config, array(
                 'caption' => '',
                 'type' => 'image',
