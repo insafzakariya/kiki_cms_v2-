@@ -116,7 +116,8 @@ class ScratchCardController extends Controller
 
     public function edit(Request $request,$id )
     {
- 
+        
+        
         $exsist_scratch_card=ScratchCards::find($id);
         if($exsist_scratch_card){
             $exsist_scratch_card->PackageID=$request->package;
@@ -134,64 +135,96 @@ class ScratchCardController extends Controller
     }
     public function listView()
     {
-        $sliders=ProgrammeSlider::with(['getProgramme'])->orderBy('displayOrder', 'ASC')->where('status','!=',0)->get();
-        return view('ProgrammeSliderManage::list',compact('sliders'));
-    }
-    public function updateOrder(Request $request)
-    {
-        foreach ($request->order as $order) {
-            ProgrammeSlider::where('ID',$order['id'])->update(['displayOrder' => $order['position']]);
-            
-        }
-        
-        return response('Update Successfully.', 200);
+        $scratchCard=ScratchCards::where('status','!=',0)->get();
+        return view('ScratchCardManage::list');
     }
 
     public function listJson()
     {
-        // try {
-            $user = Sentinel::getUser();
-            return Datatables::usingCollection(
-                Programme::select('programId', 'programName', 'programmeName_si','programmeName_ta', 'kids','status')->get()
-            )
-                ->editColumn('status', function ($value){
-                    if($value->status==1){
-                        return '<center><a href="javascript:void(0)" form="noForm" class="blue programme-status-toggle " data-id="'.$value->programId.'" data-status="0"  data-toggle="tooltip" data-placement="top" title="Deactivate"><i class="fa fa-toggle-on"></i></a></><center>';
-                    }else{
-                        return '<center><a href="javascript:void(0)" form="noForm" class="blue programme-status-toggle " data-id="' . $value->programId . '" data-status="1"  data-toggle="tooltip" data-placement="top" title="Activate"><i class="fa fa-toggle-off"></i></a></><center>';
-                    }
-                    return $value->status == 1 ? 'Activated' : 'Inactivated';
-                })
-                ->editColumn('kids', function ($value){
-                    if($value->kids == 1){
-                        return '<center><i class="fa fa-check"></i><center>';
-                    }else{
-                        return '<center><i class="fa fa-remove"></i></center>';
-                    }
-                })
-                ->addColumn('edit', function ($value) use ($user){
-                    if($user->hasAnyAccess(['programme.edit', 'admin'])){
-                        return '<center><a href="#" class="blue" onclick="window.location.href=\''.url('programme/'.$value->programId.'/edit').'\'" data-toggle="tooltip" data-placement="top" title="View/ Edit Channel"><i class="fa fa-pencil"></i></a></center>';
-                    }else{
-                        return '<center><a href="#" class="disabled" data-toggle="tooltip" data-placement="top" title="Edit Disabled"><i class="fa fa-pencil"></i></a></center>';
-                    }
-                        
-                })
+        $user = Sentinel::getUser();
+        $query=ScratchCards::with(['getPackage'])->where('tbl_scratch_cards.status',1)->orderBy('CardID','Desc')->select('tbl_scratch_cards.*');
 
-                ->addColumn('bulk-update', function ($value) use ($user){
-                    if($user->hasAnyAccess(['programme.edit', 'admin'])){
-                        return '<center><a href="#" class="blue" onclick="window.location.href=\''.url('programme/'.$value->programId.'/policy').'\'" data-toggle="tooltip" data-placement="top" title="View/ Edit Channel"><i class="fa fa-universal-access"></i></a></center>';
-                    }else{
-                        return '<center><a href="#" class="disabled" data-toggle="tooltip" data-placement="top" title="Edit Disabled"><i class="fa fa-pencil"></i></a></center>';
-                    }
-                        
-                })
-                ->make(true);
-        // }catch (\Throwable $exception){
-        //     $exceptionId = rand(0, 99999999);
-        //     Log::error("Ex " . $exceptionId . " | Error in " . __CLASS__ . "::" . __FUNCTION__ .":" .$exception->getLine()." | " . $exception->getMessage());
-        //     return Datatables::of(collect())->make(true);
-        // }
+            return Datatables::eloquent($query)
+
+            ->addColumn('package', function (ScratchCards $value) {
+
+                return  $value->getPackage ? $value->getPackage->Description : "-";
+
+            })
+            ->addColumn('type', function (ScratchCards $value) {
+                if($value->CardType ==1){
+                    return "Single";
+                }else if($value->CardType ==2){
+                    return "Bulk";
+                }
+               
+
+            })
+
+            ->addColumn('viewCode', function (ScratchCards $value) use ($user){
+                if($user->hasAnyAccess(['scratch-card.edit', 'admin'])){
+                    return '<center><a href="#" class="blue" onclick="window.location.href=\''.url('scratch-card/'.$value->CardID.'/code').'\'" data-toggle="tooltip" data-placement="top" title="View/ Edit Episode"><i class="fa fa-eye"></i></a></center>';
+                }else{
+                    return '<center><a href="#" class="disabled" data-toggle="tooltip" data-placement="top" title="Edit Disabled"><i class="fa fa-eye"></i></a></center>';
+                }
+                    
+            })
+            ->addColumn('edit', function (ScratchCards $value) use ($user){
+                if($user->hasAnyAccess(['scratch-card.edit', 'admin'])){
+                    return '<center><a href="#" class="blue" onclick="window.location.href=\''.url('scratch-card/'.$value->CardID.'/edit').'\'" data-toggle="tooltip" data-placement="top" title="View/ Edit Episode"><i class="fa fa-pencil"></i></a></center>';
+                }else{
+                    return '<center><a href="#" class="disabled" data-toggle="tooltip" data-placement="top" title="Edit Disabled"><i class="fa fa-pencil"></i></a></center>';
+                }
+                    
+            })
+            ->editColumn('delete', function ($value){
+                if($value->status==1){
+                    return '<center><a href="javascript:void(0)" form="noForm" class="blue card-delete-toggle " data-id="'.$value->CardID.'" data-status="0"  data-toggle="tooltip" data-placement="top" title="Deactivate"><i class="fa fa-trash"></i></a></><center>';
+                }else{
+                    return '<center><a href="javascript:void(0)" form="noForm" class="blue card-delete-toggle " data-id="' . $value->CardID . '" data-status="1"  data-toggle="tooltip" data-placement="top" title="Activate"><i class="fa fa-trash"></i></a></><center>';
+                }
+               
+            })
+            ->make(true);
+    }
+    
+    public function codeListJson(Request $request,$id )
+    {
+        
+        // return $request->all('card_ID');
+        $user = Sentinel::getUser();
+        $query=ScratchCardsCodes::where('CardID',$id)->select();
+
+            return Datatables::eloquent($query)
+            ->addColumn('currentStatus', function (ScratchCardsCodes $value) {
+                if($value->CardStatus ==1){
+                    return "Active";
+                }else if($value->CardStatus ==0){
+                    return "Used";
+                }
+               
+
+            })
+            ->make(true);
+    }
+
+    public function codeView(Request $request,$id)
+    {
+        return view('ScratchCardManage::codeList')->with(['id'=>$id]);
+    }
+    public function delete(Request $request)
+    {
+        $id = $request->id;
+       
+
+        $scratchCards = ScratchCards::find($id);
+        if ($scratchCards) {
+            $scratchCards->Status = 0;
+            $scratchCards->save();
+            
+            return response()->json(['status' => 'success']);
+        }
+        return response()->json(['status' => 'invalid_id']);
     }
   
     public function changeStatus(Request $request)

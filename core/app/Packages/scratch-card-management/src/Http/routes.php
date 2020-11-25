@@ -16,26 +16,26 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'scratch-card', 'namespace' 
         'as' => 'scratch-card.add', 'uses' => 'ScratchCardController@edit'
     ]);
     Route::get('/', [
-        'as' => 'programme.list', 'uses' => 'ProgrammeSliderController@listView'
+        'as' => 'scratch-card.list', 'uses' => 'ScratchCardController@listView'
     ]);
-    Route::post('/sortabledatatable', [
-        'as' => 'programme.list', 'uses' => 'ProgrammeSliderController@updateOrder'
-    ]);
+   
     
     Route::get('list/json', [
-        'as' => 'programme.list', 'uses' => 'ProgrammeController@listJson'
+        'as' => 'scratch-card.list', 'uses' => 'ScratchCardController@listJson'
     ]);
-    Route::post('changeState', [
-        'as' => 'programme.edit', 'uses' => 'ProgrammeController@changeStatus'
+    Route::get('{id}/code', [
+        'as' => 'scratch-card.list', 'uses' => 'ScratchCardController@codeView'
+    ]);
+    Route::get('code/list/json/{id}', [
+        'as' => 'scratch-card.list', 'uses' => 'ScratchCardController@codeListJson'
+    ]);
+    // Route::post('changeState', [
+    //     'as' => 'programme.edit', 'uses' => 'ProgrammeController@changeStatus'
+    // ]);
+    Route::post('delete', [
+        'as' => 'scratch-card.list', 'uses' => 'ScratchCardController@delete'
     ]);
 
-    Route::get('/sort', [
-        'as' => 'programme.sort', 'uses' => 'ProgrammeController@sortView'
-    ]);
-
-    Route::delete('image-delete', [
-        'as' => 'programme.edit', 'uses' => 'ProgrammeController@deleteImage'
-    ]);
 
 
     

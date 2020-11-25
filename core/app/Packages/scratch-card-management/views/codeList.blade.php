@@ -1,4 +1,4 @@
-@extends('layouts.back.master') @section('current_title','Scratch Card/view')
+@extends('layouts.back.master') @section('current_title','Scratch Cards /view')
 @section('css')
     <style type="text/css">
         #floating-button{
@@ -57,7 +57,7 @@
                 <a href="{{url('/')}}">Home</a>
             </li>
             <li class="active">
-                <strong>Card List</strong>
+                <strong>Scratch Card List</strong>
             </li>
         </ol>
     </div>
@@ -71,14 +71,10 @@
                     <table id="example1" class="table table-striped table-bordered table-hover" width="100%">
                         <thead>
                         <tr>
-                            <th>Card ID</th>
-                            <th>Package Name</th>
-                            <th>Type</th>
-                            <th>Activity Start Date</th>
-                            <th>Activity End Date</th>
-                            <th width="1%">View Codes</th>
-                            <th width="1%">Edit</th>
-                            <th width="1%">Delete</th>
+                            <th>System ID</th>
+                            <th>Status</th>
+                            <th>Main Card ID</th>
+                            <th>Card Code</th>
                         </tr>
                         </thead>
                     </table>
@@ -93,18 +89,20 @@
      let table;
         $(document).ready(function(){
             table=$('#example1').DataTable( {
-                "ajax": '{{url('scratch-card/list/json')}}',
+                "ajax": '{{url('scratch-card/code/list/json/')}}/'+<?php echo $id;?>,
+                'type': 'GET',
+                "data": {
+                    "card_ID": 451
+                },
                 "columns": [
                    
+                    { "data": "RecordID","orderable": false },
+                    { "data": "currentStatus",searchable : false,"orderable": false },
+                  
                     { "data": "CardID","orderable": false },
-                    { name : 'getPackage.Description',"data": "package" ,"orderable": false},
-                    // { name : 'type',"data": "type" },
-                    { "data": "type",searchable : false,"orderable": false },
-                    { "data": "ActivityStartDate","orderable": false },
-                    { "data": "ActivityEndDate","orderable": false },
-                    { "data": "viewCode",searchable : false ,"orderable": false},
-                    { "data": "edit" ,searchable : false,"orderable": false},
-                    { "data": "delete","orderable": false ,searchable : false},
+                    { "data": "CardCode","orderable": false },
+                   
+                    
                 ],
                 "columnDefs": [
                     { "orderable": false, "targets": [1] }
@@ -129,10 +127,11 @@
             });
 
             table.on( 'draw.dt', function () {
-                $('.card-delete-toggle').click(function(e){
+                $('.episode-status-toggle').click(function(e){
                     e.preventDefault();
                     id = $(this).data('id');
-                    changeStatus(id);
+                    state = $(this).data('status');
+                    changeStatus(id, state);
 
 
                 });
@@ -141,7 +140,7 @@
         });
 
 
-        function changeStatus(id) {
+        function changeStatus(id, state) {
             swal({
                 title: "Are you sure?",
                 text:"Change the status",
@@ -154,8 +153,8 @@
                 if (isConfirm) {
                     $.ajax({
                         method: "POST",
-                        url: '{{url('scratch-card/delete')}}',
-                        data:{ 'id' : id  }
+                        url: '{{url('programme/changeState')}}',
+                        data:{ 'id' : id, 'state' : state  }
                     }).done(function( msg ) {
                         console.log("CHANGED");
                         table.ajax.reload();

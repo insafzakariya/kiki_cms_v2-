@@ -59,7 +59,11 @@
                     	<div class="col-sm-5">
                             <select  name="package" id="package" required class="form-control select-simple" >
                             @foreach ($packages as $package)
-                                <option value="{{$package->PackageID}}">{{$package->Description}}</option>
+                                @if($package->PackageID == $exsist_scratch_card->PackageID)
+                                <option selected value="{{$package->PackageID}}">{{$package->Description}}</option>
+                                @else
+                                <option  value="{{$package->PackageID}}">{{$package->Description}}</option>
+                                @endif
                             @endforeach
                             </select>
                         </div>
