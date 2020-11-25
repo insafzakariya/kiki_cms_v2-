@@ -169,62 +169,62 @@ class ProgrammeSliderController extends Controller
         return response('Update Successfully.', 200);
     }
 
-    public function listJson()
-    {
-        // try {
-            $user = Sentinel::getUser();
-            return Datatables::usingCollection(
-                Programme::select('programId', 'programName', 'programmeName_si','programmeName_ta', 'kids','status')->get()
-            )
-                ->editColumn('status', function ($value){
-                    if($value->status==1){
-                        return '<center><a href="javascript:void(0)" form="noForm" class="blue programme-status-toggle " data-id="'.$value->programId.'" data-status="0"  data-toggle="tooltip" data-placement="top" title="Deactivate"><i class="fa fa-toggle-on"></i></a></><center>';
-                    }else{
-                        return '<center><a href="javascript:void(0)" form="noForm" class="blue programme-status-toggle " data-id="' . $value->programId . '" data-status="1"  data-toggle="tooltip" data-placement="top" title="Activate"><i class="fa fa-toggle-off"></i></a></><center>';
-                    }
-                    return $value->status == 1 ? 'Activated' : 'Inactivated';
-                })
-                ->editColumn('kids', function ($value){
-                    if($value->kids == 1){
-                        return '<center><i class="fa fa-check"></i><center>';
-                    }else{
-                        return '<center><i class="fa fa-remove"></i></center>';
-                    }
-                })
-                ->addColumn('edit', function ($value) use ($user){
-                    if($user->hasAnyAccess(['programme.edit', 'admin'])){
-                        return '<center><a href="#" class="blue" onclick="window.location.href=\''.url('programme/'.$value->programId.'/edit').'\'" data-toggle="tooltip" data-placement="top" title="View/ Edit Channel"><i class="fa fa-pencil"></i></a></center>';
-                    }else{
-                        return '<center><a href="#" class="disabled" data-toggle="tooltip" data-placement="top" title="Edit Disabled"><i class="fa fa-pencil"></i></a></center>';
-                    }
+    // public function listJson()
+    // {
+    //     // try {
+    //         $user = Sentinel::getUser();
+    //         return Datatables::usingCollection(
+    //             Programme::select('programId', 'programName', 'programmeName_si','programmeName_ta', 'kids','status')->get()
+    //         )
+    //             ->editColumn('status', function ($value){
+    //                 if($value->status==1){
+    //                     return '<center><a href="javascript:void(0)" form="noForm" class="blue programme-status-toggle " data-id="'.$value->programId.'" data-status="0"  data-toggle="tooltip" data-placement="top" title="Deactivate"><i class="fa fa-toggle-on"></i></a></><center>';
+    //                 }else{
+    //                     return '<center><a href="javascript:void(0)" form="noForm" class="blue programme-status-toggle " data-id="' . $value->programId . '" data-status="1"  data-toggle="tooltip" data-placement="top" title="Activate"><i class="fa fa-toggle-off"></i></a></><center>';
+    //                 }
+    //                 return $value->status == 1 ? 'Activated' : 'Inactivated';
+    //             })
+    //             ->editColumn('kids', function ($value){
+    //                 if($value->kids == 1){
+    //                     return '<center><i class="fa fa-check"></i><center>';
+    //                 }else{
+    //                     return '<center><i class="fa fa-remove"></i></center>';
+    //                 }
+    //             })
+    //             ->addColumn('edit', function ($value) use ($user){
+    //                 if($user->hasAnyAccess(['programme.edit', 'admin'])){
+    //                     return '<center><a href="#" class="blue" onclick="window.location.href=\''.url('programme/'.$value->programId.'/edit').'\'" data-toggle="tooltip" data-placement="top" title="View/ Edit Channel"><i class="fa fa-pencil"></i></a></center>';
+    //                 }else{
+    //                     return '<center><a href="#" class="disabled" data-toggle="tooltip" data-placement="top" title="Edit Disabled"><i class="fa fa-pencil"></i></a></center>';
+    //                 }
                         
-                })
+    //             })
 
-                ->addColumn('bulk-update', function ($value) use ($user){
-                    if($user->hasAnyAccess(['programme.edit', 'admin'])){
-                        return '<center><a href="#" class="blue" onclick="window.location.href=\''.url('programme/'.$value->programId.'/policy').'\'" data-toggle="tooltip" data-placement="top" title="View/ Edit Channel"><i class="fa fa-universal-access"></i></a></center>';
-                    }else{
-                        return '<center><a href="#" class="disabled" data-toggle="tooltip" data-placement="top" title="Edit Disabled"><i class="fa fa-pencil"></i></a></center>';
-                    }
+    //             ->addColumn('bulk-update', function ($value) use ($user){
+    //                 if($user->hasAnyAccess(['programme.edit', 'admin'])){
+    //                     return '<center><a href="#" class="blue" onclick="window.location.href=\''.url('programme/'.$value->programId.'/policy').'\'" data-toggle="tooltip" data-placement="top" title="View/ Edit Channel"><i class="fa fa-universal-access"></i></a></center>';
+    //                 }else{
+    //                     return '<center><a href="#" class="disabled" data-toggle="tooltip" data-placement="top" title="Edit Disabled"><i class="fa fa-pencil"></i></a></center>';
+    //                 }
                         
-                })
-                ->make(true);
-        // }catch (\Throwable $exception){
-        //     $exceptionId = rand(0, 99999999);
-        //     Log::error("Ex " . $exceptionId . " | Error in " . __CLASS__ . "::" . __FUNCTION__ .":" .$exception->getLine()." | " . $exception->getMessage());
-        //     return Datatables::of(collect())->make(true);
-        // }
-    }
+    //             })
+    //             ->make(true);
+    //     // }catch (\Throwable $exception){
+    //     //     $exceptionId = rand(0, 99999999);
+    //     //     Log::error("Ex " . $exceptionId . " | Error in " . __CLASS__ . "::" . __FUNCTION__ .":" .$exception->getLine()." | " . $exception->getMessage());
+    //     //     return Datatables::of(collect())->make(true);
+    //     // }
+    // }
   
     public function changeStatus(Request $request)
     {
         $id = $request->id;
         $state = $request->state;
 
-        $programme = Programme::find($id);
-        if ($programme) {
-            $programme->status = $state;
-            $programme->save();
+        $programme_slider = ProgrammeSlider::find($id);
+        if ($programme_slider) {
+            $programme_slider->status = $state;
+            $programme_slider->save();
             
             return response()->json(['status' => 'success']);
         }

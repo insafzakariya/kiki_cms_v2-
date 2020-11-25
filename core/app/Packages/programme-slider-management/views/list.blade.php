@@ -113,11 +113,12 @@
                       <td>{{ $slider->end_date_time }}</td>
                       <td align="center"><a href="{{url('programme-slider/'.$slider->ID.'/edit')}}" class="blue" onclick="window.location.href=\''.url('programme-slider/'.$slider->ID.'/edit').'\'" data-toggle="tooltip" data-placement="top" title="View/ Edit Slider"><i class="fa fa-pencil"></i></a></td>
                       <td align="center">
-                      @if($slider->status==1)
-                      <a href="javascript:void(0)"  class="blue programme-status-toggle " data-id="'.$value->programId.'" data-status="0"  data-toggle="tooltip" data-placement="top" title="Deactivate"><i class="fa fa-toggle-on"></i></a>
-                      @elseif($slider->status==2)
-                      <a href="javascript:void(0)" form="noForm" class="blue programme-status-toggle " data-id="'.$value->programId.'" data-status="0"  data-toggle="tooltip" data-placement="top" title="Deactivate"><i class="fa fa-toggle-off"></i></a>
-                      @endif
+                        @if($slider->status==1)
+                        <input type="checkbox" checked="true" name="checkfield{{ $slider->ID }}" id="{{ $slider->ID }}"  onchange="statusChange(this)"/>
+                        @elseif($slider->status==2)
+                        <input type="checkbox"  name="checkfield{{ $slider->ID }}" id="{{ $slider->ID }}"  onchange="statusChange(this)"/>
+                        @endif
+                       
                       </td>
                     
                      
@@ -133,53 +134,74 @@
 @section('js')
 
     <script type="text/javascript">
-        
-
-    </script>
-    <script type="text/javascript">
-  $(function () {
-    $("#table").DataTable({
-        "bPaginate": false
-        });
-
-    $( "#tablecontents" ).sortable({
-      items: "tr",
-      cursor: 'move',
-      opacity: 0.6,
-      update: function() {
-          sendOrderToServer();
+      function statusChange(checkboxElem) {
+        if (checkboxElem.checked) {
+            changeStatus(checkboxElem.id, 1);
+          
+        } else {
+            changeStatus(checkboxElem.id, 2);
+        }
       }
-    });
-
-    function sendOrderToServer() {
-
-      var order = [];
-      $('tr.row1').each(function(index,element) {
-        order.push({
-          id: $(this).attr('data-id'),
-          position: index+1
+    function changeStatus(id, state) {
+        $.ajax({
+            method: "POST",
+            url: '{{url('programme-slider/changeState')}}',
+            data:{ 'id' : id, 'state' : state  }
+        }).done(function( msg ) {
+            console.log("CHANGED");
+            
         });
-      });
+     }
+    
+    
+    
 
-      $.ajax({
-        type: "POST", 
-        dataType: "json", 
-        url: "{{ url('programme-slider/sortabledatatable') }}",
-        data: {
-          order:order,
-          _token: '{{csrf_token()}}'
-        },
-        success: function(response) {
-            if (response.status == "success") {
-              console.log(response);
-            } else {
-              console.log(response);
-            }
+
+    $(function () {
+      var table=$("#table").DataTable({
+          "bPaginate": false
+          });
+
+      $( "#tablecontents" ).sortable({
+        items: "tr",
+        cursor: 'move',
+        opacity: 0.6,
+        update: function() {
+            sendOrderToServer();
         }
       });
 
-    }
-  });
+      function sendOrderToServer() {
+
+        var order = [];
+        $('tr.row1').each(function(index,element) {
+          order.push({
+            id: $(this).attr('data-id'),
+            position: index+1
+          });
+        });
+
+        $.ajax({
+          type: "POST", 
+          dataType: "json", 
+          url: "{{ url('programme-slider/sortabledatatable') }}",
+          data: {
+            order:order,
+            _token: '{{csrf_token()}}'
+          },
+          success: function(response) {
+              if (response.status == "success") {
+                console.log(response);
+              } else {
+                console.log(response);
+              }
+          }
+        });
+
+      }
+    });
+
+ 
 
 </script>
 @stop

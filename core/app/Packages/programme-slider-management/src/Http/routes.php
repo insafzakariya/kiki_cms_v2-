@@ -7,26 +7,26 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'programme-slider', 'namespa
         'as' => 'programme-slider.add', 'uses' => 'ProgrammeSliderController@index'
     ]);
     Route::post('/add', [
-        'as' => 'programme.add', 'uses' => 'ProgrammeSliderController@store'
+        'as' => 'programme-slider.add', 'uses' => 'ProgrammeSliderController@store'
     ]);
     Route::get('{id}/edit', [
-        'as' => 'programme.edit', 'uses' => 'ProgrammeSliderController@editView'
+        'as' => 'programme-slider.edit', 'uses' => 'ProgrammeSliderController@editView'
     ]);
     Route::post('{id}/edit', [
-        'as' => 'programme.edit', 'uses' => 'ProgrammeSliderController@edit'
+        'as' => 'programme-slider.edit', 'uses' => 'ProgrammeSliderController@edit'
     ]);
     Route::get('/', [
-        'as' => 'programme.list', 'uses' => 'ProgrammeSliderController@listView'
+        'as' => 'programme-slider.list', 'uses' => 'ProgrammeSliderController@listView'
     ]);
     Route::post('/sortabledatatable', [
-        'as' => 'programme.list', 'uses' => 'ProgrammeSliderController@updateOrder'
+        'as' => 'programme-slider.list', 'uses' => 'ProgrammeSliderController@updateOrder'
     ]);
     
     Route::get('list/json', [
-        'as' => 'programme.list', 'uses' => 'ProgrammeController@listJson'
+        'as' => 'programme-slider.list', 'uses' => 'ProgrammeController@listJson'
     ]);
     Route::post('changeState', [
-        'as' => 'programme.edit', 'uses' => 'ProgrammeController@changeStatus'
+        'as' => 'programme-slider.edit', 'uses' => 'ProgrammeSliderController@changeStatus'
     ]);
 
     Route::get('/sort', [
