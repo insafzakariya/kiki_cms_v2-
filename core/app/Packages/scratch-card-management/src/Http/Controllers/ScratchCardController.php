@@ -199,7 +199,7 @@ class ScratchCardController extends Controller
             ->addColumn('currentStatus', function (ScratchCardsCodes $value) {
                 if($value->CardStatus ==1){
                     return "Active";
-                }else if($value->CardStatus ==0){
+                }else if($value->CardStatus ==2){
                     return "Used";
                 }
                
