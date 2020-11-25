@@ -42,7 +42,7 @@
                     <div class="form-group"><label class="col-sm-2 control-label">Channels </label>
                     	<div class="col-sm-5">
                         <select  name="channels[]" class="form-control" >
-                        <option></option>
+                       
                         @foreach ($channels as $channel)
                         <option value="{{$channel->channelId}}">{{$channel->channelName}}</option>
                         @endforeach
@@ -153,7 +153,7 @@
                       
                         </div>
                 	</div>
-                    <div class="form-group"><label class="col-sm-2 control-label">Search Tags</label>
+                    <div class="form-group"><label class="col-sm-2 control-label">Search Tags *</label>
                         <div class="col-sm-8">
                             <select class="select-simple-tag form-control" name="tags[]" multiple="multiple">
                             </select>
