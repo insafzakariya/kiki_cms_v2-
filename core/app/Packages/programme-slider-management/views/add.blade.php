@@ -99,7 +99,7 @@
                 return false;
             }
          
-        }, "You must select at least 3 files to upload. Please retry your upload!"); 
+        }, "You must select at least 1 files to upload. Please retry your upload!"); 
 
 
 		$("#form").validate({
