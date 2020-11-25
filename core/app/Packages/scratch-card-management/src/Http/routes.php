@@ -10,10 +10,10 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'scratch-card', 'namespace' 
         'as' => 'scratch-card.add', 'uses' => 'ScratchCardController@store'
     ]);
     Route::get('{id}/edit', [
-        'as' => 'programme.edit', 'uses' => 'ProgrammeSliderController@editView'
+        'as' => 'scratch-card.add', 'uses' => 'ScratchCardController@editView'
     ]);
     Route::post('{id}/edit', [
-        'as' => 'programme.edit', 'uses' => 'ProgrammeSliderController@edit'
+        'as' => 'scratch-card.add', 'uses' => 'ScratchCardController@edit'
     ]);
     Route::get('/', [
         'as' => 'programme.list', 'uses' => 'ProgrammeSliderController@listView'

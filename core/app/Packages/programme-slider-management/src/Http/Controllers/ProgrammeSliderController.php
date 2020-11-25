@@ -231,6 +231,19 @@ class ProgrammeSliderController extends Controller
         return response()->json(['status' => 'invalid_id']);
     }
 
+    public function deleteSlider(Request $request)
+    {
+        $id = $request->id;
+        $programme_slider = ProgrammeSlider::find($id);
+        if ($programme_slider) {
+            $programme_slider->status = 0;
+            $programme_slider->save();
+            
+            return response()->json(['status' => 'success']);
+        }
+        return response()->json(['status' => 'invalid_id']);
+    }
+
     public function sortView()
     {
         $channels=Channel::get();

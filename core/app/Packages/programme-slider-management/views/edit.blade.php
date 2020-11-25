@@ -7,7 +7,7 @@
 @stop
 @section('page_header')
  <div class="col-lg-9">
-    <h2>Programme  SliderManagement</h2>
+    <h2>Programme  Slider Management</h2>
     <ol class="breadcrumb">
         <li>
             <a href="{{url('/')}}">Home</a>

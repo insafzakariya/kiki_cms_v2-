@@ -89,12 +89,13 @@
                       <th>End</th>
                       <th>Edit</th>
                       <th>Active</th>
+                      <th>Delete</th>
                       
                     </tr>
                   </thead>
                   <tbody id="tablecontents">
                     @foreach($sliders as $slider)
-                    <tr class="row1" data-id="{{ $slider->ID }}">
+                    <tr class="row1" data-id="{{ $slider->ID }}" id="row_{{ $slider->ID }}">
                       <td>
                         <div style="color:rgb(124,77,255); padding-left: 10px; float: left; font-size: 20px; cursor: pointer;" title="change display order">
                         <i class="fa fa-ellipsis-v"></i>
@@ -119,6 +120,9 @@
                         <input type="checkbox"  name="checkfield{{ $slider->ID }}" id="{{ $slider->ID }}"  onchange="statusChange(this)"/>
                         @endif
                        
+                      </td>
+                      <td>
+                      <center><a href="#" class="blue" onclick="delete_slider(<?php echo $slider->ID; ?>)" data-toggle="tooltip" data-placement="top" title="View/ Edit Channel"><i class="fa fa-trash"></i></a></center>
                       </td>
                     
                      
@@ -152,6 +156,31 @@
             
         });
      }
+     function delete_slider(id) {
+            swal({
+                title: "Are you sure?",
+                text:"Delete Slider",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, change it!"
+
+            }).then(function (isConfirm) {
+                if (isConfirm) {
+                    $.ajax({
+                        method: "POST",
+                        url: '{{url('programme-slider/deleteSlider')}}',
+                        data:{ 'id' : id  }
+                    }).done(function( msg ) {
+                        console.log("CHANGED");
+                        $('#row_'+id).remove();
+                      
+                    });
+                } else {
+                    swal("Cancelled", "Cancelled the status change", "error");
+                }
+            });
+        }
     
     
     

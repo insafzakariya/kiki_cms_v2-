@@ -23,6 +23,11 @@ class ScratchCards extends Model{
        
     ];
 
+    public function getCodes()
+    {
+        return $this->hasMany('ScratchCardManage\Models\ScratchCardsCodes', 'CardID', 'CardID');   
+    }
+
    
   
 

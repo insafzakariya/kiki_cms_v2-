@@ -28,6 +28,9 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'programme-slider', 'namespa
     Route::post('changeState', [
         'as' => 'programme-slider.edit', 'uses' => 'ProgrammeSliderController@changeStatus'
     ]);
+    Route::post('deleteSlider', [
+        'as' => 'programme-slider.list', 'uses' => 'ProgrammeSliderController@deleteSlider'
+    ]);
 
     Route::get('/sort', [
         'as' => 'programme.sort', 'uses' => 'ProgrammeController@sortView'

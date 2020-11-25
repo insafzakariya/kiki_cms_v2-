@@ -80,83 +80,56 @@ class ScratchCardController extends Controller
             }else if($request->get('type')==2){
                 $this->generateCodes($request->get('card_count'),$card->CardID);
             }
-            
+            return redirect('scratch-card/add')->with(['success' => true,
+            'success.message' => 'Scratch Card Created successfully!',
+            'success.title' => 'Well Done!']);
+        }else{
+            return redirect('scratch-card/add')->with([
+                'error' => true,
+                'error.message'=> 'Error adding new Scratch Card. Please try again.',
+                'error.title' => 'Oops !!'
+            ]);
         }
     }
-    // Programme Slider Edit View Load
+    // Scrach Card  Edit View Load
     public function editView($id)
     {
-        $exsist_programme_slider=ProgrammeSlider::find($id);
-       
-        $thumb_image = [];
-        $thumb_image_config = [];
-
-        if($exsist_programme_slider){
+        $exsist_scratch_card=ScratchCards::with(['getCodes'])->find($id);
         
-            array_push($thumb_image, "<img style='height:190px' src='" . Config('constants.bucket.url') . Config('filePaths.front.programme') . $exsist_programme_slider->image_path . "'>");
-            array_push($thumb_image_config, array(
-                'caption' => '',
-                'type' => 'image',
-                'key' => 0,
-                'url' => url('programme/image-delete'),
-            ));
- 
-        
-            return view('ProgrammeSliderManage::edit')
+        if($exsist_scratch_card){   
+            $scratch_codes_count=ScratchCardsCodes::where('CardID',$exsist_scratch_card->CardID)->count();
+            $packages=Package::where('Status',1)->get(); 
+            return view('ScratchCardManage::edit')
             ->with(
                 [
-                'exsist_programme_slider'=>$exsist_programme_slider,
-                'thumb_image'=>$thumb_image,
-                'thumb_image_config'=>$thumb_image_config
+                'exsist_scratch_card'=>$exsist_scratch_card,
+                'packages'=>$packages,
+                'scratch_codes_count'=>$scratch_codes_count
                 ]
             );
 
         }else{
-            return "Programme Slider Not Found.";
+            return "Scrath Card Not Found.";
         }
        
     }
 
     public function edit(Request $request,$id )
     {
-        //   return $request->all();
-      
-        $exsist_programme_slider=ProgrammeSlider::find($id);
-
-        $exsist_programme_slider->name=$request->name;
-        $exsist_programme_slider->programID=$request->programme;
-        $exsist_programme_slider->start_date_time=$request->start_date;
-        $exsist_programme_slider->end_date_time=$request->end_date;
-        
-        
-        if($exsist_programme_slider){
-        
-            if($request->hasFile('thumb_image')) {
-                $cover_images=$request->file('thumb_image');
-
-                foreach ($cover_images as $key => $aImage) {
-                    $ext = $aImage->getClientOriginalExtension();
-                    $fileName = 'programme-thumb-image-' . rand(0, 999999) . '-' . date('YmdHis') . '.' . $ext;
-                    $filePath = $this->imageController->Upload($this->programmeSliderImagePath, $aImage, $fileName, "-");
-                    $exsist_programme_slider->image_path=$fileName;;
-                    
-                }
-            }else if($request->has('thumb_image_removed') && $request->get('thumb_image_removed') == 1){
-                $exsist_programme_slider->image_path="";
-            }
-            $exsist_programme_slider->save();
-
-            return redirect('programme-slider/'.$id.'/edit')->with(['success' => true,
-            'success.message' => 'Programme Slider Created successfully!',
-            'success.title' => 'Well Done!']);
-        }else{
-            return redirect('programme-slider/'.$id.'/edit')->with([
-                'error' => true,
-                'error.message'=> 'Error adding Slidere Edit. Please try again.',
-                'error.title' => 'Oops !!'
-            ]);
+ 
+        $exsist_scratch_card=ScratchCards::find($id);
+        if($exsist_scratch_card){
+            $exsist_scratch_card->PackageID=$request->package;
+            $exsist_scratch_card->ActivityStartDate=$request->start_date;
+            $exsist_scratch_card->ActivityEndDate=$request->end_date;
+            $exsist_scratch_card->save();
+    
+            return redirect('scratch-card/'.$id.'/edit')->with(['success' => true,
+                'success.message' => 'Scratch Card Created successfully!',
+                'success.title' => 'Well Done!']);
+           
         }
-      
+       
        
     }
     public function listView()
