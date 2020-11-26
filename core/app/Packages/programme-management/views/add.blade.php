@@ -166,7 +166,7 @@
 	                <div class="form-group">
 	                    <div class="col-sm-8 col-sm-offset-2">
 	                        <button class="btn btn-default" type="button" onclick="location.reload();">Cancel</button>
-	                        <button class="btn btn-primary" type="submit">Done</button>
+	                        <button class="btn btn-primary" id="btn_submit_form" type="button">Done</button>
 	                    </div>
 	                </div>
                 	
@@ -340,10 +340,18 @@
 
                 // }
                
-            },
-            submitHandler: function(form) {
+            }
+            // ,
+            // submitHandler: function(form) {
                
-                form.submit();
+            //     form.submit();
+            // }
+        });
+
+        $('#btn_submit_form').click(function() {
+           
+            if($("#form").valid()){   // test for validity
+                $("#form").submit();
             }
         });
 	});
