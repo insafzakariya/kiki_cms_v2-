@@ -42,7 +42,6 @@
                     <div class="form-group"><label class="col-sm-2 control-label">Channels </label>
                     	<div class="col-sm-5">
                         <select  name="channels[]" class="form-control" >
-                       
                         @foreach ($channels as $channel)
                         <option value="{{$channel->channelId}}">{{$channel->channelName}}</option>
                         @endforeach
@@ -73,6 +72,7 @@
                         <label class="col-sm-2 control-label required">Thumb Image</label>
                         <div class="col-sm-4">
                             <input id="thumb_image" name="thumb_image[]" type="file" multiple class="form-control" accept="image/*">
+                            <label id="thumb_image-error" class="error" for="thumb_image"></label>
                         </div>
                     </div>
                     <div class="form-group"><label class="col-sm-2 control-label">Description</label>
@@ -90,6 +90,7 @@
                         <label class="col-sm-2 control-label required">Cover Image</label>
                         <div class="col-sm-4">
                             <input id="cover_image" name="cover_image[]" type="file" multiple class="form-control" accept="image/*">
+                            <label id="cover_image-error" class="error" for="cover_image"></label>
                         </div>
                     </div>
                     <div class="form-group">
@@ -157,6 +158,7 @@
                         <div class="col-sm-8">
                             <select class="select-simple-tag form-control" name="tags[]" multiple="multiple">
                             </select>
+                            <label id="tags[]-error" class="error" for="tags[]"></label>
                         </div>
                     </div>
                     
@@ -210,8 +212,12 @@
             // multiple: true,
         });
         $('select[name="channels[]"]').select2({
-            placeholder: "Choose Channels ",
+            minimumResultsForSearch: -1,
+            placeholder: function(){
+                $(this).data('placeholder');
+            },
             multiple: true,
+            allowClear: true
             
         });
 
@@ -228,24 +234,24 @@
         jQuery.validator.addMethod("thumb_image_va", function(value, element){
             const min_file_count = $('#thumb_image').data("fileinput").options.minFileCount;
             const exsist_file_count = $('#thumb_image').data("fileinput").filestack.length;
-            if(exsist_file_count >=min_file_count){
+            if(exsist_file_count >=1){
                 return true;
             }else{
                 return false;
             }
          
-        }, "You must select at least 3 files to upload. Please retry your upload!"); 
+        }, "You must select at least 1 files to upload. Please retry your upload!"); 
 
         jQuery.validator.addMethod("cover_image_va", function(value, element){
             const min_file_count = $('#cover_image').data("fileinput").options.minFileCount;
             const exsist_file_count = $('#cover_image').data("fileinput").filestack.length;
-            if(exsist_file_count >=min_file_count){
+            if(exsist_file_count >=1){
                 return true;
             }else{
                 return false;
             }
          
-        }, "You must select at least 2 files to upload. Please retry your upload!"); 
+        }, "You must select at least 1 files to upload. Please retry your upload!"); 
 
 		$("#form").validate({
             rules: {
@@ -379,7 +385,7 @@
         uploadUrl: "", // server upload action
         dropZoneEnabled: true,
         uploadAsync: false,
-        minFileCount: 3,
+        // minFileCount: 3,
         showRemove: true,
         showUpload:false,
         allowedFileExtensions: ["jpg", "gif", "png", "jpeg", "jfif"]
@@ -390,7 +396,7 @@
         uploadUrl: "", // server upload action
         dropZoneEnabled: true,
         uploadAsync: false,
-        minFileCount: 2,
+        // minFileCount: 2,
         showRemove: true,
         showUpload:false,
         allowedFileExtensions: ["jpg", "gif", "png", "jpeg", "jfif"]

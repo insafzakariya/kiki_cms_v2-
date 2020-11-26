@@ -93,6 +93,7 @@
                         <label class="col-sm-2 control-label required">Thumb Image</label>
                         <div class="col-sm-4">
                             <input id="thumb_image" name="thumb_image[]" type="file" multiple class="form-control" accept="image/*">
+                            <label id="thumb_image-error" class="error" for="thumb_image"></label>
                         </div>
                     </div>
                     <div class="form-group"><label class="col-sm-2 control-label">Description</label>
@@ -118,6 +119,7 @@
                         <label class="col-sm-2 control-label required">Cover Image</label>
                         <div class="col-sm-4">
                             <input id="cover_image" name="cover_image[]" type="file" multiple class="form-control" accept="image/*">
+                            <label id="cover_image-error" class="error" for="cover_image"></label>
                         </div>
                     </div>
                     <div class="form-group">

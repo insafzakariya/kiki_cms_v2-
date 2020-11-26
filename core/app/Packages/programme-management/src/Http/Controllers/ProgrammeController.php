@@ -80,6 +80,8 @@ class ProgrammeController extends Controller
             'likes'=>$request->likes,
             'search_tag'=>json_encode($request->tags),
             'programType'=>$request->programme_type,
+            'thumb_image'=>1,
+            'cover_image'=>1
         ]);
 
         if($programme){
