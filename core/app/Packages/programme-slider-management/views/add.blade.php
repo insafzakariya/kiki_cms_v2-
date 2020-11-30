@@ -75,6 +75,7 @@
 	$(document).ready(function(){
         $("#start_date").flatpickr(
             {
+                allowInput:true,
                 enableTime: true,
                 dateFormat: "Y-m-d H:i",
                 defaultDate: ["today"]
@@ -83,6 +84,7 @@
 
         $("#end_date").flatpickr(
             {
+                allowInput:true,
                 enableTime: true,
                 dateFormat: "Y-m-d H:i",
                 // maxDate: "31.12.2099",
