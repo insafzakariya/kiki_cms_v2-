@@ -78,7 +78,7 @@
         <div class="col-lg-12 margins">
             <div class="ibox-content">
             <div class="col-sm-10 col-sm-offset-2" style="padding-bottom:10px"> 
-                  <button class="btn btn-primary pull-right" onclick="reorderSave()"  type="button" id="btn-bulk-policy-update">Save Reoeder List</button>
+                  <button class="btn btn-primary pull-right" onclick="reorderSave()"  type="button" id="btn-bulk-policy-update">Save Reorder List</button>
             </div>
                 <div class="panel-body">
                 <table id="table" class="table table-bordered">
