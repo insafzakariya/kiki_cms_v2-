@@ -77,6 +77,9 @@
     <div class="row">
         <div class="col-lg-12 margins">
             <div class="ibox-content">
+            <div class="col-sm-10 col-sm-offset-2" style="padding-bottom:10px"> 
+                  <button class="btn btn-primary pull-right" onclick="reorderSave()"  type="button" id="btn-bulk-policy-update">Save Reoeder List</button>
+            </div>
                 <div class="panel-body">
                 <table id="table" class="table table-bordered">
                   <thead>
@@ -138,6 +141,8 @@
 @section('js')
 
     <script type="text/javascript">
+      
+
       function statusChange(checkboxElem) {
         if (checkboxElem.checked) {
             changeStatus(checkboxElem.id, 1);
@@ -182,12 +187,58 @@
                 }
             });
         }
-    
-    
-    
 
+        function reorderSave() {
+        swal({
+                title: "Are you sure?",
+                text:"Save Order List",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, change it!"
+
+            }).then(function (isConfirm) {
+             
+                if (isConfirm.value) {
+                  sendOrderToServer();
+                } else {
+                    swal("Cancelled", "Cancelled the save change", "error");
+                }
+            });
+       }
+    
+       //Save Order Table
+       function sendOrderToServer() {
+
+          var order = [];
+          $('tr.row1').each(function(index,element) {
+            order.push({
+              id: $(this).attr('data-id'),
+              position: index+1
+            });
+          });
+
+          $.ajax({
+            type: "POST", 
+            dataType: "json", 
+            url: "{{ url('programme-slider/sortabledatatable') }}",
+            data: {
+              order:order,
+              _token: '{{csrf_token()}}'
+            },
+            success: function(response) {
+                if (response.status == "success") {
+                  console.log(response);
+                } else {
+                  console.log(response);
+                }
+            }
+          });
+
+      }
 
     $(function () {
+  
       var table=$("#table").DataTable({
           "bPaginate": false
           });
@@ -197,39 +248,12 @@
         cursor: 'move',
         opacity: 0.6,
         update: function() {
-            sendOrderToServer();
+            // sendOrderToServer();
         }
       });
-
-      function sendOrderToServer() {
-
-        var order = [];
-        $('tr.row1').each(function(index,element) {
-          order.push({
-            id: $(this).attr('data-id'),
-            position: index+1
-          });
-        });
-
-        $.ajax({
-          type: "POST", 
-          dataType: "json", 
-          url: "{{ url('programme-slider/sortabledatatable') }}",
-          data: {
-            order:order,
-            _token: '{{csrf_token()}}'
-          },
-          success: function(response) {
-              if (response.status == "success") {
-                console.log(response);
-              } else {
-                console.log(response);
-              }
-          }
-        });
-
-      }
     });
+
+  
 
  
 
