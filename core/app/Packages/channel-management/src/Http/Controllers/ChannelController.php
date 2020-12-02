@@ -141,16 +141,18 @@ class ChannelController extends Controller
                     // 'url' => url('admin/channel/image-delete'),
                 ));
             }
+        
             if ($exsist_channel->introVideo) {
-                array_push($intro_vedio, "<img style='height:190px' src='" . Config('constants.bucket.url') . Config('filePaths.front.channel') . $exsist_channel->introVideo . "'>");
+                array_push($intro_vedio,   "<video controls='' > <source src='" .Config('constants.bucket.url') . Config('filePaths.front.channel') . $exsist_channel->introVideo. "' type='video/mp4'> </video>" );
                 array_push($intro_vedio_config, array(
                     'caption' => '',
-                    'type' => 'image',
+                    'type' => 'video',
+                    'filetype'=> "video/mp4",
                     'key' => $exsist_channel->channelId,
                     // 'url' => url('admin/channel/intro-vedio-delete'),
                 ));
             }
-         
+        
             return view('ChannelManage::edit')
             ->with(
                 ['channelContentPolicies'=>$channelContentPolicies,

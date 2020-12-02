@@ -65,7 +65,7 @@
                     <div class="form-group">
                         <label class="col-sm-2 control-label required">Intro Vedio</label>
                         <div class="col-sm-4">
-                            <input id="intro_vedio" name="intro_vedio" type="file"  class="form-control" >
+                            <input id="intro_vedio" name="intro_vedio" type="file"  class="form-control" accept="video/mp4,video/x-m4v,video/*">
                         </div>
                     </div>
                     <div class="form-group">
@@ -293,13 +293,15 @@
                 $("#image_removed").val(1);
             });
         $("#intro_vedio").fileinput({
-            theme: "fa",
+            
                 showUpload: false,
                 showRemove: true,
                 multiple: false,
                 initialPreviewShowDelete: false,
-                // allowedFileTypes: ['image'],
-                // allowedFileExtensions: ["jpg", "gif", "png", "jpeg", "jfif"],
+                initialPreviewAsData: false,
+               
+                allowedFileTypes: ['video'],
+                allowedFileExtensions: ["mp4"],
                 overwriteInitial: true,
                 initialPreview: <?php echo json_encode($intro_vedio); ?>,
                 initialPreviewConfig: <?php echo json_encode($intro_vedio_config) ?>

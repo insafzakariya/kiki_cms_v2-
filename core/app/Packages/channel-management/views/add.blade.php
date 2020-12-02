@@ -25,27 +25,27 @@
                 <form method="POST" class="form-horizontal" id="form"  enctype="multipart/form-data">
                 	{!!Form::token()!!}
 
-                	<div class="form-group"><label class="col-sm-2 control-label">Channel Name</label>
+                	<div class="form-group"><label class="col-sm-2 control-label">Channel Name </label>
                     	<div class="col-sm-10"></div>
                 	</div>
-                    <div class="form-group"><label class="col-sm-2 control-label">English</label>
+                    <div class="form-group"><label class="col-sm-2 control-label">English *</label>
                     	<div class="col-sm-5"><input type="text" class="form-control" name="channel_name_en"></div>
                 	</div>
-                    <div class="form-group"><label class="col-sm-2 control-label">Sinhala</label>
+                    <div class="form-group"><label class="col-sm-2 control-label">Sinhala *</label>
                     	<div class="col-sm-5"><input type="text" class="form-control" name="channel_name_si"></div>
                 	</div>
-                    <div class="form-group"><label class="col-sm-2 control-label">Tamil</label>
+                    <div class="form-group"><label class="col-sm-2 control-label">Tamil *</label>
                     	<div class="col-sm-5"><input type="text" class="form-control" name="channel_name_ta"></div>
                 	</div>
                     <div class="form-group"><label class="col-sm-2 control-label">Description</label>
                 	</div>
-                    <div class="form-group"><label class="col-sm-2 control-label">English</label>
+                    <div class="form-group"><label class="col-sm-2 control-label">English *</label>
                     	<div class="col-sm-5"><input type="text" class="form-control" name="channel_description_en"></div>
                 	</div>
-                    <div class="form-group"><label class="col-sm-2 control-label">Sinhala</label>
+                    <div class="form-group"><label class="col-sm-2 control-label">Sinhala *</label>
                     	<div class="col-sm-5"><input type="text" class="form-control" name="channel_description_si"></div>
                 	</div>
-                    <div class="form-group"><label class="col-sm-2 control-label">Tamil</label>
+                    <div class="form-group"><label class="col-sm-2 control-label">Tamil *</label>
                     	<div class="col-sm-5"><input type="text" class="form-control" name="channel_description_ta"></div>
                 	</div>
                     <div class="form-group">
@@ -57,7 +57,8 @@
                     <div class="form-group">
                         <label class="col-sm-2 control-label required">Intro Vedio</label>
                         <div class="col-sm-4">
-                            <input id="vedio" name="intro_vedio" type="file"  class="form-control" >
+                            <input id="intro_vedio" name="intro_vedio"  type="file"  class="form-control" accept="video/mp4,video/x-m4v,video/*">
+                            
                         </div>
                     </div>
                     <div class="form-group">
@@ -141,6 +142,29 @@
             // multiple: true,
         });
 
+        jQuery.validator.addMethod("intro_video_va", function(value, element){
+            const exsist_file_count = $('#intro_vedio').data("fileinput").filestack.length;
+            if(exsist_file_count >=1){
+                return true;
+            }else{
+                return false;
+            }
+         
+        }, "You must select at least 1 files to upload. Please retry your upload!"); 
+
+        $("#intro_vedio").fileinput({
+            uploadUrl: "", // server upload action
+            dropZoneEnabled: true,
+            uploadAsync: false,
+            // minFileCount: 3,
+            showRemove: true,
+            showUpload:false,
+            allowedFileTypes: ['video'],
+            allowedFileExtensions: ["mp4"],
+            overwriteInitial: true,
+            
+        });
+        
 		$("#form").validate({
             rules: {
                 channel_name_en: {
@@ -196,6 +220,12 @@
                         }
                     },
                   
+                },
+                'vedio': {
+                    // required: true,
+                    // intro_video_va:true
+                   
+
                 }
                 // ,
                 // image: {
