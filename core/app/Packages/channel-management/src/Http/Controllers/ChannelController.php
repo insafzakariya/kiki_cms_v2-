@@ -257,7 +257,7 @@ class ChannelController extends Controller
         // try {
             $user = Sentinel::getUser();
             return Datatables::usingCollection(
-                Channel::select('channelId', 'channelName', 'channelName_si','channelName_ta', 'kids','status')->get()
+                Channel::where('status','!=',2)->select('channelId', 'channelName', 'channelName_si','channelName_ta', 'kids','status')->get()
             )
                 ->editColumn('status', function ($value){
                     if($value->status==1){
@@ -273,6 +273,11 @@ class ChannelController extends Controller
                     }else{
                         return '<center><i class="fa fa-remove"></i></center>';
                     }
+                })
+                ->editColumn('delete', function ($value){
+                        return '<center><a href="javascript:void(0)" form="noForm" class="blue channel-delete " data-id="'.$value->channelId.'" data-status="0"  data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></a></><center>';
+                    
+                    
                 })
                 ->addColumn('edit', function ($value) use ($user){
                     if($user->hasAnyAccess(['channel.edit', 'admin'])){
@@ -298,6 +303,19 @@ class ChannelController extends Controller
         $channel = Channel::find($id);
         if ($channel) {
             $channel->status = $state;
+            $channel->save();
+            
+            return response()->json(['status' => 'success']);
+        }
+        return response()->json(['status' => 'invalid_id']);
+    }
+    public function deleteChannel(Request $request)
+    {
+        $id = $request->id;
+    
+        $channel = Channel::find($id);
+        if ($channel) {
+            $channel->status = 2;
             $channel->save();
             
             return response()->json(['status' => 'success']);

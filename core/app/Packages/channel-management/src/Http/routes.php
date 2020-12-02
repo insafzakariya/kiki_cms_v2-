@@ -24,6 +24,9 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'channel', 'namespace' => 'C
     Route::post('changeState', [
         'as' => 'channel.edit', 'uses' => 'ChannelController@changeStatus'
     ]);
+    Route::post('delete', [
+        'as' => 'channel.list', 'uses' => 'ChannelController@deleteChannel'
+    ]);
 
 
     

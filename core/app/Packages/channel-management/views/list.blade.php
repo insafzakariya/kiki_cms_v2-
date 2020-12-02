@@ -63,11 +63,11 @@
     </div>
 @stop
 @section('content')
-    <!-- @if(\Sentinel::getUser()->hasAnyAccess(['admin.lyricists.show', 'admin']))
-        <div id="floating-button" data-toggle="tooltip" data-placement="left" data-original-title="Create" onclick="location.href = '{{route('admin.lyricists.create')}}';">
+   
+        <div id="floating-button" data-toggle="tooltip" data-placement="left" data-original-title="Create" onclick="location.href = '{{url('channel/add')}}';">
             <p class="plus">+</p>
         </div>
-    @endif -->
+    
     <div class="row">
         <div class="col-lg-12 margins">
             <div class="ibox-content">
@@ -82,6 +82,7 @@
                             <th>Kids</th>
                             <th width="1%">Active/ Deactivate</th>
                             <th width="1%">Edit</th>
+                            <th width="1%">Delete</th>
                         </tr>
                         </thead>
                     </table>
@@ -104,7 +105,8 @@
                     { "data": "channelName_ta" },
                     { "data": "kids" },
                     { "data": "status" },
-                    { "data": "edit" }
+                    { "data": "edit" },
+                    { "data": "delete" }
                 ],
                 "columnDefs": [
                     { "orderable": false, "targets": [4, 5] }
@@ -132,12 +134,43 @@
 
 
                 });
+                $('.channel-delete').click(function(e){
+                    e.preventDefault();
+                    id = $(this).data('id');
+                    deleteChannel(id);
+
+
+                });
 
             });
 
 
 
         });
+
+        function deleteChannel(id){
+            swal({
+                title: "Are you sure?",
+                text:"Delete the Channel",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, change it!"
+
+            }).then(function (isConfirm) {
+                if (isConfirm.value) {
+                    $.ajax({
+                        method: "POST",
+                        url: '{{url('channel/delete')}}',
+                        data:{ 'id' : id }
+                    }).done(function( msg ) {
+                        table.ajax.reload();
+                    });
+                } else {
+                    swal("Cancelled", "Cancelled the Channel Delete", "error");
+                }
+            });
+        }
 
         function changeStatus(id, state) {
             swal({
@@ -149,13 +182,13 @@
                 confirmButtonText: "Yes, change it!"
 
             }).then(function (isConfirm) {
-                if (isConfirm) {
+                if (isConfirm.value) {
                     $.ajax({
                         method: "POST",
                         url: '{{url('channel/changeState')}}',
                         data:{ 'id' : id, 'state' : state  }
                     }).done(function( msg ) {
-                       
+                        table.ajax.reload();
                     });
                 } else {
                     swal("Cancelled", "Cancelled the status change", "error");

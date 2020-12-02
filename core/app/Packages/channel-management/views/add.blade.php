@@ -51,7 +51,7 @@
                     <div class="form-group">
                         <label class="col-sm-2 control-label required">Channel Image</label>
                         <div class="col-sm-4">
-                            <input id="image" name="channel_image" type="file"  class="form-control" accept="image/*">
+                            <input id="channel_image" name="channel_image" type="file"  class="form-control" accept="image/*">
                         </div>
                     </div>
                     <div class="form-group">
@@ -162,6 +162,16 @@
             allowedFileTypes: ['video'],
             allowedFileExtensions: ["mp4"],
             overwriteInitial: true,
+            
+        });
+        $("#channel_image").fileinput({
+            uploadUrl: "", // server upload action
+            dropZoneEnabled: true,
+            uploadAsync: false,
+            // minFileCount: 3,
+            showRemove: true,
+            showUpload:false,
+            allowedFileExtensions: ["jpg", "gif", "png", "jpeg", "jfif"]
             
         });
         
