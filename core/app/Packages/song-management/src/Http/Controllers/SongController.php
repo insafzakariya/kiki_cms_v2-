@@ -32,6 +32,7 @@ use SongManage\Models\SongProjects;
 use SongManage\Models\SongPublisher;
 use SongManage\Models\Songs;
 use SongsCategory\Models\SongsCategory;
+use App;
 
 class SongController extends Controller
 {
@@ -452,8 +453,12 @@ class SongController extends Controller
                 $song->save();
 
                 if ($song) {
-                    $this->solrController->kiki_song_delete_by_id($song->songId);
-                    $this->songSolr($song->songId);
+                    //IF Solr sync off not pushing (Only Live Enabled )
+                    if (env('SOLR_SYNC')=='ON') {
+                        $this->solrController->kiki_song_delete_by_id($song->songId);
+                        $this->songSolr($song->songId);
+                    }
+                    
                     if ($songStage == 2 and $song->product) {
                         $requestType = '';
                         if(Request::exists('type')){
