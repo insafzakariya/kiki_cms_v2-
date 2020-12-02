@@ -422,7 +422,7 @@ class ProgrammeController extends Controller
         // try {
             $user = Sentinel::getUser();
             return Datatables::usingCollection(
-                Programme::select('programId', 'programName', 'programmeName_si','programmeName_ta', 'kids','status')->get()
+                Programme::where('status','!=',2)->select('programId', 'programName', 'programmeName_si','programmeName_ta', 'kids','status')->get()
             )
                 ->editColumn('status', function ($value){
                     if($value->status==1){
@@ -446,6 +446,9 @@ class ProgrammeController extends Controller
                         return '<center><a href="#" class="disabled" data-toggle="tooltip" data-placement="top" title="Edit Disabled"><i class="fa fa-pencil"></i></a></center>';
                     }
                         
+                })
+                ->editColumn('delete', function ($value){
+                    return '<center><a href="javascript:void(0)" form="noForm" class="blue programme-delete " data-id="'.$value->programId.'" data-status="0"  data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></a></><center>'; 
                 })
 
                 ->addColumn('bulk-update', function ($value) use ($user){
@@ -476,6 +479,22 @@ class ProgrammeController extends Controller
            
             ProgrammeChannel::where('programme_id',$programme->programId)
             ->update(['status'=>$state]);
+            
+            return response()->json(['status' => 'success']);
+        }
+        return response()->json(['status' => 'invalid_id']);
+    }
+    public function programmeDelete(Request $request)
+    {
+        $id = $request->id;
+    
+        $programme = Programme::find($id);
+        if ($programme) {
+            $programme->status = 2;
+            $programme->save();
+           
+            ProgrammeChannel::where('programme_id',$programme->programId)
+            ->update(['status'=>2]);
             
             return response()->json(['status' => 'success']);
         }

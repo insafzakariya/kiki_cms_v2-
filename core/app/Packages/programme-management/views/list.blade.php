@@ -63,11 +63,11 @@
     </div>
 @stop
 @section('content')
-    <!-- @if(\Sentinel::getUser()->hasAnyAccess(['admin.lyricists.show', 'admin']))
-        <div id="floating-button" data-toggle="tooltip" data-placement="left" data-original-title="Create" onclick="location.href = '{{route('admin.lyricists.create')}}';">
+    
+        <div id="floating-button" data-toggle="tooltip" data-placement="left" data-original-title="Create" onclick="location.href = '{{url('programme/add')}}';">
             <p class="plus">+</p>
         </div>
-    @endif -->
+   
     @if (session('programme-error-details'))
     <div class="alert alert-danger">
         {{ session('programme-error-details') }}
@@ -92,6 +92,7 @@
                             <th>Kids</th>
                             <th width="1%">Active/ Deactivate</th>
                             <th width="1%">Edit</th>
+                            <th width="1%">Delete</th>
                             <th width="1%">Bulk Policy Update</th>
                         </tr>
                         </thead>
@@ -116,6 +117,7 @@
                     { "data": "kids" },
                     { "data": "status" },
                     { "data": "edit" },
+                    { "data": "delete" },
                     { "data": "bulk-update" }
                 ],
                 "columnDefs": [
@@ -144,12 +146,42 @@
 
 
                 });
+                $('.programme-delete').click(function(e){
+                    e.preventDefault();
+                    id = $(this).data('id');
+                    programmeDelete(id);
+                });
 
             });
 
 
 
         });
+
+        function programmeDelete(id){
+            swal({
+                title: "Are you sure?",
+                text:"Delete the Programme",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, change it!"
+
+            }).then(function (isConfirm) {
+                if (isConfirm.value) {
+                    $.ajax({
+                        method: "POST",
+                        url: '{{url('programme/delete')}}',
+                        data:{ 'id' : id  }
+                    }).done(function( msg ) {
+                        console.log("CHANGED");
+                        table.ajax.reload();
+                    });
+                } else {
+                    swal("Cancelled", "Cancelled the Programme Delete", "error");
+                }
+            });
+        }
 
         function changeStatus(id, state) {
             swal({

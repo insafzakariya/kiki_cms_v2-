@@ -30,6 +30,9 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'programme', 'namespace' => 
     Route::post('changeState', [
         'as' => 'programme.edit', 'uses' => 'ProgrammeController@changeStatus'
     ]);
+    Route::post('delete', [
+        'as' => 'programme.list', 'uses' => 'ProgrammeController@programmeDelete'
+    ]);
 
     Route::get('/sort', [
         'as' => 'programme.sort', 'uses' => 'ProgrammeController@sortView'
