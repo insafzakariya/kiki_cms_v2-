@@ -453,12 +453,8 @@ class SongController extends Controller
                 $song->save();
 
                 if ($song) {
-                    //IF Solr sync off not pushing (Only Live Enabled )
-                    if (env('SOLR_SYNC')=='ON') {
-                        $this->solrController->kiki_song_delete_by_id($song->songId);
-                        $this->songSolr($song->songId);
-                    }
-                    
+                    $this->solrController->kiki_song_delete_by_id($song->songId);
+                    $this->songSolr($song->songId);
                     if ($songStage == 2 and $song->product) {
                         $requestType = '';
                         if(Request::exists('type')){
@@ -1164,39 +1160,43 @@ class SongController extends Controller
 
 
     private function songSolr($songId){
-        try {
-            $song = Songs::with([
-                'mood', 'primaryArtists', 'featuredArtists', 'projects', 'products',
-                'genres', 'writer', 'composer', 'publisher', 'subCategory'
-            ])
-                ->where('songId', $songId)
-                ->first();
-            if($song){
-                $data = array(
-                    'id' => $song->songId, //id is required
-                    'Name' => $song->name,
-                    'Description' => $song->description,
-                    'ISRC Code' => $song->isbc_code,
-                    'Primary Category' => $song->category ? $song->category->name : '',
-                    'Sub Category' => $song->subCategory ? $song->subCategory->name : '',
-                    //'Image URL' => $song->image ? Config('constants.bucket.url') . Config('filePaths.front.song-image') . $song->image : '',
-                    'Image URL' => $song->image ?  $song->image : '',
-                    'Song URL' => $song->streamUrl ? $song->streamUrl : '',
-                    'Primary Artist' => $song->primaryArtists()->lists('name')->toArray(),
-                    'Featured Artist' => $song->featuredArtists()->lists('name')->toArray(),
-                    'Search Tags' => $song->search_tag,
-                    'Mood' => $song->mood()->lists('name')->toArray(),
-                    'Genre' => $song->genres()->lists('Name')->toArray(),
-                    'Duration' => $song->durations ,
-                    'Upload Date' => $song->uploaded_date ,
-                    'End Date' => $song->end_date ,
-                    'Release Date' => $song->release_date ,
-                    'Status' => $song->status == 1 ? 'Active' : "Inactive",
-                );
-                $this->solrController->kiki_song_create_document($data);
+        //IF Solr sync off not pushing (Only Live Enabled )
+        if (env('SOLR_SYNC')=='ON') {
+            try {
+                $song = Songs::with([
+                    'mood', 'primaryArtists', 'featuredArtists', 'projects', 'products',
+                    'genres', 'writer', 'composer', 'publisher', 'subCategory'
+                ])
+                    ->where('songId', $songId)
+                    ->first();
+                if($song){
+                    $data = array(
+                        'id' => $song->songId, //id is required
+                        'Name' => $song->name,
+                        'Description' => $song->description,
+                        'ISRC Code' => $song->isbc_code,
+                        'Primary Category' => $song->category ? $song->category->name : '',
+                        'Sub Category' => $song->subCategory ? $song->subCategory->name : '',
+                        //'Image URL' => $song->image ? Config('constants.bucket.url') . Config('filePaths.front.song-image') . $song->image : '',
+                        'Image URL' => $song->image ?  $song->image : '',
+                        'Song URL' => $song->streamUrl ? $song->streamUrl : '',
+                        'Primary Artist' => $song->primaryArtists()->lists('name')->toArray(),
+                        'Featured Artist' => $song->featuredArtists()->lists('name')->toArray(),
+                        'Search Tags' => $song->search_tag,
+                        'Mood' => $song->mood()->lists('name')->toArray(),
+                        'Genre' => $song->genres()->lists('Name')->toArray(),
+                        'Duration' => $song->durations ,
+                        'Upload Date' => $song->uploaded_date ,
+                        'End Date' => $song->end_date ,
+                        'Release Date' => $song->release_date ,
+                        'Status' => $song->status == 1 ? 'Active' : "Inactive",
+                    );
+                    $this->solrController->kiki_song_create_document($data);
+                }
+            }catch (Exception $exception){
+                Log::error("song solr error ". $exception->getMessage());
             }
-        }catch (Exception $exception){
-            Log::error("song solr error ". $exception->getMessage());
+
         }
     }
 
