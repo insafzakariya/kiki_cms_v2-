@@ -197,8 +197,9 @@ class SongController extends Controller
                 $song->artistGenreCreate($primaryArtists, $genres);
 
                 if ($song) {
-
-                    $this->songSolr($song->songId);
+                    if (env('SOLR_SYNC')=='ON') {
+                        $this->songSolr($song->songId);
+                    }
                     Session::put('create_song_id', $song->songId);
                 } else {
                     return 'opss something went wrong ';
@@ -238,8 +239,10 @@ class SongController extends Controller
             }
 
             if ($song) {
-                $this->solrController->kiki_song_delete_by_id($song->songId);
-                $this->songSolr($song->songId);
+                if (env('SOLR_SYNC')=='ON') {
+                    $this->solrController->kiki_song_delete_by_id($song->songId);
+                    $this->songSolr($song->songId);
+                }
                 return redirect('admin/song/step-2/' . $song->songId);
             } else {
                 return redirect('admin/song/step-1/')->withErrors('Oppps something went wrong please try again.');
@@ -319,8 +322,10 @@ class SongController extends Controller
                 $contentPolicies = $request->content_policies;
 
                 $song->saveContentPolicy($contentPolicies);
-                $this->solrController->kiki_song_delete_by_id($song->songId);
-                $this->songSolr($song->songId);
+                if (env('SOLR_SYNC')=='ON') {
+                    $this->solrController->kiki_song_delete_by_id($song->songId);
+                    $this->songSolr($song->songId);
+                }
 
                 return redirect('admin/song/step-3/' . $songId);
             } else {
@@ -453,8 +458,10 @@ class SongController extends Controller
                 $song->save();
 
                 if ($song) {
-                    $this->solrController->kiki_song_delete_by_id($song->songId);
-                    $this->songSolr($song->songId);
+                    if (env('SOLR_SYNC')=='ON') {
+                        $this->solrController->kiki_song_delete_by_id($song->songId);
+                        $this->songSolr($song->songId);
+                    }
                     if ($songStage == 2 and $song->product) {
                         $requestType = '';
                         if(Request::exists('type')){
@@ -957,8 +964,10 @@ class SongController extends Controller
         if ($song) {
             $song->status = $state;
             $song->save();
-            $this->solrController->kiki_song_delete_by_id($song->songId);
-            $this->songSolr($song->songId);
+            if (env('SOLR_SYNC')=='ON') {
+                $this->solrController->kiki_song_delete_by_id($song->songId);
+                $this->songSolr($song->songId);
+            }
             return response()->json(['status' => 'success']);
         }
         return response()->json(['status' => 'invalid_id']);
@@ -1121,8 +1130,10 @@ class SongController extends Controller
             $song = Songs::find($id);
             $song->image = null;
             $song->save();
-            $this->solrController->kiki_song_delete_by_id($song->songId);
-            $this->songSolr($song->songId);
+            if (env('SOLR_SYNC')=='ON') {
+                $this->solrController->kiki_song_delete_by_id($song->songId);
+                $this->songSolr($song->songId);
+            }
             return 2;
         }
         return 1;
@@ -1137,8 +1148,10 @@ class SongController extends Controller
             $song->smilFile = null;
             $song->streamUrl = null;
             $song->save();
-            $this->solrController->kiki_song_delete_by_id($song->songId);
-            $this->songSolr($song->songId);
+            if (env('SOLR_SYNC')=='ON') {
+                $this->solrController->kiki_song_delete_by_id($song->songId);
+                $this->songSolr($song->songId);
+            }
             return 2;
         }
         return 1;
@@ -1161,7 +1174,7 @@ class SongController extends Controller
 
     private function songSolr($songId){
         //IF Solr sync off not pushing (Only Live Enabled )
-        if (env('SOLR_SYNC')=='ON') {
+       
             try {
                 $song = Songs::with([
                     'mood', 'primaryArtists', 'featuredArtists', 'projects', 'products',
@@ -1197,7 +1210,7 @@ class SongController extends Controller
                 Log::error("song solr error ". $exception->getMessage());
             }
 
-        }
+        
     }
 
     public function songSearch(Request $request){
