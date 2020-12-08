@@ -422,7 +422,7 @@ class ProgrammeController extends Controller
         // try {
             $user = Sentinel::getUser();
             return Datatables::usingCollection(
-                Programme::where('status','!=',2)->select('programId', 'programName', 'programmeName_si','programmeName_ta', 'kids','status')->get()
+                Programme::where('status','!=',2)->select('programId', 'programName', 'start_date','end_date','duration','programType', 'status')->get()
             )
                 ->editColumn('status', function ($value){
                     if($value->status==1){
@@ -432,18 +432,19 @@ class ProgrammeController extends Controller
                     }
                     return $value->status == 1 ? 'Activated' : 'Inactivated';
                 })
-                ->editColumn('kids', function ($value){
-                    if($value->kids == 1){
-                        return '<center><i class="fa fa-check"></i><center>';
-                    }else{
-                        return '<center><i class="fa fa-remove"></i></center>';
-                    }
-                })
                 ->addColumn('edit', function ($value) use ($user){
                     if($user->hasAnyAccess(['programme.edit', 'admin'])){
                         return '<center><a href="#" class="blue" onclick="window.location.href=\''.url('programme/'.$value->programId.'/edit').'\'" data-toggle="tooltip" data-placement="top" title="View/ Edit Channel"><i class="fa fa-pencil"></i></a></center>';
                     }else{
                         return '<center><a href="#" class="disabled" data-toggle="tooltip" data-placement="top" title="Edit Disabled"><i class="fa fa-pencil"></i></a></center>';
+                    }
+                        
+                })
+                ->addColumn('viewEpisode', function ($value) use ($user){
+                    if($user->hasAnyAccess(['programme.edit', 'admin'])){
+                        return '<center><a href="#" class="blue" onclick="window.location.href=\''.url('episode/'.$value->programId.'/programme').'\'" data-toggle="tooltip" data-placement="top" title="View Episode"><i class="fa fa-television"></i></a></center>';
+                    }else{
+                        return '<center><a href="#" class="disabled" data-toggle="tooltip" data-placement="top" title="View Disabled"><i class="fa fa-television"></i></a></center>';
                     }
                         
                 })

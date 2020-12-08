@@ -18,8 +18,14 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'episode', 'namespace' => 'E
     Route::get('/', [
         'as' => 'episode.list', 'uses' => 'EpisodeController@listView'
     ]);
+    Route::get('{id}/programme', [
+        'as' => 'episode.list', 'uses' => 'EpisodeController@listViewByProgramme'
+    ]);
     Route::get('list/json', [
         'as' => 'episode.list', 'uses' => 'EpisodeController@listJson'
+    ]);
+    Route::get('list/programme/json', [
+        'as' => 'episode.list', 'uses' => 'EpisodeController@listJsonByProgramme'
     ]);
     Route::post('delete', [
         'as' => 'episode.edit', 'uses' => 'EpisodeController@delete'

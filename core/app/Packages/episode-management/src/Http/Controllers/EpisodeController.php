@@ -325,6 +325,7 @@ class EpisodeController extends Controller
     {
         return view('EpisodeManage::list');
     }
+    
     public function listJson(Request $request)
     {
        
@@ -396,6 +397,52 @@ class EpisodeController extends Controller
         //     Log::error("Ex " . $exceptionId . " | Error in " . __CLASS__ . "::" . __FUNCTION__ .":" .$exception->getLine()." | " . $exception->getMessage());
         //     return Datatables::of(collect())->make(true);
         // }
+    }
+
+    //List Episode View By Programme
+    public function listViewByProgramme($id)
+    {
+        return view('EpisodeManage::list-programme')->with(['programme_id'=>$id]);
+    }
+    public function listJsonByProgramme(Request $request)
+    { 
+       
+        // try {
+            $user = Sentinel::getUser();
+            $query=Episode::with(['getProgramme'])->where('status',1)->where('programId',$request->get('programme_id'))->select('tbl_episode.*');
+
+            return Datatables::eloquent($query)
+
+            ->editColumn('checklist', function (Episode $value){
+                
+                    return '<center><input  type="checkbox" class="form-check-input episode-check"  value="'.$value->episodeId.'"><center>';
+               
+            })
+            ->editColumn('status', function (Episode $value){
+                if($value->status==1){
+                    return '<center><a href="javascript:void(0)" form="noForm" class="blue episode-status-toggle " data-id="'.$value->episodeId.'" data-status="0"  data-toggle="tooltip" data-placement="top" title="Deactivate"><i class="fa fa-trash"></i></a></><center>';
+                }else{
+                    return '<center><a href="javascript:void(0)" form="noForm" class="blue episode-status-toggle " data-id="' . $value->episodeId . '" data-status="1"  data-toggle="tooltip" data-placement="top" title="Activate"><i class="fa fa-trash"></i></a></><center>';
+                }
+                return $value->status == 1 ? 'Activated' : 'Inactivated';
+            })
+            ->addColumn('programme', function (Episode $value) {
+
+                return  $value->getProgramme ? $value->getProgramme->programName : "-";
+
+            })
+
+            ->addColumn('edit', function (Episode $value) use ($user){
+                if($user->hasAnyAccess(['episode.edit', 'admin'])){
+                    return '<center><a href="#" class="blue" onclick="window.location.href=\''.url('episode/'.$value->episodeId.'/edit').'\'" data-toggle="tooltip" data-placement="top" title="View/ Edit Episode"><i class="fa fa-pencil"></i></a></center>';
+                }else{
+                    return '<center><a href="#" class="disabled" data-toggle="tooltip" data-placement="top" title="Edit Disabled"><i class="fa fa-pencil"></i></a></center>';
+                }
+                    
+            })
+            ->make(true);
+
+     
     }
   
     public function delete(Request $request)

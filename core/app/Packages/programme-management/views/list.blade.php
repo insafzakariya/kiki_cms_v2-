@@ -86,12 +86,14 @@
                         <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Programme Name en</th>
-                            <th>Programme Name si</th>
-                            <th>Programme Name ta</th>
-                            <th>Kids</th>
+                            <th>Programme Name</th>
+                            <th>Program Type</th>
+                            <th>Duration</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
                             <th width="1%">Active/ Deactivate</th>
                             <th width="1%">Edit</th>
+                            <th width="1%">View Episode</th>
                             <th width="1%">Delete</th>
                             <th width="1%">Bulk Policy Update</th>
                         </tr>
@@ -112,11 +114,13 @@
                 "columns": [
                     { "data": "programId" },
                     { "data": "programName" },
-                    { "data": "programmeName_si" },
-                    { "data": "programmeName_ta" },
-                    { "data": "kids" },
+                    { "data": "programType" },
+                    { "data": "duration" },
+                    { "data": "start_date" },
+                    { "data": "end_date" },
                     { "data": "status" },
                     { "data": "edit" },
+                    { "data": "viewEpisode" },
                     { "data": "delete" },
                     { "data": "bulk-update" }
                 ],
