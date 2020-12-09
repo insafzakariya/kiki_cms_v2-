@@ -349,36 +349,65 @@ class NotificationController extends Controller
 
             //Get All Viwers Devices ID
             if($request['all_viewers'] =='yes'){
-                $viwer_details_chunk=Viewers::limit(100)->get()->chunk(300);;
-                foreach ($viwer_details_chunk as $viwer_details_slot){
-                    foreach ($viwer_details_slot as $viwer_detail) {
-                        if(isset($viwer_detail->DeviceID)){
-                            array_push($devices, $viwer_detail->DeviceID);
+                Viewers::chunk(200, function ($viewers) use ($title, $description,$first,$type,$contentType,$contentid,$notifydate,$URL) {
+                    $devices_chunk=array();
+                    foreach ($viewers as $viewer) {
+                        if(isset($viewer->DeviceID)){
+                            array_push($devices_chunk, $viewer->DeviceID);
                         }
                     }
-                }
-            }
-           return "KK";
-            // return $devices;
-            
-            return $finel_array=array(
-                "deviceid" =>$devices,
-                "title"  =>$title,
-                "body" => $description,
-                "image_url" => $first,
-                "type" => $type,
-                "content_type" => $contentType,
-	            "content_id" =>  $contentid,
-                "date_time" =>$notifydate
-            );
+                    $finel_array_chunk=array(
+                        "deviceid" =>$devices_chunk,
+                        "title"  =>$title,
+                        "body" => $description,
+                        "image_url" => $first,
+                        "type" => $type,
+                        "content_type" => $contentType,
+                        "content_id" =>  $contentid,
+                        "date_time" =>$notifydate
+                    );
 
-            $response =  $this->client->request('POST', $URL , [
-                'headers' => [     
-                    'Accept' => 'application/json',
-                ], 'json' => $finel_array,
-            ]);
-            $contents = $response->getBody();
-            return $contents = json_decode($contents);
+                    $response =  $this->client->request('POST', $URL , [
+                        'headers' => [     
+                            'Accept' => 'application/json',
+                        ], 'json' => $finel_array_chunk,
+                    ]);
+                    $contents = $response->getBody();
+
+                });
+                return "Sucessfully Bulk Updated";
+                //Induvigual Chunk
+                //  $viwer_details_chunk=Viewers::get()->chunk(300);;
+                // foreach ($viwer_details_chunk as $viwer_details_slot){
+                //     foreach ($viwer_details_slot as $viwer_detail) {
+                //         if(isset($viwer_detail->DeviceID)){
+                //             array_push($devices, $viwer_detail->DeviceID);
+                //         }
+                //     }
+                // }
+            }else{
+
+                return $finel_array=array(
+                    "deviceid" =>$devices,
+                    "title"  =>$title,
+                    "body" => $description,
+                    "image_url" => $first,
+                    "type" => $type,
+                    "content_type" => $contentType,
+                    "content_id" =>  $contentid,
+                    "date_time" =>$notifydate
+                );
+
+                $response =  $this->client->request('POST', $URL , [
+                    'headers' => [     
+                        'Accept' => 'application/json',
+                    ], 'json' => $finel_array,
+                ]);
+                $contents = $response->getBody();
+                return $contents = json_decode($contents);
+            }
+     
+            
             //  Log::info($contents);
 
             //  return view('NotificationManage::notification-add');
