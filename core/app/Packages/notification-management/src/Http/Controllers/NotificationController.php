@@ -361,7 +361,7 @@ class NotificationController extends Controller
            
             // return $devices;
             
-            $finel_array=array(
+            return $finel_array=array(
                 "deviceid" =>$devices,
                 "title"  =>$title,
                 "body" => $description,
