@@ -15,4 +15,8 @@ class UserGroupsViewer extends Model
         'status'
     ];
 
+    public function getViewer()
+    {
+        return $this->belongsTo(Viewers::class, 'viewer_id', 'ViewerID');
+    }
 }

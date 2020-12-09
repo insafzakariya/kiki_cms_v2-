@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Validator;
 use NotificationManage\Models\UserGroup;
 use NotificationManage\Models\UserGroupsViewer;
 use NotificationManage\Models\FcmNotification;
+use NotificationManage\Models\Viewers;
 use NotificationManage\Models\Program;
 use NotificationManage\Models\Episode;
 use GuzzleHttp\Client as GuzzleClient;
@@ -195,6 +196,7 @@ class NotificationController extends Controller
 
     public function addNotification(Request $request){
        
+
         $URL=env('NOTIFICATION_URL');
         $ImageUpLoadPath=env('IMAGE_UPLOAD_PATH');
         $folderName=env('FOLDER_NAME');
@@ -285,26 +287,26 @@ class NotificationController extends Controller
                     'tamil_image' => $ta_image_path
                 ]);
             }
+            //----START DEVICE ID
+            // $sql = "SELECT viewer_id FROM user_groups_viewers where user_group_id='$usergrp'";
+            // $viewer_ids = DB::select($sql);
+            // Log::info($viewer_ids);
 
-             
+            // $devices =array();
+            // foreach ($viewer_ids as $viewer_id_ob) {
+            //     $viewer_id = $viewer_id_ob->viewer_id;
+            //     $sql = "SELECT DeviceID FROM viewers where ViewerID='$viewer_id'";
+            //     $device_ids = DB::select($sql);
+            //     Log::info($device_ids);
+            //     foreach ($device_ids as $device_id_ob) {
+            //         Log::info($device_id_ob->DeviceID);
+            //         array_push($devices, $device_id_ob->DeviceID);
+            //     }
+            // }
+            // Log::info($devices);
+               //----END DEVICE ID
+
             
-            $sql = "SELECT viewer_id FROM user_groups_viewers where user_group_id='$usergrp'";
-            $viewer_ids = DB::select($sql);
-            Log::info($viewer_ids);
-
-            $devices =array();
-            foreach ($viewer_ids as $viewer_id_ob) {
-                $viewer_id = $viewer_id_ob->viewer_id;
-                $sql = "SELECT DeviceID FROM viewers where ViewerID='$viewer_id'";
-                $device_ids = DB::select($sql);
-                Log::info($device_ids);
-                foreach ($device_ids as $device_id_ob) {
-                    Log::info($device_id_ob->DeviceID);
-                    
-                    array_push($devices, $device_id_ob->DeviceID);
-                }
-            }
-            Log::info($devices);
 
             if($typeDesc === "MUSIC"){
                 $type="1";
@@ -325,8 +327,6 @@ class NotificationController extends Controller
                 $contentType="";
             }
             
-           
-            
             $showimage = [];
             $image_config = [];
            
@@ -337,6 +337,30 @@ class NotificationController extends Controller
             $first=$showimage[0];
              //return $first;
 
+            //----------------------GET DEVICE TOKENS-------------------------------------------
+            $devices =array();
+            //Get Selected Group viwers Devices
+            $viwer_group_details=UserGroupsViewer::with(['getViewer'])->where('user_group_id',$usergrp)->get();
+            foreach ($viwer_group_details as $viwer_group_detail) {
+                if(isset($viwer_group_detail->getViewer->DeviceID)){
+                    array_push($devices, $viwer_group_detail->getViewer->DeviceID);
+                }
+            }
+
+            //Get All Viwers Devices ID
+            if($request['all_viewers'] =='yes'){
+                $viwer_details_chunk=Viewers::get()->chunk(300);;
+                foreach ($viwer_details_chunk as $viwer_details_slot){
+                    foreach ($viwer_details_slot as $viwer_detail) {
+                        if(isset($viwer_detail->DeviceID)){
+                            array_push($devices, $viwer_detail->DeviceID);
+                        }
+                    }
+                }
+            }
+           
+            // return $devices;
+            
             $finel_array=array(
                 "deviceid" =>$devices,
                 "title"  =>$title,
@@ -348,13 +372,8 @@ class NotificationController extends Controller
                 "date_time" =>$notifydate
             );
 
-            //return $finel_array;
-           
-            
-
             $response =  $this->client->request('POST', $URL , [
-                'headers' => [
-                   
+                'headers' => [     
                     'Accept' => 'application/json',
                 ], 'json' => $finel_array,
             ]);
