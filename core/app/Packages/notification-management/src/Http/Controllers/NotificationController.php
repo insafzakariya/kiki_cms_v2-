@@ -358,7 +358,7 @@ class NotificationController extends Controller
                     }
                 }
             }
-           
+           return "KK";
             // return $devices;
             
             return $finel_array=array(
