@@ -349,7 +349,7 @@ class NotificationController extends Controller
 
             //Get All Viwers Devices ID
             if($request['all_viewers'] =='yes'){
-                $viwer_details_chunk=Viewers::get()->chunk(300);;
+                $viwer_details_chunk=Viewers::limit(100)->get()->chunk(300);;
                 foreach ($viwer_details_chunk as $viwer_details_slot){
                     foreach ($viwer_details_slot as $viwer_detail) {
                         if(isset($viwer_detail->DeviceID)){
