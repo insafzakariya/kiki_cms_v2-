@@ -347,9 +347,9 @@ class NotificationController extends Controller
                 }
             }
 
-            //Get All Viwers Devices ID
+            // //Get All Viwers Devices ID
             if($request['all_viewers'] =='yes'){
-                Viewers::chunk(200, function ($viewers) use ($title, $description,$first,$type,$contentType,$contentid,$notifydate,$URL) {
+                Viewers::groupBy('DeviceID')->chunk(200, function ($viewers) use ($title, $description,$first,$type,$contentType,$contentid,$notifydate,$URL) {
                     $devices_chunk=array();
                     foreach ($viewers as $viewer) {
                         if(isset($viewer->DeviceID)){
@@ -377,7 +377,8 @@ class NotificationController extends Controller
                 });
                 return "Sucessfully Bulk Updated";
                 //Induvigual Chunk
-                //  $viwer_details_chunk=Viewers::get()->chunk(300);;
+                // return $viwer_details_chunk=Viewers::distinct()->limit(4)->chunk(300)->unique('DeviceID');;;
+                // return $viwer_details_chunk=Viewers::distinct()->get(['DeviceID']);
                 // foreach ($viwer_details_chunk as $viwer_details_slot){
                 //     foreach ($viwer_details_slot as $viwer_detail) {
                 //         if(isset($viwer_detail->DeviceID)){
