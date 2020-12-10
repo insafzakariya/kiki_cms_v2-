@@ -307,7 +307,7 @@ class EpisodeController extends Controller
                 
             }
            
-           return  $this->smilFileCreator($exsist_episode);
+            $this->smilFileCreator($exsist_episode);
             return redirect('episode/'.$id.'/edit')->with(['success' => true,
             'success.message' => 'Episode Created successfully!',
             'success.title' => 'Well Done!']);
