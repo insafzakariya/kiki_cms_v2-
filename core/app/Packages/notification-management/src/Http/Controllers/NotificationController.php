@@ -338,21 +338,14 @@ class NotificationController extends Controller
              //return $first;
 
             //----------------------GET DEVICE TOKENS-------------------------------------------
-            $devices =array();
-            //Get Selected Group viwers Devices
-            $viwer_group_details=UserGroupsViewer::with(['getViewer'])->where('user_group_id',$usergrp)->get();
-            foreach ($viwer_group_details as $viwer_group_detail) {
-                if(isset($viwer_group_detail->getViewer->DeviceID)){
-                    array_push($devices, $viwer_group_detail->getViewer->DeviceID);
-                }
-            }
+            
 
             // //Get All Viwers Devices ID
             if($request['all_viewers'] =='yes'){
                 Viewers::groupBy('DeviceID')->chunk(200, function ($viewers) use ($title, $description,$first,$type,$contentType,$contentid,$notifydate,$URL) {
                     $devices_chunk=array();
                     foreach ($viewers as $viewer) {
-                        if(isset($viewer->DeviceID)){
+                        if(isset($viewer->DeviceID) && $viewer->DeviceID !=null && $viewer->DeviceID !=''){
                             array_push($devices_chunk, $viewer->DeviceID);
                         }
                     }
@@ -387,6 +380,15 @@ class NotificationController extends Controller
                 //     }
                 // }
             }else{
+
+                $devices =array();
+                //Get Selected Group viwers Devices
+                $viwer_group_details=UserGroupsViewer::with(['getViewer'])->where('user_group_id',$usergrp)->get();
+                foreach ($viwer_group_details as $viwer_group_detail) {
+                    if(isset($viwer_group_detail->getViewer->DeviceID) && $viwer_group_detail->getViewer->DeviceID !=null &&  $viwer_group_detail->getViewer->DeviceID !=''){
+                        array_push($devices, $viwer_group_detail->getViewer->DeviceID);
+                    }
+                }
 
                 $finel_array=array(
                     "deviceid" =>$devices,
