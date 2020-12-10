@@ -389,25 +389,29 @@ class NotificationController extends Controller
                         array_push($devices, $viwer_group_detail->getViewer->DeviceID);
                     }
                 }
-
-               return  $finel_array=array(
-                    "deviceid" =>$devices,
-                    "title"  =>$title,
-                    "body" => $description,
-                    "image_url" => $first,
-                    "type" => $type,
-                    "content_type" => $contentType,
-                    "content_id" =>  $contentid,
-                    "date_time" =>$notifydate
-                );
-
-                $response =  $this->client->request('POST', $URL , [
-                    'headers' => [     
-                        'Accept' => 'application/json',
-                    ], 'json' => $finel_array,
-                ]);
-                $contents = $response->getBody();
-                return $contents = json_decode($contents);
+                if (empty($devices)) {
+                    return "No devices Found";
+                }else{
+                    $finel_array=array(
+                        "deviceid" =>$devices,
+                        "title"  =>$title,
+                        "body" => $description,
+                        "image_url" => $first,
+                        "type" => $type,
+                        "content_type" => $contentType,
+                        "content_id" =>  $contentid,
+                        "date_time" =>$notifydate
+                    );
+    
+                    $response =  $this->client->request('POST', $URL , [
+                        'headers' => [     
+                            'Accept' => 'application/json',
+                        ], 'json' => $finel_array,
+                    ]);
+                    $contents = $response->getBody();
+                    return $contents = json_decode($contents);
+                }
+                
             }
      
             
