@@ -18,9 +18,9 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'episode', 'namespace' => 'E
     Route::get('/', [
         'as' => 'episode.list', 'uses' => 'EpisodeController@listView'
     ]);
-    Route::get('{id}/programme', [
-        'as' => 'episode.list', 'uses' => 'EpisodeController@listViewByProgramme'
-    ]);
+    // Route::get('{id}/programme', [
+    //     'as' => 'episode.list', 'uses' => 'EpisodeController@listViewByProgramme'
+    // ]);
     Route::get('list/json', [
         'as' => 'episode.list', 'uses' => 'EpisodeController@listJson'
     ]);
