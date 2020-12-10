@@ -191,6 +191,7 @@
         $("#start_date").flatpickr(
             {
                 enableTime: true,
+                allowInput:true,
                 dateFormat: "Y-m-d H:i",
                 defaultDate: ["<?php echo $exsist_episode->start_date; ?> "],
             }
@@ -199,6 +200,7 @@
         $("#end_date").flatpickr(
             {
                 enableTime: true,
+                allowInput:true,
                 dateFormat: "Y-m-d H:i",
                 // maxDate: "31.12.2099",
                 defaultDate: ["<?php echo $exsist_episode->end_date; ?> "],
@@ -207,6 +209,7 @@
         $("#publish_date").flatpickr(
             {
                 enableTime: true,
+                allowInput:true,
                 dateFormat: "Y-m-d H:i",
                 // maxDate: "31.12.2099",
                 defaultDate: ["<?php echo $exsist_episode->publish_date; ?> "],

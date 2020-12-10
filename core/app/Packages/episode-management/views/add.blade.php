@@ -179,6 +179,7 @@
         $("#start_date").flatpickr(
             {
                 enableTime: true,
+                allowInput:true,
                 dateFormat: "Y-m-d H:i",
                 defaultDate: ["today"]
             }
@@ -186,6 +187,7 @@
         $("#publish_date").flatpickr(
             {
                 enableTime: true,
+                allowInput:true,
                 dateFormat: "Y-m-d H:i",
                 defaultDate: ["today"]
             }
@@ -194,6 +196,7 @@
         $("#end_date").flatpickr(
             {
                 enableTime: true,
+                allowInput:true,
                 dateFormat: "Y-m-d H:i",
                 // maxDate: "31.12.2099",
                 defaultDate: [ "2099-12-31"]

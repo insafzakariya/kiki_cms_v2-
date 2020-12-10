@@ -250,6 +250,7 @@
         $("#start_date").flatpickr(
             {
                 enableTime: true,
+                allowInput:true,
                 dateFormat: "Y-m-d H:i",
                 defaultDate: ["<?php echo $exsist_programme->start_date; ?> "],
             }
@@ -258,6 +259,7 @@
         $("#end_date").flatpickr(
             {
                 enableTime: true,
+                allowInput:true,
                 dateFormat: "Y-m-d H:i",
                 // maxDate: "31.12.2099",
                 defaultDate: ["<?php echo $exsist_programme->end_date; ?> "],
