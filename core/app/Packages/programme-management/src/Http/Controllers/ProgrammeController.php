@@ -442,7 +442,7 @@ class ProgrammeController extends Controller
                 })
                 ->addColumn('viewEpisode', function ($value) use ($user){
                     if($user->hasAnyAccess(['programme.edit', 'admin'])){
-                        return '<center><a href="#" class="blue" onclick="window.location.href=\''.url('episode/'.$value->programId.'/programme').'\'" data-toggle="tooltip" data-placement="top" title="View Episode"><i class="fa fa-television"></i></a></center>';
+                        return '<center><a href="#" class="blue" onclick="window.location.href=\''.url('episode/'.$value->programId.'/programme/episode').'\'" data-toggle="tooltip" data-placement="top" title="View Episode"><i class="fa fa-television"></i></a></center>';
                     }else{
                         return '<center><a href="#" class="disabled" data-toggle="tooltip" data-placement="top" title="View Disabled"><i class="fa fa-television"></i></a></center>';
                     }
