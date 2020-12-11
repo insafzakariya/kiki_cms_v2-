@@ -547,7 +547,7 @@ class EpisodeController extends Controller
         $file_name = $episode->episodeId . ".smil";
 
       
-        return $trackPath = $this->imageController->UploadSmil('', $smilfile, $file_name, $episode->episodeId);
+        $trackPath = $this->imageController->UploadSmil('', $smilfile, $file_name, $episode->episodeId);
 
         $live_url = "vod/smil:" . $file_name . "/playlist.m3u8";
 
