@@ -329,8 +329,6 @@ class EpisodeController extends Controller
     public function listJson(Request $request)
     {
        
-
-
         // try {
             $user = Sentinel::getUser();
             $query=Episode::with(['getProgramme'])->where('status',1)->select('tbl_episode.*');
