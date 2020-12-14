@@ -446,8 +446,7 @@ class ProgrammeController extends Controller
                     foreach($value->getProgrammeChannels AS $chanel){
                         $channels.=$chanel->getChannel->channelName.",";
                     }
-                    return $channels;
-                    
+                    return rtrim($channels, ',');
     
                 })
                 ->addColumn('viewEpisode', function ($value) use ($user){
