@@ -421,8 +421,9 @@ class ProgrammeController extends Controller
     {
         // try {
             $user = Sentinel::getUser();
+        //    return Programme::with(['getProgrammeChannels'])->where('status','!=',2)->get();
             return Datatables::usingCollection(
-                Programme::where('status','!=',2)->select('programId', 'programName', 'start_date','end_date','duration','programType', 'status')->get()
+                Programme::with(['getProgrammeChannels.getChannel'])->where('status','!=',2)->select('programId', 'programName', 'start_date','end_date','duration','programType', 'status')->get()
             )
                 ->editColumn('status', function ($value){
                     if($value->status==1){
@@ -439,6 +440,15 @@ class ProgrammeController extends Controller
                         return '<center><a href="#" class="disabled" data-toggle="tooltip" data-placement="top" title="Edit Disabled"><i class="fa fa-pencil"></i></a></center>';
                     }
                         
+                })
+                ->addColumn('channels', function (Programme $value) {
+                    $channels='';
+                    foreach($value->getProgrammeChannels AS $chanel){
+                        $channels.=$chanel->getChannel->channelName.",";
+                    }
+                    return $channels;
+                    
+    
                 })
                 ->addColumn('viewEpisode', function ($value) use ($user){
                     if($user->hasAnyAccess(['programme.edit', 'admin'])){

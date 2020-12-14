@@ -88,6 +88,7 @@
                             <th>ID</th>
                             <th>Programme Name</th>
                             <th>Program Type</th>
+                            <th>Channels</th>
                             <th>Start Date</th>
                             <th>End Date</th>
                             <th width="1%">Active/ Deactivate</th>
@@ -114,6 +115,7 @@
                     { "data": "programId" },
                     { "data": "programName" },
                     { "data": "programType" },
+                    { "data": "channels" },
                     { "data": "start_date" },
                     { "data": "end_date" },
                     { "data": "status" },
