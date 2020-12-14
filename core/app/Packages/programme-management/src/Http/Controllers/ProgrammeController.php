@@ -435,7 +435,8 @@ class ProgrammeController extends Controller
                 })
                 ->addColumn('edit', function ($value) use ($user){
                     if($user->hasAnyAccess(['programme.edit', 'admin'])){
-                        return '<center><a href="#" class="blue" onclick="window.location.href=\''.url('programme/'.$value->programId.'/edit').'\'" data-toggle="tooltip" data-placement="top" title="View/ Edit Channel"><i class="fa fa-pencil"></i></a></center>';
+                        $url=url('programme/'.$value->programId.'/edit');
+                        return '<center><a href="'.$url.'" class="blue"  data-toggle="tooltip" data-placement="top" title="View/ Edit Channel"><i class="fa fa-pencil"></i></a></center>';
                     }else{
                         return '<center><a href="#" class="disabled" data-toggle="tooltip" data-placement="top" title="Edit Disabled"><i class="fa fa-pencil"></i></a></center>';
                     }
@@ -451,7 +452,8 @@ class ProgrammeController extends Controller
                 })
                 ->addColumn('viewEpisode', function ($value) use ($user){
                     if($user->hasAnyAccess(['programme.edit', 'admin'])){
-                        return '<center><a href="#" class="blue" onclick="window.location.href=\''.url('episode/'.$value->programId.'/programme/episode').'\'" data-toggle="tooltip" data-placement="top" title="View Episode"><i class="fa fa-television"></i></a></center>';
+                        $url=url('episode/'.$value->programId.'/programme/episode');
+                        return '<center><a href="'.$url.'" class="blue" data-toggle="tooltip" data-placement="top" title="View Episode"><i class="fa fa-television"></i></a></center>';
                     }else{
                         return '<center><a href="#" class="disabled" data-toggle="tooltip" data-placement="top" title="View Disabled"><i class="fa fa-television"></i></a></center>';
                     }
