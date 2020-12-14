@@ -356,7 +356,8 @@ class EpisodeController extends Controller
 
             ->addColumn('edit', function (Episode $value) use ($user){
                 if($user->hasAnyAccess(['episode.edit', 'admin'])){
-                    return '<center><a href="#" class="blue" onclick="window.location.href=\''.url('episode/'.$value->episodeId.'/edit').'\'" data-toggle="tooltip" data-placement="top" title="View/ Edit Episode"><i class="fa fa-pencil"></i></a></center>';
+                    $url =url('episode/'.$value->episodeId.'/edit');
+                    return '<center><a href="'.$url.'" class="blue"  data-toggle="tooltip" data-placement="top" title="View/ Edit Episode"><i class="fa fa-pencil"></i></a></center>';
                 }else{
                     return '<center><a href="#" class="disabled" data-toggle="tooltip" data-placement="top" title="Edit Disabled"><i class="fa fa-pencil"></i></a></center>';
                 }
@@ -432,7 +433,8 @@ class EpisodeController extends Controller
 
             ->addColumn('edit', function (Episode $value) use ($user){
                 if($user->hasAnyAccess(['episode.edit', 'admin'])){
-                    return '<center><a href="#" class="blue" onclick="window.location.href=\''.url('episode/'.$value->episodeId.'/edit').'\'" data-toggle="tooltip" data-placement="top" title="View/ Edit Episode"><i class="fa fa-pencil"></i></a></center>';
+                    $url =url('episode/'.$value->episodeId.'/edit');
+                    return '<center><a href="'.$url.'" class="blue"  data-toggle="tooltip" data-placement="top" title="View/ Edit Episode"><i class="fa fa-pencil"></i></a></center>';
                 }else{
                     return '<center><a href="#" class="disabled" data-toggle="tooltip" data-placement="top" title="Edit Disabled"><i class="fa fa-pencil"></i></a></center>';
                 }

@@ -95,6 +95,8 @@
                             <th>ID</th>
                             <th>Episode Name en</th>
                             <th>Programme</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
                             <th width="1%">Delete</th>
                             <th width="1%">Edit</th>
                         </tr>
@@ -124,6 +126,8 @@
                     { "data": "episodeId" },
                     { "data": "episodeName" },
                     { name : 'getProgramme.programName',"data": "programme" },
+                    { "data": "start_date" },
+                    { "data": "end_date" },
                     { "data": "status" },
                     { "data": "edit" ,searchable : false}
                 ],
