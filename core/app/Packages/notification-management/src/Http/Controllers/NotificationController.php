@@ -210,6 +210,7 @@ class NotificationController extends Controller
         //    return $image_filename;
             $usergrp= $request['user_group'];
             $contentType= $request['content_type'];
+            $sub_type= $request['sub_type'];
             $contentid= $request['content_id'];
             $typeDesc=$request['section'];
             $type=null;
@@ -310,7 +311,16 @@ class NotificationController extends Controller
 
             if($typeDesc === "MUSIC"){
                 $type="1";
-                $contentType="songid";
+                if($sub_type =="playlist"){
+                    $contentType="playlistid";
+                }else if($sub_type =="song"){
+                    $contentType="songid";
+                }else if($sub_type =="album"){
+                    $contentType="albumid";
+                }
+                // return $sub_type;
+               
+                // $contentType="songid";
             }
             if($typeDesc === "VIDEO"){
                 $type="0";
@@ -339,7 +349,7 @@ class NotificationController extends Controller
 
             //----------------------GET DEVICE TOKENS-------------------------------------------
             
-
+// return $contentType."ddd";
             // //Get All Viwers Devices ID
             if($request['all_viewers'] =='yes'){
                 Viewers::groupBy('DeviceID')->chunk(200, function ($viewers) use ($title, $description,$first,$type,$contentType,$contentid,$notifydate,$URL) {

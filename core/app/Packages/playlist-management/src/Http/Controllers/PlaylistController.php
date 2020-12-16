@@ -92,7 +92,6 @@ class PlaylistController extends Controller {
             $policies[] = [
                 "policy_id" => $content_policy,
                 "pollicy_type" => 1,
-
             ];
         }
 
@@ -647,6 +646,17 @@ class PlaylistController extends Controller {
         $album = [];
         if($search){
             $album =  Product::where('name', 'like', '%' . $search . '%')->where('status', 1)->where('type', 'Album')->limit(20)->orderBy('name', 'asc')->get();
+        }
+
+        return $album;
+
+    }
+    public function searchPlaylist(Request $request){
+
+        $search = $request->get('term');
+        $album = [];
+        if($search){
+            $album =  AudioPlaylist::where('name', 'like', '%' . $search . '%')->where('status', 1)->limit(20)->orderBy('name', 'asc')->get();
         }
 
         return $album;

@@ -62,5 +62,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'namespace' => 'Pla
     Route::get('playlist/searchalbum', [
         'as' => 'admin.playlist.searchalbum', 'uses' => 'PlaylistController@searchAlbum'
     ]);
+    Route::get('playlist/searchPlaylist', [
+        'as' => 'admin.playlist.searchalbum', 'uses' => 'PlaylistController@searchPlaylist'
+    ]);
 
 });

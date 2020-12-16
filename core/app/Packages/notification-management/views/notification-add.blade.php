@@ -129,6 +129,7 @@
                                 <select id="music" name="music" class="form-control select-simple">
                                     <option value="SONG" selected>Song</option>
                                     <option value="ALBUM" >Album</option>
+                                    <option value="PLAYLIST" >Playlist</option>
                                 </select>
                             </div>
                         </div>
@@ -144,6 +145,14 @@
                             <label class="col-sm-2 control-label">Album</label>
                             <div class="col-sm-7">
                                 <select id="album" name="album" class="form-control select-simple">
+                                    
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group" id="div-playlist">
+                            <label class="col-sm-2 control-label">Playlist</label>
+                            <div class="col-sm-7">
+                                <select id="playlist" name="playlist" class="form-control select-simple">
                                     
                                 </select>
                             </div>
@@ -401,15 +410,21 @@
                 let tamildescription=null;
                 let tamilimage=null;
                 let uploadImage=null;
+                var sub_type=null;
              
                 if(section.value === 'MUSIC'){
-                    contenttype=document.getElementById('music');
+                    // contenttype=document.getElementById('music');
                     
 
                     if(music.value === 'ALBUM'){
                         contentid=document.getElementById('album');
-                    }else{                    
+                        sub_type='album';
+                    }else if(music.value === 'PLAYLIST'){                     
+                        contentid=document.getElementById('playlist');
+                        sub_type='playlist';
+                    }else if(music.value === 'SONG'){
                         contentid=document.getElementById('song');
+                        sub_type='song';
                     }
                 }
 
@@ -529,6 +544,7 @@
 
                 fd.append( 'user_group',usergroup.value);
                 fd.append( 'section',section.value);
+                fd.append( 'sub_type',sub_type);
                 fd.append( 'content_type',contenttype == undefined ? null : contenttype.value);
                 fd.append( 'content_id',contentid == undefined ? null : contentid.value);
                 fd.append( 'notification_time',notifiactiontime);
@@ -570,6 +586,7 @@
             $("#div-video").addClass('hide');
             $("#div-music").addClass('hide');
             $("#div-album").addClass('hide');
+            $("#div-playlist").addClass('hide');
             $( "#language" ).prop( "disabled", true );
 
             function disableScreen() {
@@ -622,12 +639,20 @@
             switch (val) {
                 case 'SONG':
                     $("#div-album").addClass('hide');
+                    $("#div-playlist").addClass('hide');
                     $("#div-song").removeClass('hide');
                     break;
                 case 'ALBUM':
                     $("#div-song").addClass('hide');
+                    $("#div-playlist").addClass('hide');
                     $("#div-album").removeClass('hide');
                     break;
+                case 'PLAYLIST':
+                    $("#div-song").addClass('hide');
+                    $("#div-album").addClass('hide');
+                    $("#div-playlist").removeClass('hide');
+                    break;
+            
             
                 default:
                     break;
@@ -920,6 +945,38 @@
                     return  'term='+params.term;
                 
                      /*JSON.stringify({
+                        term: params.term
+                    });*/
+                },
+                processResults: function (data) {
+                    return {
+                        results: $.map(data, function (item, i) {
+                            return {
+                                text: item.name,
+                                id: item.id
+                            }
+                        })
+                    };
+                },
+                cache: true
+            },
+        });
+
+        let url6 = '{{url('admin/playlist/searchPlaylist')}}';
+        $('#playlist').select2({
+            placeholder: "Please select a album",
+            tokenSeparators: [','],
+            tags: true,
+            minimumInputLength: 3,
+            multiple: false,
+            ajax: {
+                type: "GET",
+                url: url6,
+                dataType: 'json',
+                contentType: "application/json",
+                delay: 250,
+                data: function (params) {
+                    return  'term='+params.term; /*JSON.stringify({
                         term: params.term
                     });*/
                 },
