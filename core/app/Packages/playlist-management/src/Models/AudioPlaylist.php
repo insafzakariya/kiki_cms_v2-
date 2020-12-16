@@ -16,7 +16,7 @@ class AudioPlaylist extends Model{
 	protected $primaryKey = 'id';
 
     protected $fillable = ['name', 'status', 'publish_date', 'playlist_type', 'description', 'content_policy',
-                           'advertisement_policy', 'release_date', 'type_name','expiry_date'];
+                           'advertisement_policy', 'release_date', 'type_name','expiry_date','created_date'];
 
 
     public function activeSongs(){

@@ -108,7 +108,8 @@ class PlaylistController extends Controller {
                 'content_policy' => "",
                 'advertisement_policy' => "",
                 'release_date' => $request->release_date,
-                'expiry_date' => $request->end_date
+                'expiry_date' => $request->end_date,
+                'created_date'=>Date('Y-m-d')
             ]);
             $playlist->policies()->sync($policies);
             $playlistId = $playlist->id;
