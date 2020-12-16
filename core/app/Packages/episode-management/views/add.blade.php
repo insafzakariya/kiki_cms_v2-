@@ -327,12 +327,12 @@
                 },
                 'video_quality[]': {
                     required: true
-
-                },
-                'tags[]': {
-                    required: true
-
                 }
+                // },
+                // 'tags[]': {
+                //     required: true
+
+                // }
                 ,
                 'thumb_image[]': {
                     required: true,
