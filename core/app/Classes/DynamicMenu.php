@@ -13,6 +13,7 @@ namespace App\Classes;
 
 use Permissions\Models\Permission;
 use Sentinel;
+use Log;
 
 class DynamicMenu{
   
@@ -26,34 +27,35 @@ class DynamicMenu{
    * @param  Integer $userId        Logged in User Id
    * @return String                 Generated html string
    */
-  static function generateMenu($parent, $menu, $level, $currentUrl,$userId){
-    $user = Sentinel::findUserById($userId);
+  static function generateMenu($parent, $menu, $level, $currentUrl,$user){
+    
+    // $user = Sentinel::findUserById($userId);
     $html = "";
 
     if(!empty($menu)){
-     
       foreach ($menu as $key => $element) {
-        $permissions = Permission::whereIn('name',json_decode($element->permissions))->where('status','=',1)->lists('name');
-        
-        if($user->hasAnyAccess($permissions) && $element->status == 1){ 
+        //$permissions = Permission::whereIn('name',json_decode($element->permissions))->where('status','=',1)->lists('name');
+        // if($user->hasAnyAccess($permissions) && $element->status == 1){ 
+        if($user->hasAnyAccess(json_decode($element->permissions)) && $element->status == 1){ 
           if(count($element->children) == 0){ 
-           
+          
             if($currentUrl && $currentUrl->id == $element->id){ 
               $html .= "<li class=\"active\">";
             }else{ 
               $html .= "<li>";
             }
-
+            
             $html .= "<a href=\"".url($element->link)."\">";   
              if ($level==0) {
                 $html .= "<i class='".$element->icon."'></i><span class='nav-label' >".$element->label."</span>";
              } else {
                $html .= "<i class='".$element->icon."'></i>".$element->label;
              }
-             
+            
             $html .= "</a></li>";
 
           }else{
+          
             if($currentUrl && $element->isAncestorOf($currentUrl)){
               $html .= "<li class=\"active\">";
             }else{
@@ -68,7 +70,9 @@ class DynamicMenu{
             $html .= "<span class='fa arrow'></span></a>";
 
             $html .= "<ul class=\"nav nav-second-level collapse\">";
-            $html .= DynamicMenu::generateMenu($element->id, $element->children, $element->getLevel(), $currentUrl, $userId);
+            // $html .= DynamicMenu::generateMenu($element->id, $element->children,$element->getLevel(), $currentUrl, $user);
+            $html .= DynamicMenu::generateMenu($element->id, $element->children,$element->depth, $currentUrl, $user);
+           
             $html .= "</ul>";
 
             $html .= "</li>";

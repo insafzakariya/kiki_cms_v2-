@@ -9,6 +9,7 @@ use Request;
 use Route;
 use Sentinel;
 use Session;
+use Log;
 
 class Authenticate {
 
@@ -25,22 +26,26 @@ class Authenticate {
 				Session::put('loginRedirect', $request->url());
 				return redirect()->route('user.login');
 			} else {
+				Log::info('Showing user profile for user: 1');
+
 				$user = Sentinel::getUser();
 				$action = Route::currentRouteName();
 				$permissions = Permission::whereIn('name', [$action, 'admin'])->where('status', '=', 1)->lists('name');
 
 				if (!$user->hasAnyAccess($permissions)) {
-
-					$menu = Menu::where('label', '=', 'Root Menu')->first()->getDescendants()->toHierarchy(); // Get all menus
+					Log::info('Showing user profile for user: 2');
+					$menu = Menu::with(['children'])->where('label', '=', 'Root Menu')->first()->getDescendants()->toHierarchy(); // Get all menus
 					
-					$currentMenu = Menu::where('link', '=', Request::path())->where('status', '=', 1)->first(); //Get the id of Current Route Url
+					$currentMenu = Menu::with(['children'])->where('link', '=', Request::path())->where('status', '=', 1)->first(); //Get the id of Current Route Url
 
 					if ($currentMenu) {
-						$aa = DynamicMenu::generateMenu(0, $menu, 0, $currentMenu, Sentinel::getUser()->id);
+						// $aa = DynamicMenu::generateMenu(0, $menu, 0, $currentMenu, Sentinel::getUser()->id);
+						$aa = DynamicMenu::generateMenu(0, $menu, 0, $currentMenu, $user);
 					}
 					//Generate Menu with current url id
 					else {
-						$aa = DynamicMenu::generateMenu(0, $menu, 0, null, Sentinel::getUser()->id);
+						// $aa = DynamicMenu::generateMenu(0, $menu, 0, null, Sentinel::getUser()->id);
+						$aa = DynamicMenu::generateMenu(0, $menu, 0, null, $user);
 					}
 					//Generate Menu without current url id
 
@@ -54,19 +59,26 @@ class Authenticate {
 			Session::put('loginRedirect', $request->url());
 			return redirect()->route('user.login');
 		}
-
+		Log::info('Showing user profile for user: 3');
+		$user = Sentinel::getUser();
 		//Menu::rebuild();die;
-		$menu = Menu::where('label', '=', 'Root Menu')->first()->getDescendants()->toHierarchy(); // Get all menus
-		
-		$currentMenu = Menu::where('link', '=', Request::path())->where('status', '=', 1)->first(); //Get the id of Current Route Url
-
+		Log::info('Showing user profile for user: 4');
+		$menu = Menu::with(['children'])->where('label', '=', 'Root Menu')->first()->getDescendants()->toHierarchy(); // Get all menus
+		Log::info('Showing user profile for user: 5');
+		$currentMenu = Menu::with(['children'])->where('link', '=', Request::path())->where('status', '=', 1)->first(); //Get the id of Current Route Url
+		Log::info('Showing user profile for user: 6');
 		if ($currentMenu) {
-			$aa = DynamicMenu::generateMenu(0, $menu, 0, $currentMenu, Sentinel::getUser()->id);
+			Log::info('Showing user profile for user: 7');
+			// $aa = DynamicMenu::generateMenu(0, $menu, 0, $currentMenu, Sentinel::getUser()->id);
+			$aa = DynamicMenu::generateMenu(0, $menu, 0, $currentMenu, $user);
 		}
 		//Generate Menu with current url id
 		else {
-			$aa = DynamicMenu::generateMenu(0, $menu, 0, null, Sentinel::getUser()->id);
+			Log::info('Showing user profile for user: 8');
+			// $aa = DynamicMenu::generateMenu(0, $menu, 0, null, Sentinel::getUser()->id);
+			$aa = DynamicMenu::generateMenu(0, $menu, 0, null, $user);
 		}
+		Log::info('Showing user profile for user: 9');
 		//Generate Menu without current url id
 
 		view()->share('menu', $aa); //Share the generated menu with all views

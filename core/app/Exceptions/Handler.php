@@ -58,9 +58,11 @@ class Handler extends ExceptionHandler {
 			    $currentMenu = Menu::where('link','=',Request::path())->where('status','=',1)->first(); //Get the id of Current Route Url
 
 			    if($currentMenu)
-			      $aa = DynamicMenu::generateMenu(0,$menu,0,$currentMenu,Sentinel::getUser()->id); //Generate Menu with current url id
+			    //   $aa = DynamicMenu::generateMenu(0,$menu,0,$currentMenu,Sentinel::getUser()->id); //Generate Menu with current url id
+			      $aa = DynamicMenu::generateMenu(0,$menu,0,$currentMenu,$user); //Generate Menu with current url id
 			    else
-			      $aa = DynamicMenu::generateMenu(0,$menu,0,null,Sentinel::getUser()->id); //Generate Menu without current url id
+			    //   $aa = DynamicMenu::generateMenu(0,$menu,0,null,Sentinel::getUser()->id); //Generate Menu without current url id
+			      $aa = DynamicMenu::generateMenu(0,$menu,0,null,$user); //Generate Menu without current url id
 
 			    view()->share('menu',$aa); //Share the generated menu with all views
 			    view()->share('user',$user);
