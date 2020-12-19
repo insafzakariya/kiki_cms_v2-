@@ -1,6 +1,6 @@
 <?php
 /**
- * PRODUCT MANAGEMENT ROUTES
+ * DASHBOARD MANAGEMENT ROUTES
  *
  * @version 1.0.0
  * @author Insaf Zakariya <insaf.zak@gmail.com>
@@ -10,6 +10,21 @@
 /**
  * USER AUTHENTICATION MIDDLEWARE
  */
+
+Route::group(['middleware' => ['auth'], 'prefix' => 'dashboard', 'namespace' => 'DashboardManage\Http\Controllers'], function()
+{
+
+    Route::get('/subscribe', [
+        'as' => 'index', 'uses' => 'DashboardController@subsribe'
+    ]);
+    Route::get('data/subscribe', [
+        'as' => 'index', 'uses' => 'DashboardController@subsribeData'
+    ]);
+    
+
+    
+
+});
 
 
 
