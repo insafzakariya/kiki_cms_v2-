@@ -50,6 +50,8 @@
 
 
 
+
+
 </style>
 @stop
 @section('current_path')
@@ -73,6 +75,8 @@
         <div class="col-lg-12 margins">
             <div class="ibox-content">
                 <div class="panel-body">
+                <div class="modal"><!-- Place at bottom of page --></div>
+
                     <div class="col-sm-10">
                     <input id="startDate" type="text" />
                     <input id="endDate" type="text" />
@@ -118,10 +122,18 @@
         data:[],
         options: {
 
-            scales: {
+                scales: {
+                    xAxes: [{
+            gridLines: {
+                drawOnChartArea: false
+            }
+        }],
                 yAxes: [{
                     ticks: {
                         beginAtZero: true
+                    },
+                    gridLines: {
+                        drawOnChartArea: false
                     }
                 }]
             },
@@ -132,6 +144,7 @@
             
         }
     });
+    
 
     load_subscribe_chart(subscribe_chart);
     //Find Data
