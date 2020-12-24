@@ -124,28 +124,34 @@
             "hover": {
               "animationDuration": 0
             },
+            "legendCallback": function() {
+                charValueOnTop();
+            },
             "animation": {
                 "duration": 1,
                 "onComplete": function() {
-                    var chartInstance = this.chart,
-                    ctx = chartInstance.ctx;
+                    charValueOnTop();
+                    // var chartInstance = this.chart,
+                    // ctx = chartInstance.ctx;
     
-                    ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'bottom';
+                    // ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+                    // ctx.textAlign = 'center';
+                    // ctx.textBaseline = 'bottom';
     
-                    this.data.datasets.forEach(function(dataset, i) {
-                    var meta = chartInstance.controller.getDatasetMeta(i);
-                    meta.data.forEach(function(bar, index) {
-                        var data = dataset.data[index];
-                        ctx.fillText(data, bar._model.x, bar._model.y - 5);
-                    });
-                    });
+                    // this.data.datasets.forEach(function(dataset, i) {
+                    // var meta = chartInstance.controller.getDatasetMeta(i);
+                    // meta.data.forEach(function(bar, index) {
+                    //     var data = dataset.data[index];
+                    //     console.log(dataset.hidden);
+                    //     ctx.fillText(data, bar._model.x, bar._model.y - 5);
+                    // });
+                    // });
                 }
            
             },
             legend: {
-            "display": true
+            "display": true,
+            "position": 'right' 
             },
             scales: {
                 xAxes: [{
@@ -187,11 +193,38 @@
         }).done(function( chart_data ) {
             subscribe_chart.data= chart_data;
             subscribe_chart.update(); 
+            // charValueOnTop();
             console.log(chart_data);
             
         });
        
 
+    }
+
+    function charValueOnTop(){
+        var chartInstance = subscribe_chart,
+        ctx = chartInstance.ctx;
+
+        ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'bottom';
+
+        chartInstance.data.datasets.forEach(function(dataset, i) {
+        var meta = chartInstance.controller.getDatasetMeta(i);
+        console.log(meta.hidden);
+            if(meta.hidden ==false){
+                meta.data.forEach(function(bar, index) {
+                    var data = dataset.data[index];
+                
+                    console.log(dataset.hidden);
+                    // if(!dataset.hidden){
+                        ctx.fillText(data, bar._model.x, bar._model.y - 5);
+                    // }
+            
+                });
+            }
+        
+        });
     }
     
     

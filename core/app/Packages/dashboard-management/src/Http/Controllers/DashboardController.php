@@ -104,8 +104,8 @@ class DashboardController extends Controller {
 			array_push($data_array['mobitel_border_bar_colour'],Config::get('chart.service_provider.mobitel.rgba'));
 			
 			array_push($data_array['overall'],0);
-			array_push($data_array['overall_bar_colour'],Config::get('chart.service_provider.mobitel.rgba'));
-			array_push($data_array['overall_border_bar_colour'],Config::get('chart.service_provider.mobitel.rgba'));
+			array_push($data_array['overall_bar_colour'],Config::get('chart.service_provider.overall.rgba'));
+			array_push($data_array['overall_border_bar_colour'],Config::get('chart.service_provider.overall.rgba'));
 			// $data_array[$dt->format("Y-m")]=array('dialog'=>0,'mobitel'=>0,'hutch'=>0,'appel'=>0);
 		}
 		// return $data_array;
@@ -189,35 +189,40 @@ class DashboardController extends Controller {
 			"data"=> $data_array['dialog'],
 			'backgroundColor'=>$data_array['dialog_bar_colour'],
 			"borderColor"=>$data_array['dialog_border_bar_colour'],
-			"borderWidth"=>1
+			"borderWidth"=>1,
+			"hidden"=> true,
 		);
 		$hutch_dataset=array(
 			"label"=>"Hutch",
 			"data"=> $data_array['hutch'],
 			'backgroundColor'=>$data_array['hutch_bar_colour'],
 			"borderColor"=>$data_array['hutch_border_bar_colour'],
-			"borderWidth"=>1
+			"borderWidth"=>1,
+			"hidden"=> true,
 		);
 		$apple_dataset=array(
 			"label"=>"Apple",
 			"data"=> $data_array['apple'],
 			'backgroundColor'=>$data_array['apple_bar_colour'],
 			"borderColor"=>$data_array['apple_border_bar_colour'],
-			"borderWidth"=>1
+			"borderWidth"=>1,
+			"hidden"=> true,
 		);
 		$mobitel_dataset=array(
 			"label"=>"Mobitel",
 			"data"=> $data_array['mobitel'],
 			'backgroundColor'=>$data_array['mobitel_bar_colour'],
 			"borderColor"=>$data_array['mobitel_border_bar_colour'],
-			"borderWidth"=>1
+			"borderWidth"=>1,
+			"hidden"=> true,
 		);
-		$mobitel_dataset=array(
+		$overall_dataset=array(
 			"label"=>"Overall",
 			"data"=> $data_array['overall'],
 			'backgroundColor'=>$data_array['overall_bar_colour'],
 			"borderColor"=>$data_array['overall_border_bar_colour'],
-			"borderWidth"=>1
+			"borderWidth"=>1,
+			"hidden"=> true,
 		);
 
 		$dataset_2=array(
@@ -230,10 +235,12 @@ class DashboardController extends Controller {
 		
 
 		//Assign to Dataset Array
+		array_push($datasets,$overall_dataset);
 		array_push($datasets,$dialog_dataset);
 		array_push($datasets,$hutch_dataset);
 		array_push($datasets,$apple_dataset);
 		array_push($datasets,$mobitel_dataset);
+		
 		// array_push($datasets,$dataset_2);
 		// array_push($datasets,$dataset_3);
 

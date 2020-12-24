@@ -14,6 +14,9 @@ return [
         ],
         'apple' => [
             "rgba"=>'rgba(34, 49, 63, 1)'
+        ],
+        'overall' => [
+            "rgba"=>'rgba(247, 202, 24, 1)'
         ]
         
     ],
