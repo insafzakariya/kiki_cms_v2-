@@ -100,7 +100,10 @@
     var d = new Date();
     var current_month = d.getMonth()+1;
     var current_year = d.getFullYear();
-    $('#startDate').val((current_month-2)+'/'+current_year);
+    var old_date=d.setMonth(d.getMonth() - 3);
+    // $('#startDate').val((current_month-2)+'/'+current_year);
+    // console.log(d.getMonth()+'/'+d.getFullYear());
+    $('#startDate').val(d.getMonth()+'/'+d.getFullYear());
     $('#endDate').val(current_month+'/'+current_year);
     $('#startDate').Monthpicker({
         // format: 'yyyy-mm',
