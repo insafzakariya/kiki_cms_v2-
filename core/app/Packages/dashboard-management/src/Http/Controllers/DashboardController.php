@@ -81,8 +81,11 @@ class DashboardController extends Controller {
 		$label=[];
 		//Month List
 		$satrt_date=str_replace('/','-', $start_month.'-01');
-		$end_date=str_replace('/','-', $end_month.'-31');
-		$result = CarbonPeriod::create($satrt_date, '1 month', $end_date);
+		$end_first_date=str_replace('/','-', $end_month.'-01');
+		// $end_date=str_replace('/','-', $end_month.'-31');
+		$end_date_initial=date("Y-m-t", strtotime($end_first_date));
+		$end_date = date('Y-m-d', strtotime($end_date_initial . ' +1 day'));
+		$result = CarbonPeriod::create($satrt_date, '1 month', $end_date_initial);
 
         foreach ($result as $dt) {
 			array_push($label,$dt->format("M-Y"));
@@ -149,37 +152,52 @@ class DashboardController extends Controller {
 			$data_array['apple'][$key]=$aSubscribe->subscriber_count;
 			$data_array['overall'][$key]=($data_array['overall'][$key]+$aSubscribe->subscriber_count);
 		}
+		if($satrt_date>'2020-11-10'){
+			//MOBITEl SUBSCRIBE Query BEFORE '2020-11-10 08:46:23'
+			$mobitel_subscribe_list=DB::select("select count(viewer_id)  as subscriber_count, MONTH(cast(createDate as date))  as month ,YEAR(cast(createDate as date)) as year
+			from subscription_data where createDate between cast("."'".$satrt_date."'"." as date) and cast("."'".$end_date."'"." as date) 
+			and type = 'MOBITEL' and subscribe = 1 and status = 1 group by year,month");
 
-		//MOBITEl SUBSCRIBE Query BEFORE '2020-11-10 08:46:23'
-		$mobitel_subscribe_list=DB::select("SELECT Count(a.vid) AS subscriber_count,
-		Cast(a.creadt AS DATE) AS create_date
-		FROM   (SELECT viewer             AS vid,
-						Cast(date AS DATE) AS creadt
-				FROM   susila_db.viewer_subscription
-				WHERE  date BETWEEN Cast("."'".$satrt_date."'"."  AS DATE) AND Cast(
-					"."'".$end_date."'"." AS DATE)
-						AND subscriptiontype = 'MOBITEL_ADD_TO_BILL'
-				UNION
-				SELECT viewer_id                AS vid,
-						Cast(createdate AS DATE) AS creadt
-				FROM   subscription_data
-				WHERE  createdate BETWEEN Cast('2020-11-10 08:46:23' AS DATETIME) AND
-										Cast(
-											"."'".$end_date."'"." AS DATE)
-						AND type = 'MOBITEL'
-						AND subscribe = 1
-						AND status = 1) a
-		GROUP  BY a.creadt,create_date");
+			foreach($mobitel_subscribe_list AS $mSubscribe){
+				$key = array_search ($mSubscribe->year.'-'.str_pad($mSubscribe->month, 2, '0', STR_PAD_LEFT), $data_array['months']);
+				$data_array['mobitel'][$key]=$mSubscribe->subscriber_count;
+				$data_array['overall'][$key]=($data_array['overall'][$key]+$mSubscribe->subscriber_count);
+			}
 
-		////MOBITEl SUBSCRIBE Query AFTER '2020-11-10 08:46:23'
+		}else{
+			//MOBITEl SUBSCRIBE Query BEFORE '2020-11-10 08:46:23' 
+		    $mobitel_subscribe_list=DB::select("SELECT Count(a.vid) AS subscriber_count,
+			Cast(a.creadt AS DATE) AS create_date
+			FROM   (SELECT viewer             AS vid,
+							Cast(date AS DATE) AS creadt
+					FROM   susila_db.viewer_subscription
+					WHERE  date BETWEEN Cast("."'".$satrt_date."'"."  AS DATE) AND Cast(
+						"."'".$end_date."'"." AS DATE)
+							AND subscriptiontype = 'MOBITEL_ADD_TO_BILL'
+					UNION
+					SELECT viewer_id                AS vid,
+							Cast(createdate AS DATE) AS creadt
+					FROM   subscription_data
+					WHERE  createdate BETWEEN Cast('2020-11-10 08:46:23' AS DATETIME) AND
+											Cast(
+												"."'".$end_date."'"." AS DATE)
+							AND type = 'MOBITEL'
+							AND subscribe = 1
+							AND status = 1) a
+			GROUP  BY a.creadt,create_date");
 
-		foreach($mobitel_subscribe_list AS $mSubscribe){
-			 $year = date('Y', strtotime($mSubscribe->create_date));
-			 $month = date('m', strtotime($mSubscribe->create_date));
+			////MOBITEl SUBSCRIBE Query AFTER '2020-11-10 08:46:23'
 
-			$key = array_search ($year.'-'.str_pad($month, 2, '0', STR_PAD_LEFT), $data_array['months']);
-			$data_array['mobitel'][$key]=($data_array['mobitel'][$key]+$mSubscribe->subscriber_count);
+			foreach($mobitel_subscribe_list AS $mSubscribe){
+				$year = date('Y', strtotime($mSubscribe->create_date));
+				$month = date('m', strtotime($mSubscribe->create_date));
+
+				$key = array_search ($year.'-'.str_pad($month, 2, '0', STR_PAD_LEFT), $data_array['months']);
+				$data_array['mobitel'][$key]=($data_array['mobitel'][$key]+$mSubscribe->subscriber_count);
+				$data_array['overall'][$key]=($data_array['overall'][$key]+$mSubscribe->subscriber_count);
+			}
 		}
+		
 
 		// return $data_array;
 		//Create Dataset Array

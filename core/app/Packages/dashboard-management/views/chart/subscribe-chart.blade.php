@@ -49,9 +49,6 @@
 }
 
 
-
-
-
 </style>
 @stop
 @section('current_path')
@@ -98,9 +95,10 @@
 
 <script type="text/javascript">
     var d = new Date();
+    d.setMonth(d.getMonth() - 1);
     var current_month = d.getMonth()+1;
     var current_year = d.getFullYear();
-    var old_date=d.setMonth(d.getMonth() - 3);
+    d.setMonth(d.getMonth() - 3);
     // $('#startDate').val((current_month-2)+'/'+current_year);
     // console.log(d.getMonth()+'/'+d.getFullYear());
     $('#startDate').val(d.getMonth()+'/'+d.getFullYear());
