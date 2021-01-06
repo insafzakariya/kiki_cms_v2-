@@ -11,7 +11,7 @@
  * USER AUTHENTICATION MIDDLEWARE
  */
 
-Route::group(['middleware' => ['auth'], 'prefix' => 'dashboard', 'namespace' => 'DashboardManage\Http\Controllers'], function()
+Route::group(['middleware' => [], 'prefix' => 'dashboard', 'namespace' => 'DashboardManage\Http\Controllers'], function()
 {
 
     Route::get('/subscribe', [
@@ -20,6 +20,14 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'dashboard', 'namespace' => 
     Route::get('data/subscribe', [
         'as' => 'index', 'uses' => 'DashboardController@subsribeData'
     ]);
+
+    Route::get('/dailytransaction', [
+        'as' => 'index', 'uses' => 'DashboardController@dailyTransaction'
+    ]);
+    Route::get('data/dailytransaction', [
+        'as' => 'index', 'uses' => 'DashboardController@dailyTransactionData'
+    ]);
+
     
 
     

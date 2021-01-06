@@ -90,6 +90,7 @@ class DashboardController extends Controller {
         foreach ($result as $dt) {
 			array_push($label,$dt->format("M-Y"));
 			array_push($data_array['months'],$dt->format("Y-m"));
+			
 			array_push($data_array['dialog'],0);
 			array_push($data_array['dialog_bar_colour'],Config::get('chart.service_provider.dialog.rgba'));
 			array_push($data_array['dialog_border_bar_colour'],Config::get('chart.service_provider.dialog.rgba'));
@@ -263,6 +264,37 @@ class DashboardController extends Controller {
 		// array_push($datasets,$dataset_3);
 
 		//Finel Array For Chart
+		$chart_data=array(
+			'type'=>'bar',
+			'labels'=>$label,
+			'datasets'=>$datasets
+		);
+
+		return $chart_data;
+	}
+
+	public function dailyTransaction()
+	{
+		return view('DashboardManage::chart.dailytransaction-chart');
+	}
+	public function dailyTransactionData()
+	{
+		$satrt_date='2020-12-20';
+		$end_date='2021-01-02';
+
+		$data_array=array(
+			'days'=>array()
+		);
+
+		$label=[];
+		$result = CarbonPeriod::create($satrt_date, '1 day', $end_date);
+		foreach ($result as $dt) {
+			array_push($label,$dt->format("Y-m-d"));
+			array_push($data_array['days'],$dt->format("Y-m-d"));
+		}
+	
+		$datasets=array();
+
 		$chart_data=array(
 			'type'=>'bar',
 			'labels'=>$label,
