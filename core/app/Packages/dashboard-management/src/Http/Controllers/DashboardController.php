@@ -118,9 +118,13 @@ class DashboardController extends Controller {
 
 		//Dialog Subscribe Month Wise Query
 		
-		$dialog_subscribe_list = DB::select("SELECT count(viwer_id) as subscriber_count,  MONTH(cast(createdDate as date)) as month,YEAR(cast(createdDate as date)) as year
-		FROM ideabiz WHERE subscribe = 1 and createdDate between cast("."'".$satrt_date."'"." as date) and cast("."'".$end_date."'"." as date)
-		group by year,month");
+		// $dialog_subscribe_list = DB::select("SELECT count(viwer_id) as subscriber_count,  MONTH(cast(createdDate as date)) as month,YEAR(cast(createdDate as date)) as year
+		// FROM ideabiz WHERE subscribe = 1 and createdDate between cast("."'".$satrt_date."'"." as date) and cast("."'".$end_date."'"." as date)
+		// group by year,month");
+
+		$dialog_subscribe_list = DB::select("select count(distinct viewer_id)  as subscriber_count,MONTH(cast(createdDate as date)) as month,YEAR(cast(createdDate as date)) as year
+		from subscription_invoice where createdDate between cast("."'".$satrt_date."'"." as date) and cast("."'".$end_date."'"." as date) and type = 'DIALOG' and amount > 0
+		and success = 1 and status = 1 group by year,month");
 
 		foreach($dialog_subscribe_list AS $dSubscribe){
 			$key = array_search ($dSubscribe->year.'-'.str_pad($dSubscribe->month, 2, '0', STR_PAD_LEFT), $data_array['months']);
@@ -132,9 +136,13 @@ class DashboardController extends Controller {
 
 		//Hutch Subscribe Month Wise Query
 
-		$hutch_subscribe_list=DB::select("select count(viewer_id)  as subscriber_count, MONTH(cast(createDate as date))  as month ,YEAR(cast(createDate as date)) as year
-		from subscription_data where createDate between cast("."'".$satrt_date."'"." as date) and cast("."'".$end_date."'"." as date) 
-		and type = 'HUTCH' and subscribe = 1 and status = 1 group by year,month");
+		// $hutch_subscribe_list=DB::select("select count(viewer_id)  as subscriber_count, MONTH(cast(createDate as date))  as month ,YEAR(cast(createDate as date)) as year
+		// from subscription_data where createDate between cast("."'".$satrt_date."'"." as date) and cast("."'".$end_date."'"." as date) 
+		// and type = 'HUTCH' and subscribe = 1 and status = 1 group by year,month");
+
+		$hutch_subscribe_list = DB::select("select count(distinct viewer_id)  as subscriber_count,MONTH(cast(createdDate as date)) as month,YEAR(cast(createdDate as date)) as year
+		from subscription_invoice where createdDate between cast("."'".$satrt_date."'"." as date) and cast("."'".$end_date."'"." as date) and type = 'HUTCH' and amount > 0
+		and success = 1 and status = 1 group by year,month");
 
 		foreach($hutch_subscribe_list AS $hSubscribe){
 			$key = array_search ($hSubscribe->year.'-'.str_pad($hSubscribe->month, 2, '0', STR_PAD_LEFT), $data_array['months']);
@@ -144,20 +152,43 @@ class DashboardController extends Controller {
 
 		//Apple Subscribe Month Wise Query
 
-		$appel_subscribe_list=DB::select("select count(viewer_id)  as subscriber_count, MONTH(cast(createDate as date))  as month ,YEAR(cast(createDate as date)) as year
-		from subscription_data where createDate between cast("."'".$satrt_date."'"." as date) and cast("."'".$end_date."'"." as date) 
-		and type = 'APPLE' and subscribe = 1 and status = 1 group by year,month");
+		// $appel_subscribe_list=DB::select("select count(viewer_id)  as subscriber_count, MONTH(cast(createDate as date))  as month ,YEAR(cast(createDate as date)) as year
+		// from subscription_data where createDate between cast("."'".$satrt_date."'"." as date) and cast("."'".$end_date."'"." as date) 
+		// and type = 'APPLE' and subscribe = 1 and status = 1 group by year,month");
 
+		$appel_subscribe_list = DB::select("select count(distinct viewer_id)  as subscriber_count,MONTH(cast(createdDate as date)) as month,YEAR(cast(createdDate as date)) as year
+		from subscription_invoice where createdDate between cast("."'".$satrt_date."'"." as date) and cast("."'".$end_date."'"." as date) and type = 'APPLE' and amount > 0
+		and success = 1 and status = 1 group by year,month");
+		
 		foreach($appel_subscribe_list AS $aSubscribe){
 			$key = array_search ($aSubscribe->year.'-'.str_pad($aSubscribe->month, 2, '0', STR_PAD_LEFT), $data_array['months']);
 			$data_array['apple'][$key]=$aSubscribe->subscriber_count;
 			$data_array['overall'][$key]=($data_array['overall'][$key]+$aSubscribe->subscriber_count);
 		}
+
+		//MOBITEL
+		$mobitel_subscribe_list = DB::select("select count(distinct viewer_id)  as subscriber_count,MONTH(cast(createdDate as date)) as month,YEAR(cast(createdDate as date)) as year
+			from subscription_invoice where createdDate between cast("."'".$satrt_date."'"." as date) and cast("."'".$end_date."'"." as date) and type = 'MOBITEL' and amount > 0
+			and success = 1 and status = 1 group by year,month");
+
+		foreach($mobitel_subscribe_list AS $mSubscribe){
+			$key = array_search ($mSubscribe->year.'-'.str_pad($mSubscribe->month, 2, '0', STR_PAD_LEFT), $data_array['months']);
+			$data_array['mobitel'][$key]=$mSubscribe->subscriber_count;
+			$data_array['overall'][$key]=($data_array['overall'][$key]+$mSubscribe->subscriber_count);
+		}
+		
+		//THIS IS OLD CONDITION
+		/*
 		if($satrt_date>'2020-11-10'){
 			//MOBITEl SUBSCRIBE Query BEFORE '2020-11-10 08:46:23'
-			$mobitel_subscribe_list=DB::select("select count(viewer_id)  as subscriber_count, MONTH(cast(createDate as date))  as month ,YEAR(cast(createDate as date)) as year
-			from subscription_data where createDate between cast("."'".$satrt_date."'"." as date) and cast("."'".$end_date."'"." as date) 
-			and type = 'MOBITEL' and subscribe = 1 and status = 1 group by year,month");
+			// $mobitel_subscribe_list=DB::select("select count(viewer_id)  as subscriber_count, MONTH(cast(createDate as date))  as month ,YEAR(cast(createDate as date)) as year
+			// from subscription_data where createDate between cast("."'".$satrt_date."'"." as date) and cast("."'".$end_date."'"." as date) 
+			// and type = 'MOBITEL' and subscribe = 1 and status = 1 group by year,month");
+
+			$mobitel_subscribe_list = DB::select("select count(distinct viewer_id)  as subscriber_count,MONTH(cast(createdDate as date)) as month,YEAR(cast(createdDate as date)) as year
+			from subscription_invoice where createdDate between cast("."'".$satrt_date."'"." as date) and cast("."'".$end_date."'"." as date) and type = 'MOBITEL' and amount > 0
+			and success = 1 and status = 1 group by year,month");
+		
 
 			foreach($mobitel_subscribe_list AS $mSubscribe){
 				$key = array_search ($mSubscribe->year.'-'.str_pad($mSubscribe->month, 2, '0', STR_PAD_LEFT), $data_array['months']);
@@ -197,7 +228,8 @@ class DashboardController extends Controller {
 				$data_array['mobitel'][$key]=($data_array['mobitel'][$key]+$mSubscribe->subscriber_count);
 				$data_array['overall'][$key]=($data_array['overall'][$key]+$mSubscribe->subscriber_count);
 			}
-		}
+		}*/
+		
 		
 
 		// return $data_array;
