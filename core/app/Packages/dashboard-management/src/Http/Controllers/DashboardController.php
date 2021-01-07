@@ -309,10 +309,11 @@ class DashboardController extends Controller {
 	{
 		return view('DashboardManage::chart.dailytransaction-chart');
 	}
-	public function dailyTransactionData()
+	public function dailyTransactionData(Request $request)
 	{
-		$satrt_date='2020-12-30';
-		$end_date='2021-01-02';
+		$start_date=$request->get('start_date');
+		$end_date_initial=$request->get('end_date');
+		$end_date = date('Y-m-d', strtotime($end_date_initial . ' +1 day'));
 
 		$data_array=array(
 			'days'=>array(),
@@ -355,7 +356,7 @@ class DashboardController extends Controller {
 		);
 
 		$label=[];
-		$result = CarbonPeriod::create($satrt_date, '1 day', $end_date);
+		$result = CarbonPeriod::create($start_date, '1 day', $end_date_initial);
 		foreach ($result as $dt) {
 			array_push($label,$dt->format("Y-m-d"));
 			array_push($data_array['days'],$dt->format("Y-m-d"));
@@ -401,7 +402,7 @@ class DashboardController extends Controller {
 
 		//Transaction Data Retreview
 		$transaction_data_list = DB::select("select count(viewer_id)  as subscriber_count, amount as package,type, cast(createdDate as date)  as create_date 
-		from subscription_invoice where createdDate between cast("."'".$satrt_date."'"." as date) and cast("."'".$end_date."'"." as date) and amount > 0
+		from subscription_invoice where createdDate between cast("."'".$start_date."'"." as date) and cast("."'".$end_date."'"." as date) and amount > 0
 		and success = 1 and status = 1 group by create_date, package,type");
 
 		foreach($transaction_data_list AS $data){
