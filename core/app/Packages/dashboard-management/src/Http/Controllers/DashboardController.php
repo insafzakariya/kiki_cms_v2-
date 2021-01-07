@@ -511,6 +511,165 @@ class DashboardController extends Controller {
 
 		return $chart_data;
 	}
+
+	public function dailyRevenue()
+	{
+		return view('DashboardManage::chart.dailyRevenu-chart');
+	}
+
+	public function dailyRevenueData(Request $request)
+	{
+		$start_date=$request->get('start_date');
+		$end_date_initial=$request->get('end_date');
+		$end_date = date('Y-m-d', strtotime($end_date_initial . ' +1 day'));
+
+		$data_array=array(
+			'days'=>array(),
+
+			'TOTAL'=>array(),
+			'DIALOG'=>array(),
+			'HUTCH'=>array(),
+			'MOBITEL'=>array(),
+			'APPLE'=>array(),
+
+		);
+
+		$label=[];
+		$result = CarbonPeriod::create($start_date, '1 day', $end_date_initial);
+		foreach ($result as $dt) {
+			array_push($label,$dt->format("Y-m-d"));
+			array_push($data_array['days'],$dt->format("Y-m-d"));
+
+			array_push($data_array['TOTAL'],0);
+			array_push($data_array['DIALOG'],0);
+			array_push($data_array['HUTCH'],0);
+
+			array_push($data_array['MOBITEL'],0);
+			array_push($data_array['APPLE'],0);
+			
+		}
+	
+		$datasets=array();
+
+		//Transaction Data Retreview
+		$transaction_data_list = DB::select("select count(viewer_id)  as subscriber_count, amount as package,type, cast(createdDate as date)  as create_date 
+		from subscription_invoice where createdDate between cast("."'".$start_date."'"." as date) and cast("."'".$end_date."'"." as date) and amount > 0
+		and success = 1 and status = 1 group by create_date, package,type");
+
+		foreach($transaction_data_list AS $data){
+			$key = array_search ($data->create_date, $data_array['days']);
+			$data_array[$data->type][$key]=$data_array[$data->type][$key]+($data->package*$data->subscriber_count);
+			$data_array['TOTAL'][$key]=$data_array['TOTAL'][$key]+($data->package*$data->subscriber_count);
+			// $data_array['overall'][$key]=($data_array['overall'][$key]+$dSubscribe->subscriber_count);
+		}
+		$total_dataset=array(
+			"label"=>"TOTAL",
+			"data"=> $data_array['TOTAL'],
+			"hidden"=> true,
+			'lineTension'=> 0,
+			'fill'=> false,
+			'borderColor'=> Config::get('chart.service_provider.overall.rgba'),
+			// 'backgroundColor'=> 'transparent',
+			'pointBorderColor'=> Config::get('chart.service_provider.overall.rgba'),
+			'pointBackgroundColor'=> Config::get('chart.service_provider.overall.rgba'),
+			'pointRadius'=> 5,
+			'pointHoverRadius'=> 10,
+			'pointHitRadius'=> 30,
+			'pointBorderWidth'=> 1,
+			'pointStyle'=> 'rectRounded'
+		);
+
+		$dialog_dataset=array(
+			"label"=>"Dialog",
+			"data"=> $data_array['DIALOG'],
+			"borderWidth"=>1,
+			"hidden"=> true,
+			'lineTension'=> 0,
+			'fill'=> false,
+			'borderColor'=> Config::get('chart.service_provider.dialog.rgba'),
+			'backgroundColor'=> 'transparent',
+			'pointBorderColor'=> Config::get('chart.service_provider.dialog.rgba'),
+			'pointBackgroundColor'=> Config::get('chart.service_provider.dialog.rgba'),
+			'pointRadius'=> 5,
+			'pointHoverRadius'=> 10,
+			'pointHitRadius'=> 30,
+			'pointBorderWidth'=> 1,
+			'pointStyle'=> 'rectRounded'
+		);
+
+
+		$hutch_dataset=array(
+			"label"=>"Hutch Rs 5",
+			"data"=> $data_array['HUTCH'],
+			"borderWidth"=>1,
+			"hidden"=> true,
+			'lineTension'=> 0,
+			'fill'=> false,
+			'borderColor'=> Config::get('chart.service_provider.hutch.rgba'),
+			'backgroundColor'=> 'transparent',
+			'pointBorderColor'=> Config::get('chart.service_provider.hutch.rgba'),
+			'pointBackgroundColor'=> Config::get('chart.service_provider.hutch.rgba'),
+			'pointRadius'=> 5,
+			'pointHoverRadius'=> 10,
+			'pointHitRadius'=> 30,
+			'pointBorderWidth'=> 1,
+			'pointStyle'=> 'rectRounded'
+		);
+
+		
+		$mobitel_dataset=array(
+			"label"=>"Mobitel Rs 5",
+			"data"=> $data_array['MOBITEL'],
+			"borderWidth"=>1,
+			"hidden"=> true,
+			'lineTension'=> 0,
+			'fill'=> false,
+			'borderColor'=> Config::get('chart.service_provider.mobitel.rgba'),
+			'backgroundColor'=> 'transparent',
+			'pointBorderColor'=> Config::get('chart.service_provider.mobitel.rgba'),
+			'pointBackgroundColor'=> Config::get('chart.service_provider.mobitel.rgba'),
+			'pointRadius'=> 5,
+			'pointHoverRadius'=> 10,
+			'pointHitRadius'=> 30,
+			'pointBorderWidth'=> 1,
+			'pointStyle'=> 'rectRounded'
+		);
+
+		$apple_dataset=array(
+			"label"=>"APPLE $6",
+			"data"=> $data_array['APPLE'],
+			"borderWidth"=>1,
+			"hidden"=> true,
+			'lineTension'=> 0,
+			'fill'=> false,
+			'borderColor'=> Config::get('chart.service_provider.appel.rgba'),
+			'backgroundColor'=> 'transparent',
+			'pointBorderColor'=> Config::get('chart.service_provider.appel.rgba'),
+			'pointBackgroundColor'=> Config::get('chart.service_provider.appel.rgba'),
+			'pointRadius'=> 5,
+			'pointHoverRadius'=> 10,
+			'pointHitRadius'=> 30,
+			'pointBorderWidth'=> 1,
+			'pointStyle'=> 'rectRounded'
+		);
+
+		//Assign to Dataset Array
+		array_push($datasets,$dialog_dataset);
+		array_push($datasets,$hutch_dataset);
+		array_push($datasets,$mobitel_dataset);
+		array_push($datasets,$apple_dataset);
+
+		array_push($datasets,$total_dataset);
+
+		$chart_data=array(
+			'type'=>'bar',
+			'labels'=>$label,
+			'datasets'=>$datasets
+		);
+
+		return $chart_data;
+	}
+
 	
 	
 
