@@ -554,7 +554,7 @@ class DashboardController extends Controller {
 		//Transaction Data Retreview
 		$transaction_data_list = DB::select("select count(viewer_id)  as subscriber_count, amount as package,type, cast(createdDate as date)  as create_date 
 		from subscription_invoice where createdDate between cast("."'".$start_date."'"." as date) and cast("."'".$end_date."'"." as date) and amount > 0
-		and success = 1 and status = 1 group by create_date, package,type");
+		and success = 1 and status = 1 and type !='APPLE' group by create_date, package,type");
 
 		foreach($transaction_data_list AS $data){
 			$key = array_search ($data->create_date, $data_array['days']);
@@ -599,7 +599,7 @@ class DashboardController extends Controller {
 
 
 		$hutch_dataset=array(
-			"label"=>"Hutch Rs 5",
+			"label"=>"Hutch",
 			"data"=> $data_array['HUTCH'],
 			"borderWidth"=>1,
 			"hidden"=> true,
@@ -618,7 +618,7 @@ class DashboardController extends Controller {
 
 		
 		$mobitel_dataset=array(
-			"label"=>"Mobitel Rs 5",
+			"label"=>"Mobitel",
 			"data"=> $data_array['MOBITEL'],
 			"borderWidth"=>1,
 			"hidden"=> true,
@@ -657,7 +657,7 @@ class DashboardController extends Controller {
 		array_push($datasets,$dialog_dataset);
 		array_push($datasets,$hutch_dataset);
 		array_push($datasets,$mobitel_dataset);
-		array_push($datasets,$apple_dataset);
+		// array_push($datasets,$apple_dataset);
 
 		array_push($datasets,$total_dataset);
 
@@ -669,6 +669,255 @@ class DashboardController extends Controller {
 
 		return $chart_data;
 	}
+
+	public function newSubscriberWithFreeTrial()
+	{
+		return view('DashboardManage::chart.newsubscriberwithfreetrial-chart');
+	}
+	public function newSubscriberWithFreeTrialData(Request $request)
+	{
+		$start_date=$request->get('start_date');
+		$end_date_initial=$request->get('end_date');
+		$end_date = date('Y-m-d', strtotime($end_date_initial . ' +1 day'));
+
+		$data_array=array(
+			'days'=>array(),
+
+			'TOTAL'=>array(),
+			'TOTAL_bar_colour'=>array(),
+			'TOTAL_border_bar_colour'=>array(),
+
+			'DIALOG_1'=>array(),
+			'DIALOG_1_bar_colour'=>array(),
+			'DIALOG_1_border_bar_colour'=>array(),
+			
+			'DIALOG_7'=>array(),
+			'DIALOG_7_bar_colour'=>array(),
+			'DIALOG_7_border_bar_colour'=>array(),
+			
+			'DIALOG_30'=>array(),
+			'DIALOG_30_bar_colour'=>array(),
+			'DIALOG_30_border_bar_colour'=>array(),
+			
+			'HUTCH_1'=>array(),
+			'HUTCH_1_bar_colour'=>array(),
+			'HUTCH_1_border_bar_colour'=>array(),
+			
+			'HUTCH_7'=>array(),
+			'HUTCH_7_bar_colour'=>array(),
+			'HUTCH_7_border_bar_colour'=>array(),
+			
+			'HUTCH_30'=>array(),
+			'HUTCH_30_bar_colour'=>array(),
+			'HUTCH_30_border_bar_colour'=>array(),
+
+			'MOBITEL_1'=>array(),
+			'MOBITEL_1_bar_colour'=>array(),
+			'MOBITEL_1_border_bar_colour'=>array(),
+			
+			'APPLE_90'=>array(),
+			'APPLE_90_bar_colour'=>array(),
+			'APPLE_90_border_bar_colour'=>array(),
+
+			'APPLE_360'=>array(),
+			'APPLE_360_bar_colour'=>array(),
+			'APPLE_360_border_bar_colour'=>array(),
+
+			'KEELS_1'=>array(),
+			'KEELS_1_bar_colour'=>array(),
+			'KEELS_1_border_bar_colour'=>array(),
+		);
+
+		$label=[];
+		$result = CarbonPeriod::create($start_date, '1 day', $end_date_initial);
+		foreach ($result as $dt) {
+			array_push($label,$dt->format("Y-m-d"));
+			array_push($data_array['days'],$dt->format("Y-m-d"));
+
+			array_push($data_array['TOTAL'],0);
+			array_push($data_array['TOTAL_bar_colour'],Config::get('chart.service_provider.overall.rgba'));
+			array_push($data_array['TOTAL_border_bar_colour'],Config::get('chart.service_provider.overall.rgba'));
+
+			array_push($data_array['DIALOG_1'],0);
+			array_push($data_array['DIALOG_1_bar_colour'],Config::get('chart.service_provider.dialog_1.rgba'));
+			array_push($data_array['DIALOG_1_border_bar_colour'],Config::get('chart.service_provider.dialog_1.rgba'));
+			
+			array_push($data_array['DIALOG_7'],0);
+			array_push($data_array['DIALOG_7_bar_colour'],Config::get('chart.service_provider.dialog_7.rgba'));
+			array_push($data_array['DIALOG_7_border_bar_colour'],Config::get('chart.service_provider.dialog_7.rgba'));
+			
+			array_push($data_array['DIALOG_30'],0);
+			array_push($data_array['DIALOG_30_bar_colour'],Config::get('chart.service_provider.dialog_30.rgba'));
+			array_push($data_array['DIALOG_30_border_bar_colour'],Config::get('chart.service_provider.dialog_30.rgba'));
+			
+			array_push($data_array['HUTCH_1'],0);
+			array_push($data_array['HUTCH_1_bar_colour'],Config::get('chart.service_provider.hutch_1.rgba'));
+			array_push($data_array['HUTCH_1_border_bar_colour'],Config::get('chart.service_provider.hutch_1.rgba'));
+			
+			array_push($data_array['HUTCH_7'],0);
+			array_push($data_array['HUTCH_7_bar_colour'],Config::get('chart.service_provider.hutch_7.rgba'));
+			array_push($data_array['HUTCH_7_border_bar_colour'],Config::get('chart.service_provider.hutch_7.rgba'));
+			
+			array_push($data_array['HUTCH_30'],0);
+			array_push($data_array['HUTCH_30_bar_colour'],Config::get('chart.service_provider.hutch_30.rgba'));
+			array_push($data_array['HUTCH_30_border_bar_colour'],Config::get('chart.service_provider.hutch_30.rgba'));
+
+			array_push($data_array['MOBITEL_1'],0);
+			array_push($data_array['MOBITEL_1_bar_colour'],Config::get('chart.service_provider.mobitel_1.rgba'));
+			array_push($data_array['MOBITEL_1_border_bar_colour'],Config::get('chart.service_provider.mobitel_1.rgba'));
+			
+			array_push($data_array['APPLE_90'],0);
+			array_push($data_array['APPLE_90_bar_colour'],Config::get('chart.service_provider.apple_90.rgba'));
+			array_push($data_array['APPLE_90_border_bar_colour'],Config::get('chart.service_provider.apple_90.rgba'));
+			
+			array_push($data_array['APPLE_360'],0);
+			array_push($data_array['APPLE_360_bar_colour'],Config::get('chart.service_provider.apple_360.rgba'));
+			array_push($data_array['APPLE_360_border_bar_colour'],Config::get('chart.service_provider.apple_360.rgba'));
+			
+			array_push($data_array['KEELS_1'],0);
+			array_push($data_array['KEELS_1_bar_colour'],Config::get('chart.service_provider.keels_1.rgba'));
+			array_push($data_array['KEELS_1_border_bar_colour'],Config::get('chart.service_provider.keels_1.rgba'));
+		}
+	
+		$datasets=array();
+
+		//Transaction Data Retreview
+		
+		$transaction_data_list = DB::select("select count(viewer_id)  as subscriber_count, subscribed_days as package,type,
+		 cast(createDate as date)  as create_date from subscription_data 
+		 where createDate between cast("."'".$start_date."'"." as date) and 
+		 cast("."'".$end_date."'"." as date)  and subscribe = 1 and status = 1 
+		 group by create_date, package,type");
+
+		foreach($transaction_data_list AS $data){
+			$key = array_search ($data->create_date, $data_array['days']);
+			$data_array[$data->type.'_'.$data->package][$key]=$data->subscriber_count;
+			$data_array['TOTAL'][$key]=$data_array['TOTAL'][$key]+$data->subscriber_count;
+			// $data_array['overall'][$key]=($data_array['overall'][$key]+$dSubscribe->subscriber_count);
+		}
+		$total_dataset=array(
+			"label"=>"TOTAL",
+			"data"=> $data_array['TOTAL'],
+			'backgroundColor'=>$data_array['TOTAL_bar_colour'],
+			"borderColor"=>$data_array['TOTAL_border_bar_colour'],
+			"borderWidth"=>1,
+			"hidden"=> true,
+		);
+
+		$dialog_1_dataset=array(
+			"label"=>"Dialog 1 day",
+			"data"=> $data_array['DIALOG_1'],
+			'backgroundColor'=>$data_array['DIALOG_1_bar_colour'],
+			"borderColor"=>$data_array['DIALOG_1_border_bar_colour'],
+			"borderWidth"=>1,
+			"hidden"=> true,
+		);
+
+		$dialog_7_dataset=array(
+			"label"=>"Dialog 7 day",
+			"data"=> $data_array['DIALOG_7'],
+			'backgroundColor'=>$data_array['DIALOG_7_bar_colour'],
+			"borderColor"=>$data_array['DIALOG_7_border_bar_colour'],
+			"borderWidth"=>1,
+			"hidden"=> true,
+		);
+		$dialog_30_dataset=array(
+			"label"=>"Dialog 30 day",
+			"data"=> $data_array['DIALOG_30'],
+			'backgroundColor'=>$data_array['DIALOG_30_bar_colour'],
+			"borderColor"=>$data_array['DIALOG_30_border_bar_colour'],
+			"borderWidth"=>1,
+			"hidden"=> true,
+		);
+		$hutch_1_dataset=array(
+			"label"=>"Hutch 1 day",
+			"data"=> $data_array['HUTCH_1'],
+			'backgroundColor'=>$data_array['HUTCH_1_bar_colour'],
+			"borderColor"=>$data_array['HUTCH_1_border_bar_colour'],
+			"borderWidth"=>1,
+			"hidden"=> true,
+		);
+
+		$hutch_7_dataset=array(
+			"label"=>"Hutch 7 day",
+			"data"=> $data_array['HUTCH_7'],
+			'backgroundColor'=>$data_array['HUTCH_7_bar_colour'],
+			"borderColor"=>$data_array['HUTCH_7_border_bar_colour'],
+			"borderWidth"=>1,
+			"hidden"=> true,
+		);
+		$hutch_30_dataset=array(
+			"label"=>"Hucth 30 day",
+			"data"=> $data_array['HUTCH_30'],
+			'backgroundColor'=>$data_array['HUTCH_30_bar_colour'],
+			"borderColor"=>$data_array['HUTCH_30_border_bar_colour'],
+			"borderWidth"=>1,
+			"hidden"=> true,
+		);
+
+		$mobitel_1_dataset=array(
+			"label"=>"Mobitel 1 day",
+			"data"=> $data_array['MOBITEL_1'],
+			'backgroundColor'=>$data_array['MOBITEL_1_bar_colour'],
+			"borderColor"=>$data_array['MOBITEL_1_border_bar_colour'],
+			"borderWidth"=>1,
+			"hidden"=> true,
+		);
+
+		$apple_90_dataset=array(
+			"label"=>"APPLE 90 day",
+			"data"=> $data_array['APPLE_90'],
+			'backgroundColor'=>$data_array['APPLE_90_bar_colour'],
+			"borderColor"=>$data_array['APPLE_90_border_bar_colour'],
+			"borderWidth"=>1,
+			"hidden"=> true,
+		);
+
+		$apple_360_dataset=array(
+			"label"=>"APPLE 360 day",
+			"data"=> $data_array['APPLE_360'],
+			'backgroundColor'=>$data_array['APPLE_360_bar_colour'],
+			"borderColor"=>$data_array['APPLE_360_border_bar_colour'],
+			"borderWidth"=>1,
+			"hidden"=> true,
+		);
+
+		$keels_1_dataset=array(
+			"label"=>"KEELS 1 day",
+			"data"=> $data_array['KEELS_1'],
+			'backgroundColor'=>$data_array['KEELS_1_bar_colour'],
+			"borderColor"=>$data_array['KEELS_1_border_bar_colour'],
+			"borderWidth"=>1,
+			"hidden"=> true,
+		);
+
+		//Assign to Dataset Array
+		array_push($datasets,$dialog_1_dataset);
+		array_push($datasets,$dialog_7_dataset);
+		array_push($datasets,$dialog_30_dataset);
+
+		array_push($datasets,$hutch_1_dataset);
+		array_push($datasets,$hutch_7_dataset);
+		array_push($datasets,$hutch_30_dataset);
+
+		array_push($datasets,$mobitel_1_dataset);
+
+		array_push($datasets,$apple_90_dataset);
+		array_push($datasets,$apple_360_dataset);
+
+		array_push($datasets,$keels_1_dataset);
+
+		array_push($datasets,$total_dataset);
+
+		$chart_data=array(
+			'type'=>'bar',
+			'labels'=>$label,
+			'datasets'=>$datasets
+		);
+
+		return $chart_data;
+	}
+
 
 	
 	

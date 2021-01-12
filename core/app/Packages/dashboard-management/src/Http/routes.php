@@ -35,6 +35,13 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'dashboard', 'namespace' => 
         'as' => 'index', 'uses' => 'DashboardController@dailyRevenueData'
     ]);
 
+    Route::get('/newsubscriberwithfreetrial', [
+        'as' => 'index', 'uses' => 'DashboardController@newSubscriberWithFreeTrial'
+    ]);
+    Route::get('data/newsubscriberwithFreetrial', [
+        'as' => 'index', 'uses' => 'DashboardController@newSubscriberWithFreeTrialData'
+    ]);
+
     
 
     
