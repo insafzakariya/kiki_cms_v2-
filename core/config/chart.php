@@ -29,7 +29,7 @@ return [
             "rgba"=>'rgba(154, 18, 179, 1)'
         ],
         'mobitel_5' => [
-            "rgba"=>'rgba(42, 187, 155, 1)'
+            "rgba"=>'rgba(30, 130, 76, 1)'
         ],
         'hutch_5' => [
             "rgba"=>'rgba(232, 126, 4, 1)'

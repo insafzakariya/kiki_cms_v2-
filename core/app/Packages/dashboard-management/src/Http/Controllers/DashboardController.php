@@ -836,7 +836,7 @@ class DashboardController extends Controller {
 		$transaction_data_list = DB::select("select count(viewer_id)  as subscriber_count, amount as package,type,
 		 cast(createDate as date)  as create_date from subscription_data 
 		 where createDate between cast("."'".$start_date."'"." as date) and 
-		 cast("."'".$end_date."'"." as date)  and subscribe = 1 and status = 1 
+		 cast("."'".$end_date."'"." as date)  and subscribe = 1 and status = 1 and amount >0
 		 group by create_date, package,type");
 
 		foreach($transaction_data_list AS $data){
@@ -851,7 +851,7 @@ class DashboardController extends Controller {
 			'backgroundColor'=>$data_array['TOTAL_bar_colour'],
 			"borderColor"=>$data_array['TOTAL_border_bar_colour'],
 			"borderWidth"=>1,
-			"hidden"=> true,
+			// "hidden"=> true,
 		);
 
 		$dialog_5_dataset=array(
@@ -860,7 +860,7 @@ class DashboardController extends Controller {
 			'backgroundColor'=>$data_array['DIALOG_5_bar_colour'],
 			"borderColor"=>$data_array['DIALOG_5_border_bar_colour'],
 			"borderWidth"=>1,
-			"hidden"=> true,
+			// "hidden"=> true,
 		);
 
 		$dialog_25_dataset=array(
@@ -869,7 +869,7 @@ class DashboardController extends Controller {
 			'backgroundColor'=>$data_array['DIALOG_25_bar_colour'],
 			"borderColor"=>$data_array['DIALOG_25_border_bar_colour'],
 			"borderWidth"=>1,
-			"hidden"=> true,
+			// "hidden"=> true,
 		);
 		$dialog_99_dataset=array(
 			"label"=>"Dialog Rs 99",
@@ -877,7 +877,7 @@ class DashboardController extends Controller {
 			'backgroundColor'=>$data_array['DIALOG_99_bar_colour'],
 			"borderColor"=>$data_array['DIALOG_99_border_bar_colour'],
 			"borderWidth"=>1,
-			"hidden"=> true,
+			// "hidden"=> true,
 		);
 		$hutch_5_dataset=array(
 			"label"=>"Hutch Rs 5",
@@ -885,7 +885,7 @@ class DashboardController extends Controller {
 			'backgroundColor'=>$data_array['HUTCH_5_bar_colour'],
 			"borderColor"=>$data_array['HUTCH_5_border_bar_colour'],
 			"borderWidth"=>1,
-			"hidden"=> true,
+			// "hidden"=> true,
 		);
 
 		$hutch_25_dataset=array(
@@ -894,7 +894,7 @@ class DashboardController extends Controller {
 			'backgroundColor'=>$data_array['HUTCH_25_bar_colour'],
 			"borderColor"=>$data_array['HUTCH_25_border_bar_colour'],
 			"borderWidth"=>1,
-			"hidden"=> true,
+			// "hidden"=> true,
 		);
 		$hutch_99_dataset=array(
 			"label"=>"Hucth Rs 99",
@@ -902,7 +902,7 @@ class DashboardController extends Controller {
 			'backgroundColor'=>$data_array['HUTCH_99_bar_colour'],
 			"borderColor"=>$data_array['HUTCH_99_border_bar_colour'],
 			"borderWidth"=>1,
-			"hidden"=> true,
+			// "hidden"=> true,
 		);
 
 		$mobitel_5_dataset=array(
@@ -911,7 +911,7 @@ class DashboardController extends Controller {
 			'backgroundColor'=>$data_array['MOBITEL_5_bar_colour'],
 			"borderColor"=>$data_array['MOBITEL_5_border_bar_colour'],
 			"borderWidth"=>1,
-			"hidden"=> true,
+			// "hidden"=> true,
 		);
 
 		$apple_6_dataset=array(
@@ -920,7 +920,7 @@ class DashboardController extends Controller {
 			'backgroundColor'=>$data_array['APPLE_6_bar_colour'],
 			"borderColor"=>$data_array['APPLE_6_border_bar_colour'],
 			"borderWidth"=>1,
-			"hidden"=> true,
+			// "hidden"=> true,
 		);
 		$apple_10_dataset=array(
 			"label"=>"APPLE $10",
@@ -928,7 +928,7 @@ class DashboardController extends Controller {
 			'backgroundColor'=>$data_array['APPLE_10_bar_colour'],
 			"borderColor"=>$data_array['APPLE_10_border_bar_colour'],
 			"borderWidth"=>1,
-			"hidden"=> true,
+			// "hidden"=> true,
 		);
 		$apple_15_dataset=array(
 			"label"=>"APPLE $15",
@@ -936,7 +936,7 @@ class DashboardController extends Controller {
 			'backgroundColor'=>$data_array['APPLE_15_bar_colour'],
 			"borderColor"=>$data_array['APPLE_15_border_bar_colour'],
 			"borderWidth"=>1,
-			"hidden"=> true,
+			// "hidden"=> true,
 		);
 		$keels_5_dataset=array(
 			"label"=>"KEELS Rs 5",
@@ -944,7 +944,7 @@ class DashboardController extends Controller {
 			'backgroundColor'=>$data_array['KEELS_5_bar_colour'],
 			"borderColor"=>$data_array['KEELS_5_border_bar_colour'],
 			"borderWidth"=>1,
-			"hidden"=> true,
+			// "hidden"=> true,
 		);
 
 		//Assign to Dataset Array
