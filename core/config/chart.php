@@ -77,7 +77,7 @@ return [
         'apple_360' => [
             "rgba"=>'rgba(192, 57, 43, 1)'
         ],
-        'keels_1' => [
+        'keels_5' => [
             "rgba"=>'rgba(145, 61, 136, 1)'
         ],
         

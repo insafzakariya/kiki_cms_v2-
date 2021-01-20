@@ -241,7 +241,7 @@ class DashboardController extends Controller {
 			'backgroundColor'=>$data_array['dialog_bar_colour'],
 			"borderColor"=>$data_array['dialog_border_bar_colour'],
 			"borderWidth"=>1,
-			"hidden"=> true,
+			"hidden"=> false,
 		);
 		$hutch_dataset=array(
 			"label"=>"Hutch",
@@ -249,7 +249,7 @@ class DashboardController extends Controller {
 			'backgroundColor'=>$data_array['hutch_bar_colour'],
 			"borderColor"=>$data_array['hutch_border_bar_colour'],
 			"borderWidth"=>1,
-			"hidden"=> true,
+			"hidden"=> false,
 		);
 		$apple_dataset=array(
 			"label"=>"Apple",
@@ -257,7 +257,7 @@ class DashboardController extends Controller {
 			'backgroundColor'=>$data_array['apple_bar_colour'],
 			"borderColor"=>$data_array['apple_border_bar_colour'],
 			"borderWidth"=>1,
-			"hidden"=> true,
+			"hidden"=> false,
 		);
 		$mobitel_dataset=array(
 			"label"=>"Mobitel",
@@ -265,7 +265,7 @@ class DashboardController extends Controller {
 			'backgroundColor'=>$data_array['mobitel_bar_colour'],
 			"borderColor"=>$data_array['mobitel_border_bar_colour'],
 			"borderWidth"=>1,
-			"hidden"=> true,
+			"hidden"=> false,
 		);
 		$overall_dataset=array(
 			"label"=>"Overall",
@@ -273,7 +273,7 @@ class DashboardController extends Controller {
 			'backgroundColor'=>$data_array['overall_bar_colour'],
 			"borderColor"=>$data_array['overall_border_bar_colour'],
 			"borderWidth"=>1,
-			"hidden"=> true,
+			"hidden"=> false,
 		);
 
 		$dataset_2=array(
@@ -433,7 +433,7 @@ class DashboardController extends Controller {
 			'backgroundColor'=>$data_array['TOTAL_bar_colour'],
 			"borderColor"=>$data_array['TOTAL_border_bar_colour'],
 			"borderWidth"=>1,
-			"hidden"=> true,
+			"hidden"=> false,
 		);
 
 		$dialog_5_dataset=array(
@@ -442,7 +442,7 @@ class DashboardController extends Controller {
 			'backgroundColor'=>$data_array['DIALOG_5_bar_colour'],
 			"borderColor"=>$data_array['DIALOG_5_border_bar_colour'],
 			"borderWidth"=>1,
-			"hidden"=> true,
+			"hidden"=> false,
 		);
 
 		$dialog_25_dataset=array(
@@ -451,7 +451,7 @@ class DashboardController extends Controller {
 			'backgroundColor'=>$data_array['DIALOG_25_bar_colour'],
 			"borderColor"=>$data_array['DIALOG_25_border_bar_colour'],
 			"borderWidth"=>1,
-			"hidden"=> true,
+			"hidden"=> false,
 		);
 		$dialog_99_dataset=array(
 			"label"=>"Dialog Rs 99",
@@ -459,7 +459,7 @@ class DashboardController extends Controller {
 			'backgroundColor'=>$data_array['DIALOG_99_bar_colour'],
 			"borderColor"=>$data_array['DIALOG_99_border_bar_colour'],
 			"borderWidth"=>1,
-			"hidden"=> true,
+			"hidden"=> false,
 		);
 		$hutch_5_dataset=array(
 			"label"=>"Hutch Rs 5",
@@ -467,7 +467,7 @@ class DashboardController extends Controller {
 			'backgroundColor'=>$data_array['HUTCH_5_bar_colour'],
 			"borderColor"=>$data_array['HUTCH_5_border_bar_colour'],
 			"borderWidth"=>1,
-			"hidden"=> true,
+			"hidden"=> false,
 		);
 
 		$hutch_25_dataset=array(
@@ -476,7 +476,7 @@ class DashboardController extends Controller {
 			'backgroundColor'=>$data_array['HUTCH_25_bar_colour'],
 			"borderColor"=>$data_array['HUTCH_25_border_bar_colour'],
 			"borderWidth"=>1,
-			"hidden"=> true,
+			"hidden"=> false,
 		);
 		$hutch_99_dataset=array(
 			"label"=>"Hucth Rs 99",
@@ -484,7 +484,7 @@ class DashboardController extends Controller {
 			'backgroundColor'=>$data_array['HUTCH_99_bar_colour'],
 			"borderColor"=>$data_array['HUTCH_99_border_bar_colour'],
 			"borderWidth"=>1,
-			"hidden"=> true,
+			"hidden"=> false,
 		);
 
 		$mobitel_5_dataset=array(
@@ -493,7 +493,7 @@ class DashboardController extends Controller {
 			'backgroundColor'=>$data_array['MOBITEL_5_bar_colour'],
 			"borderColor"=>$data_array['MOBITEL_5_border_bar_colour'],
 			"borderWidth"=>1,
-			"hidden"=> true,
+			"hidden"=> false,
 		);
 
 		$apple_6_dataset=array(
@@ -502,7 +502,7 @@ class DashboardController extends Controller {
 			'backgroundColor'=>$data_array['APPLE_6_bar_colour'],
 			"borderColor"=>$data_array['APPLE_6_border_bar_colour'],
 			"borderWidth"=>1,
-			"hidden"=> true,
+			"hidden"=> false,
 		);
 		$apple_10_dataset=array(
 			"label"=>"APPLE $10",
@@ -510,7 +510,7 @@ class DashboardController extends Controller {
 			'backgroundColor'=>$data_array['APPLE_10_bar_colour'],
 			"borderColor"=>$data_array['APPLE_10_border_bar_colour'],
 			"borderWidth"=>1,
-			"hidden"=> true,
+			"hidden"=> false,
 		);
 		
 		$apple_15_dataset=array(
@@ -519,7 +519,7 @@ class DashboardController extends Controller {
 			'backgroundColor'=>$data_array['APPLE_15_bar_colour'],
 			"borderColor"=>$data_array['APPLE_15_border_bar_colour'],
 			"borderWidth"=>1,
-			"hidden"=> true,
+			"hidden"=> false,
 		);
 
 		//Assign to Dataset Array
@@ -600,7 +600,7 @@ class DashboardController extends Controller {
 		$total_dataset=array(
 			"label"=>"TOTAL",
 			"data"=> $data_array['TOTAL'],
-			"hidden"=> true,
+			"hidden"=> false,
 			'lineTension'=> 0,
 			'fill'=> false,
 			'borderColor'=> Config::get('chart.service_provider.overall.rgba'),
@@ -618,7 +618,7 @@ class DashboardController extends Controller {
 			"label"=>"Dialog",
 			"data"=> $data_array['DIALOG'],
 			"borderWidth"=>1,
-			"hidden"=> true,
+			"hidden"=> false,
 			'lineTension'=> 0,
 			'fill'=> false,
 			'borderColor'=> Config::get('chart.service_provider.dialog.rgba'),
@@ -637,7 +637,7 @@ class DashboardController extends Controller {
 			"label"=>"Hutch",
 			"data"=> $data_array['HUTCH'],
 			"borderWidth"=>1,
-			"hidden"=> true,
+			"hidden"=> false,
 			'lineTension'=> 0,
 			'fill'=> false,
 			'borderColor'=> Config::get('chart.service_provider.hutch.rgba'),
@@ -656,7 +656,7 @@ class DashboardController extends Controller {
 			"label"=>"Mobitel",
 			"data"=> $data_array['MOBITEL'],
 			"borderWidth"=>1,
-			"hidden"=> true,
+			"hidden"=> false,
 			'lineTension'=> 0,
 			'fill'=> false,
 			'borderColor'=> Config::get('chart.service_provider.mobitel.rgba'),
@@ -674,7 +674,7 @@ class DashboardController extends Controller {
 			"label"=>"APPLE $6",
 			"data"=> $data_array['APPLE'],
 			"borderWidth"=>1,
-			"hidden"=> true,
+			"hidden"=> false,
 			'lineTension'=> 0,
 			'fill'=> false,
 			'borderColor'=> Config::get('chart.service_provider.appel.rgba'),
@@ -851,7 +851,7 @@ class DashboardController extends Controller {
 			'backgroundColor'=>$data_array['TOTAL_bar_colour'],
 			"borderColor"=>$data_array['TOTAL_border_bar_colour'],
 			"borderWidth"=>1,
-			// "hidden"=> true,
+			"hidden"=> false,
 		);
 
 		$dialog_5_dataset=array(
@@ -860,7 +860,7 @@ class DashboardController extends Controller {
 			'backgroundColor'=>$data_array['DIALOG_5_bar_colour'],
 			"borderColor"=>$data_array['DIALOG_5_border_bar_colour'],
 			"borderWidth"=>1,
-			// "hidden"=> true,
+			"hidden"=> false,
 		);
 
 		$dialog_25_dataset=array(
@@ -869,7 +869,7 @@ class DashboardController extends Controller {
 			'backgroundColor'=>$data_array['DIALOG_25_bar_colour'],
 			"borderColor"=>$data_array['DIALOG_25_border_bar_colour'],
 			"borderWidth"=>1,
-			// "hidden"=> true,
+			"hidden"=> false,
 		);
 		$dialog_99_dataset=array(
 			"label"=>"Dialog Rs 99",
@@ -877,7 +877,7 @@ class DashboardController extends Controller {
 			'backgroundColor'=>$data_array['DIALOG_99_bar_colour'],
 			"borderColor"=>$data_array['DIALOG_99_border_bar_colour'],
 			"borderWidth"=>1,
-			// "hidden"=> true,
+			"hidden"=> false,
 		);
 		$hutch_5_dataset=array(
 			"label"=>"Hutch Rs 5",
@@ -885,7 +885,7 @@ class DashboardController extends Controller {
 			'backgroundColor'=>$data_array['HUTCH_5_bar_colour'],
 			"borderColor"=>$data_array['HUTCH_5_border_bar_colour'],
 			"borderWidth"=>1,
-			// "hidden"=> true,
+			"hidden"=> false,
 		);
 
 		$hutch_25_dataset=array(
@@ -894,7 +894,7 @@ class DashboardController extends Controller {
 			'backgroundColor'=>$data_array['HUTCH_25_bar_colour'],
 			"borderColor"=>$data_array['HUTCH_25_border_bar_colour'],
 			"borderWidth"=>1,
-			// "hidden"=> true,
+			"hidden"=> false,
 		);
 		$hutch_99_dataset=array(
 			"label"=>"Hucth Rs 99",
@@ -902,7 +902,7 @@ class DashboardController extends Controller {
 			'backgroundColor'=>$data_array['HUTCH_99_bar_colour'],
 			"borderColor"=>$data_array['HUTCH_99_border_bar_colour'],
 			"borderWidth"=>1,
-			// "hidden"=> true,
+			"hidden"=> false,
 		);
 
 		$mobitel_5_dataset=array(
@@ -911,7 +911,7 @@ class DashboardController extends Controller {
 			'backgroundColor'=>$data_array['MOBITEL_5_bar_colour'],
 			"borderColor"=>$data_array['MOBITEL_5_border_bar_colour'],
 			"borderWidth"=>1,
-			// "hidden"=> true,
+			"hidden"=> false,
 		);
 
 		$apple_6_dataset=array(
@@ -920,7 +920,7 @@ class DashboardController extends Controller {
 			'backgroundColor'=>$data_array['APPLE_6_bar_colour'],
 			"borderColor"=>$data_array['APPLE_6_border_bar_colour'],
 			"borderWidth"=>1,
-			// "hidden"=> true,
+			"hidden"=> false,
 		);
 		$apple_10_dataset=array(
 			"label"=>"APPLE $10",
@@ -928,7 +928,7 @@ class DashboardController extends Controller {
 			'backgroundColor'=>$data_array['APPLE_10_bar_colour'],
 			"borderColor"=>$data_array['APPLE_10_border_bar_colour'],
 			"borderWidth"=>1,
-			// "hidden"=> true,
+			"hidden"=> false,
 		);
 		$apple_15_dataset=array(
 			"label"=>"APPLE $15",
@@ -936,7 +936,7 @@ class DashboardController extends Controller {
 			'backgroundColor'=>$data_array['APPLE_15_bar_colour'],
 			"borderColor"=>$data_array['APPLE_15_border_bar_colour'],
 			"borderWidth"=>1,
-			// "hidden"=> true,
+			"hidden"=> false,
 		);
 		$keels_5_dataset=array(
 			"label"=>"KEELS Rs 5",
@@ -944,7 +944,7 @@ class DashboardController extends Controller {
 			'backgroundColor'=>$data_array['KEELS_5_bar_colour'],
 			"borderColor"=>$data_array['KEELS_5_border_bar_colour'],
 			"borderWidth"=>1,
-			// "hidden"=> true,
+			"hidden"=> false,
 		);
 
 		//Assign to Dataset Array

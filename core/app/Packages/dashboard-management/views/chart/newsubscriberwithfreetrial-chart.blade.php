@@ -134,11 +134,14 @@
                 xAxes: [{
                     gridLines: {
                         drawOnChartArea: false
+                    },
+                    ticks: {
+                     beginAtZero: true
                     }
                 }],
                 yAxes: [{
                     ticks: {
-                        beginAtZero: true
+                        beginAtZero: false
                     },
                     gridLines: {
                         drawOnChartArea: false
@@ -203,17 +206,17 @@
         chartInstance.data.datasets.forEach(function(dataset, i) {
         var meta = chartInstance.controller.getDatasetMeta(i);
         console.log(meta.hidden);
-            // if(meta.hidden ==false){
+            if(meta.hidden !=true){
                 meta.data.forEach(function(bar, index) {
                     var data = dataset.data[index];
                 
                     console.log(dataset.hidden);
-                    // if(!dataset.hidden){
+                    if(!dataset.hidden){
                         ctx.fillText(data, bar._model.x, bar._model.y - 5);
-                    // }
+                    }
             
                 });
-            // }
+            }
         
         });
     }
