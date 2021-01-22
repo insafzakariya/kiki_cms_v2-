@@ -1037,6 +1037,10 @@ class DashboardController extends Controller {
 			'APPLE_15'=>array(),
 			'APPLE_15_bar_colour'=>array(),
 			'APPLE_15_border_bar_colour'=>array(),
+
+			'KEELS_5'=>array(),
+			'KEELS_5_bar_colour'=>array(),
+			'KEELS_5_border_bar_colour'=>array(),
 		);
 
 		$label=[];
@@ -1087,6 +1091,10 @@ class DashboardController extends Controller {
 			array_push($data_array['APPLE_15'],0);
 			array_push($data_array['APPLE_15_bar_colour'],Config::get('chart.service_provider.apple_15.rgba'));
 			array_push($data_array['APPLE_15_border_bar_colour'],Config::get('chart.service_provider.apple_15.rgba'));
+
+			array_push($data_array['KEELS_5'],0);
+			array_push($data_array['KEELS_5_bar_colour'],Config::get('chart.service_provider.keels_5.rgba'));
+			array_push($data_array['KEELS_5_border_bar_colour'],Config::get('chart.service_provider.keels_5.rgba'));
 		// }
 	
 		$datasets=array();
@@ -1213,6 +1221,16 @@ class DashboardController extends Controller {
 			"hidden"=> false,
 		);
 
+		$keels_5_dataset=array(
+			"label"=>"KEELS Rs 5",
+			"data"=> $data_array['KEELS_5'],
+			'backgroundColor'=>$data_array['KEELS_5_bar_colour'],
+			"borderColor"=>$data_array['KEELS_5_border_bar_colour'],
+			"borderWidth"=>1,
+			"hidden"=> false,
+		);
+
+
 		//Assign to Dataset Array
 		array_push($datasets,$dialog_5_dataset);
 		array_push($datasets,$dialog_25_dataset);
@@ -1226,6 +1244,7 @@ class DashboardController extends Controller {
 		array_push($datasets,$apple_6_dataset);
 		array_push($datasets,$apple_10_dataset);
 		array_push($datasets,$apple_15_dataset);
+		array_push($datasets,$keels_5_dataset);
 
 		array_push($datasets,$total_dataset);
 
