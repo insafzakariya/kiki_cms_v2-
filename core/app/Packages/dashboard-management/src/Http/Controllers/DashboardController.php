@@ -988,6 +988,7 @@ class DashboardController extends Controller {
 		$prev_month_ts = strtotime($start_date.' -1 month');
 		$prev_month_start_date = date('Y-m-d', $prev_month_ts);
 		$prev_month_end_date = date("Y-m-t", strtotime($prev_month_start_date));
+		$prev_month_end_date = date('Y-m-d', strtotime($prev_month_end_date . ' +1 day'));
 		
 
 		$data_array=array(
@@ -1240,7 +1241,7 @@ class DashboardController extends Controller {
 		if($previous_user_count>0){
 			$retention=number_format(($total_retention_user_counts/$previous_user_count)*100,2);
 		}
-		
+
 		return $finel_data=array('chart_data'=>$chart_data,
 		'total_retention_user_counts'=>$total_retention_user_counts,
 		'retention'=>$retention,
