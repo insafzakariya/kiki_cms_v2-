@@ -975,7 +975,279 @@ class DashboardController extends Controller {
 
 	public function retentionChart()
 	{
+		
 		return view('DashboardManage::chart.retention-chart');
+	}
+	public function retentionChartData(Request $request)
+	{
+		$start_month= implode('/', array_reverse(explode('/', $request->get('start_date'))));
+		
+		$start_date=str_replace('/','-', $start_month.'-01');
+		$end_date=date("Y-m-t", strtotime($start_date));
+
+		$prev_month_ts = strtotime($start_date.' -1 month');
+		$prev_month_start_date = date('Y-m-d', $prev_month_ts);
+		$prev_month_end_date = date("Y-m-t", strtotime($prev_month_start_date));
+		
+
+		$data_array=array(
+			'days'=>array(),
+
+			'TOTAL'=>array(),
+			'TOTAL_bar_colour'=>array(),
+			'TOTAL_border_bar_colour'=>array(),
+
+			'DIALOG_5'=>array(),
+			'DIALOG_5_bar_colour'=>array(),
+			'DIALOG_5_border_bar_colour'=>array(),
+			
+			'DIALOG_25'=>array(),
+			'DIALOG_25_bar_colour'=>array(),
+			'DIALOG_25_border_bar_colour'=>array(),
+			
+			'DIALOG_99'=>array(),
+			'DIALOG_99_bar_colour'=>array(),
+			'DIALOG_99_border_bar_colour'=>array(),
+
+			'HUTCH_5'=>array(),
+			'HUTCH_5_bar_colour'=>array(),
+			'HUTCH_5_border_bar_colour'=>array(),
+			
+			'HUTCH_25'=>array(),
+			'HUTCH_25_bar_colour'=>array(),
+			'HUTCH_25_border_bar_colour'=>array(),
+
+			'HUTCH_99'=>array(),
+			'HUTCH_99_bar_colour'=>array(),
+			'HUTCH_99_border_bar_colour'=>array(),
+
+			'MOBITEL_5'=>array(),
+			'MOBITEL_5_bar_colour'=>array(),
+			'MOBITEL_5_border_bar_colour'=>array(),
+			
+			'APPLE_6'=>array(),
+			'APPLE_6_bar_colour'=>array(),
+			'APPLE_6_border_bar_colour'=>array(),
+
+			'APPLE_10'=>array(),
+			'APPLE_10_bar_colour'=>array(),
+			'APPLE_10_border_bar_colour'=>array(),
+			
+			'APPLE_15'=>array(),
+			'APPLE_15_bar_colour'=>array(),
+			'APPLE_15_border_bar_colour'=>array(),
+		);
+
+		$label=[];
+		
+			array_push($label,$request->get('start_date'));
+			array_push($data_array['days'],$request->get('start_date'));
+
+			array_push($data_array['TOTAL'],0);
+			array_push($data_array['TOTAL_bar_colour'],Config::get('chart.service_provider.overall.rgba'));
+			array_push($data_array['TOTAL_border_bar_colour'],Config::get('chart.service_provider.overall.rgba'));
+
+			array_push($data_array['DIALOG_5'],0);
+			array_push($data_array['DIALOG_5_bar_colour'],Config::get('chart.service_provider.dialog_5.rgba'));
+			array_push($data_array['DIALOG_5_border_bar_colour'],Config::get('chart.service_provider.dialog_5.rgba'));
+			
+			array_push($data_array['DIALOG_25'],0);
+			array_push($data_array['DIALOG_25_bar_colour'],Config::get('chart.service_provider.dialog_25.rgba'));
+			array_push($data_array['DIALOG_25_border_bar_colour'],Config::get('chart.service_provider.dialog_25.rgba'));
+			
+			array_push($data_array['DIALOG_99'],0);
+			array_push($data_array['DIALOG_99_bar_colour'],Config::get('chart.service_provider.dialog_99.rgba'));
+			array_push($data_array['DIALOG_99_border_bar_colour'],Config::get('chart.service_provider.dialog_99.rgba'));
+			
+			array_push($data_array['HUTCH_5'],0);
+			array_push($data_array['HUTCH_5_bar_colour'],Config::get('chart.service_provider.hutch_5.rgba'));
+			array_push($data_array['HUTCH_5_border_bar_colour'],Config::get('chart.service_provider.hutch_5.rgba'));
+			
+			array_push($data_array['HUTCH_25'],0);
+			array_push($data_array['HUTCH_25_bar_colour'],Config::get('chart.service_provider.hutch_25.rgba'));
+			array_push($data_array['HUTCH_25_border_bar_colour'],Config::get('chart.service_provider.hutch_25.rgba'));
+			
+			array_push($data_array['HUTCH_99'],0);
+			array_push($data_array['HUTCH_99_bar_colour'],Config::get('chart.service_provider.hutch_99.rgba'));
+			array_push($data_array['HUTCH_99_border_bar_colour'],Config::get('chart.service_provider.hutch_99.rgba'));
+
+			array_push($data_array['MOBITEL_5'],0);
+			array_push($data_array['MOBITEL_5_bar_colour'],Config::get('chart.service_provider.mobitel_5.rgba'));
+			array_push($data_array['MOBITEL_5_border_bar_colour'],Config::get('chart.service_provider.mobitel_5.rgba'));
+			
+			array_push($data_array['APPLE_6'],0);
+			array_push($data_array['APPLE_6_bar_colour'],Config::get('chart.service_provider.apple_6.rgba'));
+			array_push($data_array['APPLE_6_border_bar_colour'],Config::get('chart.service_provider.apple_6.rgba'));
+			
+			array_push($data_array['APPLE_10'],0);
+			array_push($data_array['APPLE_10_bar_colour'],Config::get('chart.service_provider.apple_10.rgba'));
+			array_push($data_array['APPLE_10_border_bar_colour'],Config::get('chart.service_provider.apple_10.rgba'));
+			
+			array_push($data_array['APPLE_15'],0);
+			array_push($data_array['APPLE_15_bar_colour'],Config::get('chart.service_provider.apple_15.rgba'));
+			array_push($data_array['APPLE_15_border_bar_colour'],Config::get('chart.service_provider.apple_15.rgba'));
+		// }
+	
+		$datasets=array();
+
+		 $privious_transaction_data_list = DB::select("SELECT count(DISTINCT( viewer_id )) AS previous_user_count
+							 FROM   subscription_invoice
+							 WHERE  success = 1
+									AND amount > 0
+									AND createddate BETWEEN
+									"."'".$prev_month_start_date."'"." AND "."'".$prev_month_end_date."'");
+
+		$transaction_data_list = DB::select("SELECT Count(DISTINCT( viewer_id )) AS user_count,type,amount as package
+		FROM   subscription_invoice
+		WHERE  viewer_id IN (SELECT DISTINCT( viewer_id )
+							 FROM   subscription_invoice
+							 WHERE  success = 1
+									AND amount > 0
+									AND createddate BETWEEN
+									"."'".$prev_month_start_date."'"." AND "."'".$prev_month_end_date."'".") 
+			   AND success = 1
+			   AND amount > 0
+			   AND createddate BETWEEN "."'".$start_date."'"." AND "."'".$end_date."'"."  group by type,amount ");
+		
+
+		foreach($transaction_data_list AS $data){
+			// return $data->user_count;
+			$key = array_search ($data->type.'_'.$data->package, $data_array['days']);
+			$data_array[$data->type.'_'.$data->package][$key]=$data->user_count;
+			$data_array['TOTAL'][$key]=$data_array['TOTAL'][$key]+$data->user_count;
+			// $data_array['overall'][$key]=($data_array['overall'][$key]+$dSubscribe->subscriber_count);
+		}
+		$total_dataset=array(
+			"label"=>"TOTAL",
+			"data"=> $data_array['TOTAL'],
+			'backgroundColor'=>$data_array['TOTAL_bar_colour'],
+			"borderColor"=>$data_array['TOTAL_border_bar_colour'],
+			"borderWidth"=>1,
+			"hidden"=> false,
+		);
+
+		$dialog_5_dataset=array(
+			"label"=>"Dialog Rs 5",
+			"data"=> $data_array['DIALOG_5'],
+			'backgroundColor'=>$data_array['DIALOG_5_bar_colour'],
+			"borderColor"=>$data_array['DIALOG_5_border_bar_colour'],
+			"borderWidth"=>1,
+			"hidden"=> false,
+		);
+
+		$dialog_25_dataset=array(
+			"label"=>"Dialog Rs 25",
+			"data"=> $data_array['DIALOG_25'],
+			'backgroundColor'=>$data_array['DIALOG_25_bar_colour'],
+			"borderColor"=>$data_array['DIALOG_25_border_bar_colour'],
+			"borderWidth"=>1,
+			"hidden"=> false,
+		);
+		$dialog_99_dataset=array(
+			"label"=>"Dialog Rs 99",
+			"data"=> $data_array['DIALOG_99'],
+			'backgroundColor'=>$data_array['DIALOG_99_bar_colour'],
+			"borderColor"=>$data_array['DIALOG_99_border_bar_colour'],
+			"borderWidth"=>1,
+			"hidden"=> false,
+		);
+		$hutch_5_dataset=array(
+			"label"=>"Hutch Rs 5",
+			"data"=> $data_array['HUTCH_5'],
+			'backgroundColor'=>$data_array['HUTCH_5_bar_colour'],
+			"borderColor"=>$data_array['HUTCH_5_border_bar_colour'],
+			"borderWidth"=>1,
+			"hidden"=> false,
+		);
+
+		$hutch_25_dataset=array(
+			"label"=>"Hutch Rs 25",
+			"data"=> $data_array['HUTCH_25'],
+			'backgroundColor'=>$data_array['HUTCH_25_bar_colour'],
+			"borderColor"=>$data_array['HUTCH_25_border_bar_colour'],
+			"borderWidth"=>1,
+			"hidden"=> false,
+		);
+		$hutch_99_dataset=array(
+			"label"=>"Hucth Rs 99",
+			"data"=> $data_array['HUTCH_99'],
+			'backgroundColor'=>$data_array['HUTCH_99_bar_colour'],
+			"borderColor"=>$data_array['HUTCH_99_border_bar_colour'],
+			"borderWidth"=>1,
+			"hidden"=> false,
+		);
+
+		$mobitel_5_dataset=array(
+			"label"=>"Mobitel Rs 5",
+			"data"=> $data_array['MOBITEL_5'],
+			'backgroundColor'=>$data_array['MOBITEL_5_bar_colour'],
+			"borderColor"=>$data_array['MOBITEL_5_border_bar_colour'],
+			"borderWidth"=>1,
+			"hidden"=> false,
+		);
+
+		$apple_6_dataset=array(
+			"label"=>"APPLE $6",
+			"data"=> $data_array['APPLE_6'],
+			'backgroundColor'=>$data_array['APPLE_6_bar_colour'],
+			"borderColor"=>$data_array['APPLE_6_border_bar_colour'],
+			"borderWidth"=>1,
+			"hidden"=> false,
+		);
+		$apple_10_dataset=array(
+			"label"=>"APPLE $10",
+			"data"=> $data_array['APPLE_10'],
+			'backgroundColor'=>$data_array['APPLE_10_bar_colour'],
+			"borderColor"=>$data_array['APPLE_10_border_bar_colour'],
+			"borderWidth"=>1,
+			"hidden"=> false,
+		);
+		
+		$apple_15_dataset=array(
+			"label"=>"APPLE $15",
+			"data"=> $data_array['APPLE_15'],
+			'backgroundColor'=>$data_array['APPLE_15_bar_colour'],
+			"borderColor"=>$data_array['APPLE_15_border_bar_colour'],
+			"borderWidth"=>1,
+			"hidden"=> false,
+		);
+
+		//Assign to Dataset Array
+		array_push($datasets,$dialog_5_dataset);
+		array_push($datasets,$dialog_25_dataset);
+		array_push($datasets,$dialog_99_dataset);
+
+		array_push($datasets,$hutch_5_dataset);
+		array_push($datasets,$hutch_25_dataset);
+		array_push($datasets,$hutch_99_dataset);
+
+		array_push($datasets,$mobitel_5_dataset);
+		array_push($datasets,$apple_6_dataset);
+		array_push($datasets,$apple_10_dataset);
+		array_push($datasets,$apple_15_dataset);
+
+		array_push($datasets,$total_dataset);
+
+		$chart_data=array(
+			'type'=>'bar',
+			'labels'=>$label,
+			'datasets'=>$datasets
+		);
+
+		$total_retention_user_counts= $data_array['TOTAL'][0];
+		$previous_user_count=$privious_transaction_data_list[0]->previous_user_count;
+		$retention=0;
+		if($previous_user_count>0){
+			$retention=number_format(($total_retention_user_counts/$previous_user_count)*100,2);
+		}
+		
+		return $finel_data=array('chart_data'=>$chart_data,
+		'total_retention_user_counts'=>$total_retention_user_counts,
+		'retention'=>$retention,
+		);
+		
+
+		
 	}
 
 

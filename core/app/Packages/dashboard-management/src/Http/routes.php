@@ -42,6 +42,13 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'dashboard', 'namespace' => 
         'as' => 'index', 'uses' => 'DashboardController@newSubscriberWithFreeTrialData'
     ]);
 
+    Route::get('/retentions-chart', [
+        'as' => 'index', 'uses' => 'DashboardController@retentionChart'
+    ]);
+    Route::get('data/retention', [
+        'as' => 'index', 'uses' => 'DashboardController@retentionChartData'
+    ]);
+
     
 
     
