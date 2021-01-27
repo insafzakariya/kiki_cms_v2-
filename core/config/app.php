@@ -167,6 +167,7 @@ return [
 		'ProgrammeSliderManage\ProgrammeSliderManageServiceProvider',
 		'PlaylistManage\PlaylistManageServiceProvider',
 		'ScratchCardManage\ScratchCardManageServiceProvider',
+		'TwiloManage\TwiloManageServiceProvider',
 		'NotificationManage\NotificationManageServiceProvider',
 
 
