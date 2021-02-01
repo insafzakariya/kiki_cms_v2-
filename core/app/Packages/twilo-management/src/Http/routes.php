@@ -25,11 +25,25 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'twillio', 'namespace' => 'T
     Route::get('list/json', [
         'as' => 'twilo.list', 'uses' => 'TwiloChatController@listJson'
     ]);
+
+    Route::get('/member', [
+        'as' => 'twilo.list', 'uses' => 'TwiloChatController@memberListView'
+    ]);
+    Route::get('memberListJson/json', [
+        'as' => 'twilo.list', 'uses' => 'TwiloChatController@memberListJson'
+    ]);
+
+    
+
+    
     Route::post('changeState', [
         'as' => 'channel.edit', 'uses' => 'ChannelController@changeStatus'
     ]);
-    Route::post('delete', [
-        'as' => 'channel.list', 'uses' => 'ChannelController@deleteChannel'
+    Route::post('member/block', [
+        'as' => 'twilo.list', 'uses' => 'TwiloChatController@block'
+    ]);
+    Route::post('member/delete', [
+        'as' => 'twilo.list', 'uses' => 'TwiloChatController@deleteMember'
     ]);
 
 

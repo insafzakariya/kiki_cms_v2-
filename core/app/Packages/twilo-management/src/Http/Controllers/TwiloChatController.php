@@ -170,32 +170,104 @@ class TwiloChatController extends Controller
     }
  
   
-    public function changeStatus(Request $request)
+    public function block(Request $request)
     {
         $id = $request->id;
         $state = $request->state;
 
-        $channel = Channel::find($id);
-        if ($channel) {
-            $channel->status = $state;
-            $channel->save();
+        $member = ChatMemberChannel::find($id);
+        if ($member) {
+            $member->block = $state;
+            $member->save();
             
             return response()->json(['status' => 'success']);
         }
         return response()->json(['status' => 'invalid_id']);
     }
-    public function deleteChannel(Request $request)
+    public function deleteMember(Request $request)
     {
         $id = $request->id;
     
-        $channel = Channel::find($id);
-        if ($channel) {
-            $channel->status = 2;
-            $channel->save();
+        $member = ChatMemberChannel::find($id);
+        if ($member) {
+            $member->status = 0;
+            $member->save();
             
             return response()->json(['status' => 'success']);
         }
         return response()->json(['status' => 'invalid_id']);
+    }
+
+    public function memberListView()
+    {
+        return view('TwiloManage::member-list');
+    }
+    public function memberListJson()
+    {
+       
+        $user = Sentinel::getUser();
+        $query=ChatMemberChannel::with(['getMemeber.getMemeberDetails'])->where('status',1)->select('chat_member_channel.*');
+
+        return Datatables::eloquent($query)
+
+        // ->editColumn('checklist', function (Episode $value){
+            
+        //         return '<center><input  type="checkbox" class="form-check-input episode-check"  value="'.$value->episodeId.'"><center>';
+           
+        // })
+        ->editColumn('status', function (ChatMemberChannel $value){
+            if($value->status==1){
+                return '<center><a href="javascript:void(0)" form="noForm" class="blue episode-status-toggle " data-id="'.$value->id.'" data-status="0"  data-toggle="tooltip" data-placement="top" title="Deactivate"><i class="fa fa-trash"></i></a></><center>';
+            }else{
+                return '<center><a href="javascript:void(0)" form="noForm" class="blue episode-status-toggle " data-id="' . $value->id . '" data-status="1"  data-toggle="tooltip" data-placement="top" title="Activate"><i class="fa fa-trash"></i></a></><center>';
+            }
+            return $value->status == 1 ? 'Activated' : 'Inactivated';
+        })
+        ->addColumn('ViewerId', function (ChatMemberChannel $value) {
+
+            return  $value->getMemeber ? $value->getMemeber->viewerId : "-";
+
+        })
+        ->addColumn('ViewerName', function (ChatMemberChannel $value) {
+
+            return  $value->getMemeber->getMemeberDetails ? $value->getMemeber->getMemeberDetails->Name : "-";
+
+        })
+        ->addColumn('ViewerMobileNo', function (ChatMemberChannel $value) {
+
+            return  $value->getMemeber->getMemeberDetails ? $value->getMemeber->getMemeberDetails->MobileNumber : "-";
+
+        })
+        ->editColumn('delete', function ($value){
+            return '<center><a href="javascript:void(0)" form="noForm" class="blue member-delete " data-id="'.$value->id.'" data-status="0"  data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></a></><center>'; 
+        })
+        ->addColumn('block', function ($value) {
+            if ($value->block == 1) {
+                return '<center>
+                    <a href="javascript:void(0)" form="noForm" class="blue member-status-toggle " data-id="' . $value->id . '" data-status="0"  data-toggle="tooltip" data-placement="top" title="un-block">
+                    <i class="fa fa-toggle-on"></i>
+                    </a>
+                    </center>';
+            } else {
+                return '<center>
+                    <a href="javascript:void(0)" form="noForm" class="blue member-status-toggle " data-id="' . $value->id . '" data-status="1"  data-toggle="tooltip" data-placement="top" title="blocked">
+                    <i class="fa fa-toggle-off"></i>
+                    </a>
+                    </center>';
+            }
+        })
+
+        // ->addColumn('edit', function (Episode $value) use ($user){
+        //     if($user->hasAnyAccess(['episode.edit', 'admin'])){
+        //         $url =url('episode/'.$value->episodeId.'/edit');
+        //         return '<center><a href="'.$url.'" class="blue"  data-toggle="tooltip" data-placement="top" title="View/ Edit Episode"><i class="fa fa-pencil"></i></a></center>';
+        //     }else{
+        //         return '<center><a href="#" class="disabled" data-toggle="tooltip" data-placement="top" title="Edit Disabled"><i class="fa fa-pencil"></i></a></center>';
+        //     }
+                
+        // })
+        ->make(true);
+       
     }
  
    

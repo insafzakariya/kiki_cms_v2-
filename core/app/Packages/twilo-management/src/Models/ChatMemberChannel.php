@@ -19,12 +19,13 @@ class ChatMemberChannel extends Model{
 		'status',
 		'chatChannelEntity_id',
 		'chatMemberEntity_id',
-		
-		
-        
-       
+	
     ];
    
+	public function getMemeber()
+    {
+        return $this->belongsTo('TwiloManage\Models\ChatMember', 'chatMemberEntity_id', 'id');
+    }
 
 
     

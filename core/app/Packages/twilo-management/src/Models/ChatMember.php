@@ -29,7 +29,12 @@ class ChatMember extends Model{
 		
         
        
-    ];
+	];
+	
+	public function getMemeberDetails()
+    {
+        return $this->belongsTo('TwiloManage\Models\Viewer', 'viewerId', 'ViewerID');
+    }
    
 
 
