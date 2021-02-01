@@ -64,7 +64,7 @@
 @stop
 @section('content')
    
-        <div id="floating-button" data-toggle="tooltip" data-placement="left" data-original-title="Create" onclick="location.href = '{{url('twillio/add')}}';">
+        <div id="floating-button" data-toggle="tooltip" data-placement="left" data-original-title="Create" onclick="location.href = '{{url('twillio/member/add')}}';">
             <p class="plus">+</p>
         </div>
     
