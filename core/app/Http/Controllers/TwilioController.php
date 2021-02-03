@@ -42,5 +42,19 @@ class TwilioController extends Controller
         ->fetch();
     }
 
+    public function deleteChannel($channelID)
+    {
+        $sid = getenv("TWILIO_ACCOUNT_SID");
+        $token = getenv("TWILIO_AUTH_TOKEN");
+        $twilio = new Client($sid, $token);
+
+        return $twilio->chat->v2->services(env('TWILIO_SERVICE_SID'))
+                 ->channels($channelID)
+                 ->delete();
+
+       
+       
+    }
+
    
 }

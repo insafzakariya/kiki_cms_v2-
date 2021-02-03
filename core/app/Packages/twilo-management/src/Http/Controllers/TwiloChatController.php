@@ -101,18 +101,15 @@ class TwiloChatController extends Controller
     }
     public function listJson()
     {
-        // try {
-            $user = Sentinel::getUser();
-            return Datatables::usingCollection(
-                TwillioChannel::where('status','=',1)->select('id', 'friendly_name', 'unique_name')->get()
-            )
-                
-                ->make(true);
-        // }catch (\Throwable $exception){
-        //     $exceptionId = rand(0, 99999999);
-        //     Log::error("Ex " . $exceptionId . " | Error in " . __CLASS__ . "::" . __FUNCTION__ .":" .$exception->getLine()." | " . $exception->getMessage());
-        //     return Datatables::of(collect())->make(true);
-        // }
+        
+            $user = Sentinel::getUser();  
+            $query=TwillioChannel::where('status',1)->select('id', 'friendly_name', 'unique_name');
+            return Datatables::eloquent($query)
+    
+            ->editColumn('delete', function (TwillioChannel $value){
+                return '<center><a href="javascript:void(0)" form="noForm" class="blue channel-delete " data-id="'.$value->id.'" data-status="0"  data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></a></><center>'; 
+            })
+            ->make(true);
     }
     public function createChannelMemberView()
     {
@@ -192,6 +189,21 @@ class TwiloChatController extends Controller
         if ($member) {
             $member->status = 0;
             $member->save();
+            
+            return response()->json(['status' => 'success']);
+        }
+        return response()->json(['status' => 'invalid_id']);
+    }
+    public function deleteChannel(Request $request)
+    {
+        $id = $request->id;
+    
+        $channel = TwillioChannel::find($id);
+       
+       $twillioChannel=$this->twillioController->deleteChannel($channel->sid);
+        if ($channel) {
+            $channel->status = 0;
+            $channel->save();
             
             return response()->json(['status' => 'success']);
         }

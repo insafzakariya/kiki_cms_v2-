@@ -78,6 +78,7 @@
                             <th>ID</th>
                             <th>Friendly Name</th>
                             <th>Unique Name</th>
+                            <th>Delete</th>
                         </tr>
                         </thead>
                     </table>
@@ -96,7 +97,8 @@
                 "columns": [
                     { "data": "id" },
                     { "data": "friendly_name" },
-                    { "data": "unique_name" }
+                    { "data": "unique_name" },
+                    { "data": "delete" }
                 ],
                 "columnDefs": [
                     { "orderable": false, "targets": [1, 2] }
@@ -151,7 +153,7 @@
                 if (isConfirm.value) {
                     $.ajax({
                         method: "POST",
-                        url: '{{url('twillio/delete')}}',
+                        url: '{{url('twillio/channel/delete')}}',
                         data:{ 'id' : id }
                     }).done(function( msg ) {
                         table.ajax.reload();
