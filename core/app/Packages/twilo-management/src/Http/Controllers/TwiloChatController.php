@@ -36,7 +36,7 @@ class TwiloChatController extends Controller
 
     public function __construct()
     {
-      $this->channelImagePath = Config::get('filePaths.channel-images');
+      $this->channelImagePath = Config::get('filePaths.twillio-channel');
       $this->imageController = new ImageController();   
       $this->twillioController = new TwilioController();   
     }
