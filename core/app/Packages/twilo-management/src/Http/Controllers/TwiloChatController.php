@@ -36,7 +36,7 @@ class TwiloChatController extends Controller
 
     public function __construct()
     {
-      $this->channelImagePath = Config::get('filePaths.twillio-channel');
+      $this->channelImagePath = Config::get('filePaths.twillio-channel-images');
       $this->imageController = new ImageController();   
       $this->twillioController = new TwilioController();   
     }
@@ -50,7 +50,7 @@ class TwiloChatController extends Controller
     public function channelStore(Request $request)
     {
 
-       
+ 
         // return $request->all();
         $accountsid = getenv("TWILIO_ACCOUNT_SID");
         $twillioChannel=$this->twillioController->createChannel($request->unique_name,$request->friendly_name);

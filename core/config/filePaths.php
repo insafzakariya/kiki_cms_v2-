@@ -9,7 +9,7 @@ return [
     'lyricist-images' => 'lyricist',
     'channel-images' => 'channel',
     'twillio-channel-images' => 'chat/channel',
-    'programme-images' => 'programme',
+    'programme-images' => 'programs',
     'programme-slider' => 'banners',
     'episode-images' => 'episodes',
     'notification-images' => 'notification',
