@@ -79,6 +79,7 @@
                             <th>Friendly Name</th>
                             <th>Unique Name</th>
                             <th>Delete</th>
+                            <th>Backup</th>
                         </tr>
                         </thead>
                     </table>
@@ -98,7 +99,8 @@
                     { "data": "id" },
                     { "data": "friendly_name" },
                     { "data": "unique_name" },
-                    { "data": "delete" }
+                    { "data": "delete" },
+                    { "data": "chat" }
                 ],
                 "columnDefs": [
                     { "orderable": false, "targets": [1, 2] }
@@ -133,6 +135,13 @@
 
 
                 });
+                $('.chat-backup').click(function(e){
+                    e.preventDefault();
+                    id = $(this).data('id');
+                    chatBackup(id);
+
+
+                });
 
             });
 
@@ -160,6 +169,29 @@
                     });
                 } else {
                     swal("Cancelled", "Cancelled the Channel Delete", "error");
+                }
+            });
+        }
+        function chatBackup(id){
+            swal({
+                title: "Are you sure?",
+                text:"Backup Chat",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, change it!"
+
+            }).then(function (isConfirm) {
+                if (isConfirm.value) {
+                    // $.ajax({
+                    //     method: "POST",
+                    //     url: '{{url('twillio/channel/delete')}}',
+                    //     data:{ 'id' : id }
+                    // }).done(function( msg ) {
+                    //     table.ajax.reload();
+                    // });
+                } else {
+                    swal("Cancelled", "Cancelled Chat Backup", "error");
                 }
             });
         }

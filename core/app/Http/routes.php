@@ -32,6 +32,12 @@ Route::get('/twillo/createchannel', [
 Route::get('/twillo/getchannel', [
     'as' => 'index', 'uses' => 'TwilioController@getAllChannels',
 ]);
+Route::get('/twillo/getmembers', [
+    'as' => 'index', 'uses' => 'TwilioController@getAllMembers',
+]);
+Route::get('/twillo/AllChat', [
+    'as' => 'index', 'uses' => 'TwilioController@getAllChat',
+]);
 
 Route::group(['middleware' => ['auth_front']], function () {
 

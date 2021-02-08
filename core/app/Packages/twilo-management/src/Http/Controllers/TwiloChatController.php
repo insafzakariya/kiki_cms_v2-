@@ -109,6 +109,9 @@ class TwiloChatController extends Controller
             ->editColumn('delete', function (TwillioChannel $value){
                 return '<center><a href="javascript:void(0)" form="noForm" class="blue channel-delete " data-id="'.$value->id.'" data-status="0"  data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></a></><center>'; 
             })
+            ->editColumn('chat', function ($value){
+                return '<center><a href="javascript:void(0)" form="noForm" class="blue chat-backup " data-id="'.$value->id.'" data-status="0"  data-toggle="tooltip" data-placement="top" title="Backup"><i class="fa fa-refresh"></i></a></><center>'; 
+            })
             ->make(true);
     }
     public function createChannelMemberView()
