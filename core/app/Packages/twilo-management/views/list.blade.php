@@ -179,17 +179,17 @@
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#DD6B55",
-                confirmButtonText: "Yes, change it!"
+                confirmButtonText: "Yes, backup it!"
 
             }).then(function (isConfirm) {
                 if (isConfirm.value) {
-                    // $.ajax({
-                    //     method: "POST",
-                    //     url: '{{url('twillio/channel/delete')}}',
-                    //     data:{ 'id' : id }
-                    // }).done(function( msg ) {
-                    //     table.ajax.reload();
-                    // });
+                    $.ajax({
+                        method: "POST",
+                        url: '{{url('twillio/channel/backup')}}',
+                        data:{ 'id' : id }
+                    }).done(function( msg ) {
+                        table.ajax.reload();
+                    });
                 } else {
                     swal("Cancelled", "Cancelled Chat Backup", "error");
                 }

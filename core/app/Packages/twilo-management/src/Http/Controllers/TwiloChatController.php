@@ -212,6 +212,15 @@ class TwiloChatController extends Controller
         }
         return response()->json(['status' => 'invalid_id']);
     }
+    public function backupChannel(Request $request)
+    {
+        $id = $request->id;
+    
+        $channel = TwillioChannel::find($id);
+       
+       $this->twillioController->getAllChat($channel->sid,$channel->id);
+       return response()->json(['status' => 'success']);
+    }
 
     public function memberListView()
     {

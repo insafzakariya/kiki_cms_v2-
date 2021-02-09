@@ -45,6 +45,9 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'twillio', 'namespace' => 'T
     Route::post('channel/delete', [
         'as' => 'twilo.list', 'uses' => 'TwiloChatController@deleteChannel'
     ]);
+    Route::post('channel/backup', [
+        'as' => 'twilo.list', 'uses' => 'TwiloChatController@backupChannel'
+    ]);
 
     Route::post('member/delete', [
         'as' => 'twilo.list', 'uses' => 'TwiloChatController@deleteMember'
