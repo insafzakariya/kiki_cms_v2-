@@ -48,6 +48,12 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'dashboard', 'namespace' => 
     Route::get('data/retention', [
         'as' => 'index', 'uses' => 'DashboardController@retentionChartData'
     ]);
+    Route::get('/dailyactivity', [
+        'as' => 'index', 'uses' => 'DashboardController@dailyActivity'
+    ]);
+    Route::get('data/dailyactivity', [
+        'as' => 'index', 'uses' => 'DashboardController@dailyActivityData'
+    ]);
 
     
 

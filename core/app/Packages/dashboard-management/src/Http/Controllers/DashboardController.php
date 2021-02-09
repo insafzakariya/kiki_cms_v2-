@@ -1270,6 +1270,125 @@ class DashboardController extends Controller {
 		
 	}
 
+	public function getActionCount(Type $var = null)
+	{
+		// select count(distinct (va.viewer_id) ) as user_count,cast(va.action_time as date)  as create_date from viewer_actions va where va.action_type =3 and va.action_time between cast('2017-03-05' as date) and 
+		//  cast('2017-03-08' as date)  group by create_date
+
+		// select va.action_type as type,count(distinct (va.viewer_id) ) as user_count,cast(va.action_time as date)  as create_date from viewer_actions va where (va.action_type =3 or va.action_type =8 ) and va.action_time between cast('2021-01-05' as date) and 
+		//  cast('2021-01-21' as date)  group by create_date,type
+	}
+	public function dailyActivity()
+	{
+		return view('DashboardManage::chart.dailyActiveUser-chart');
+	}
+
+	public function dailyActivityData(Request $request)
+	{
+		$start_date=$request->get('start_date');
+		$end_date_initial=$request->get('end_date');
+		$end_date = date('Y-m-d', strtotime($end_date_initial . ' +1 day'));
+
+		$data_array=array(
+			'days'=>array(),
+
+			'TOTAL'=>array(),
+			'3'=>array(),
+			'8'=>array(),
+			
+
+		);
+
+		$label=[];
+		$result = CarbonPeriod::create($start_date, '1 day', $end_date_initial);
+		foreach ($result as $dt) {
+			array_push($label,$dt->format("Y-m-d"));
+			array_push($data_array['days'],$dt->format("Y-m-d"));
+
+			array_push($data_array['TOTAL'],0);
+			array_push($data_array['3'],0);
+			array_push($data_array['8'],0);
+			
+		}
+	
+		$datasets=array();
+
+		$transaction_data_list = DB::select("select va.action_type as type,count(distinct (va.viewer_id) ) as user_count,cast(va.action_time as date)  as create_date from viewer_actions va where (va.action_type =3 or va.action_type =8 ) and va.action_time between cast("."'".$start_date."'"." as date) and 
+		cast("."'".$end_date."'"." as date)  group by create_date,type");
+
+		foreach($transaction_data_list AS $data){
+			$key = array_search ($data->create_date, $data_array['days']);
+			$data_array[$data->type][$key]=$data_array[$data->type][$key]+($data->user_count);
+			$data_array['TOTAL'][$key]=$data_array['TOTAL'][$key]+($data->user_count);
+		}
+		$total_dataset=array(
+			"label"=>"TOTAL",
+			"data"=> $data_array['TOTAL'],
+			"hidden"=> false,
+			'lineTension'=> 0,
+			'fill'=> false,
+			'borderColor'=> Config::get('chart.service_provider.overall.rgba'),
+			// 'backgroundColor'=> 'transparent',
+			'pointBorderColor'=> Config::get('chart.service_provider.overall.rgba'),
+			'pointBackgroundColor'=> Config::get('chart.service_provider.overall.rgba'),
+			'pointRadius'=> 5,
+			'pointHoverRadius'=> 10,
+			'pointHitRadius'=> 30,
+			'pointBorderWidth'=> 1,
+			'pointStyle'=> 'rectRounded'
+		);
+
+		$video_dataset=array(
+			"label"=>"VIDEO",
+			"data"=> $data_array['3'],
+			"borderWidth"=>1,
+			"hidden"=> false,
+			'lineTension'=> 0,
+			'fill'=> false,
+			'borderColor'=> Config::get('chart.service_provider.dialog.rgba'),
+			'backgroundColor'=> 'transparent',
+			'pointBorderColor'=> Config::get('chart.service_provider.dialog.rgba'),
+			'pointBackgroundColor'=> Config::get('chart.service_provider.dialog.rgba'),
+			'pointRadius'=> 5,
+			'pointHoverRadius'=> 10,
+			'pointHitRadius'=> 30,
+			'pointBorderWidth'=> 1,
+			'pointStyle'=> 'rectRounded'
+		);
+
+
+		$audio_dataset=array(
+			"label"=>"AUDIO",
+			"data"=> $data_array['8'],
+			"borderWidth"=>1,
+			"hidden"=> false,
+			'lineTension'=> 0,
+			'fill'=> false,
+			'borderColor'=> Config::get('chart.service_provider.hutch.rgba'),
+			'backgroundColor'=> 'transparent',
+			'pointBorderColor'=> Config::get('chart.service_provider.hutch.rgba'),
+			'pointBackgroundColor'=> Config::get('chart.service_provider.hutch.rgba'),
+			'pointRadius'=> 5,
+			'pointHoverRadius'=> 10,
+			'pointHitRadius'=> 30,
+			'pointBorderWidth'=> 1,
+			'pointStyle'=> 'rectRounded'
+		);
+
+		//Assign to Dataset Array
+		array_push($datasets,$video_dataset);
+		array_push($datasets,$audio_dataset);
+		array_push($datasets,$total_dataset);
+
+		$chart_data=array(
+			'type'=>'bar',
+			'labels'=>$label,
+			'datasets'=>$datasets
+		);
+
+		return $chart_data;
+	}
+
 
 	
 	
