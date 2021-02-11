@@ -15,44 +15,44 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'dashboard', 'namespace' => 
 {
 
     Route::get('/subscribe', [
-        'as' => 'index', 'uses' => 'DashboardController@subsribe'
+        'as' => 'report', 'uses' => 'DashboardController@subsribe'
     ]);
     Route::get('data/subscribe', [
-        'as' => 'index', 'uses' => 'DashboardController@subsribeData'
+        'as' => 'report', 'uses' => 'DashboardController@subsribeData'
     ]);
 
     Route::get('/dailytransaction', [
-        'as' => 'index', 'uses' => 'DashboardController@dailyTransaction'
+        'as' => 'report', 'uses' => 'DashboardController@dailyTransaction'
     ]);
     Route::get('data/dailytransaction', [
-        'as' => 'index', 'uses' => 'DashboardController@dailyTransactionData'
+        'as' => 'report', 'uses' => 'DashboardController@dailyTransactionData'
     ]);
    
     Route::get('/dailyrevenue', [
-        'as' => 'index', 'uses' => 'DashboardController@dailyRevenue'
+        'as' => 'report', 'uses' => 'DashboardController@dailyRevenue'
     ]);
     Route::get('data/dailyrevenue', [
-        'as' => 'index', 'uses' => 'DashboardController@dailyRevenueData'
+        'as' => 'report', 'uses' => 'DashboardController@dailyRevenueData'
     ]);
 
     Route::get('/newsubscriberwithfreetrial', [
-        'as' => 'index', 'uses' => 'DashboardController@newSubscriberWithFreeTrial'
+        'as' => 'report', 'uses' => 'DashboardController@newSubscriberWithFreeTrial'
     ]);
     Route::get('data/newsubscriberwithFreetrial', [
-        'as' => 'index', 'uses' => 'DashboardController@newSubscriberWithFreeTrialData'
+        'as' => 'report', 'uses' => 'DashboardController@newSubscriberWithFreeTrialData'
     ]);
 
     Route::get('/retentions-chart', [
-        'as' => 'index', 'uses' => 'DashboardController@retentionChart'
+        'as' => 'report', 'uses' => 'DashboardController@retentionChart'
     ]);
     Route::get('data/retention', [
-        'as' => 'index', 'uses' => 'DashboardController@retentionChartData'
+        'as' => 'report', 'uses' => 'DashboardController@retentionChartData'
     ]);
     Route::get('/dailyactivity', [
-        'as' => 'index', 'uses' => 'DashboardController@dailyActivity'
+        'as' => 'report', 'uses' => 'DashboardController@dailyActivity'
     ]);
     Route::get('data/dailyactivity', [
-        'as' => 'index', 'uses' => 'DashboardController@dailyActivityData'
+        'as' => 'report', 'uses' => 'DashboardController@dailyActivityData'
     ]);
 
     
