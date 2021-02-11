@@ -1315,6 +1315,21 @@ class DashboardController extends Controller {
 
 		$transaction_data_list = DB::select("select va.action_type as type,count(distinct (va.viewer_id) ) as user_count,cast(va.action_time as date)  as create_date from viewer_actions va where (va.action_type =3 or va.action_type =8 ) and va.action_time between cast("."'".$start_date."'"." as date) and 
 		cast("."'".$end_date."'"." as date)  group by create_date,type");
+		$transaction_data_list = DB::select(" SELECT   va.action_type AS type,
+			Count(DISTINCT ( va.viewer_id )) AS user_count,
+			Cast(va.action_time AS DATE)     AS create_date
+			FROM     viewer_actions va
+			WHERE   ( va.rec_id IN (
+					(
+							SELECT     va2.rec_id
+							FROM       viewer_actions va2
+							INNER JOIN tbl_episode te
+							ON         va2.content_id =te.episodeid
+							WHERE      va2.action_type =3 and te.isTrailer =0)
+			) or va.action_type =8)
+			AND      va.action_time BETWEEN Cast("."'".$start_date."'"."  AS DATE) AND      Cast( "."'".$end_date."'"."  AS DATE)
+			GROUP BY create_date,
+					type ");
 
 		foreach($transaction_data_list AS $data){
 			$key = array_search ($data->create_date, $data_array['days']);
@@ -1381,7 +1396,7 @@ class DashboardController extends Controller {
 		array_push($datasets,$total_dataset);
 
 		$chart_data=array(
-			'type'=>'bar',
+			// 'type'=>'bar',
 			'labels'=>$label,
 			'datasets'=>$datasets
 		);
