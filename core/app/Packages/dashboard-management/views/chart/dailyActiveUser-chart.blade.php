@@ -131,22 +131,22 @@
             "position": 'right' 
             }
             ,
-            // scales: {
-            //     xAxes: [{
-            //         gridLines: {
-            //             drawOnChartArea: true
-            //         }
-            //     }],
-            //     yAxes: [{
-            //         stacked: true,
-            //         ticks: {
-            //             beginAtZero: false
-            //         },
-            //         gridLines: {
-            //             drawOnChartArea: true
-            //         }
-            //     }]
-            // },
+            scales: {
+                xAxes: [{
+                    gridLines: {
+                        drawOnChartArea: false
+                    }
+                }],
+                yAxes: [{
+                    stacked: false,
+                    ticks: {
+                        beginAtZero: false
+                    },
+                    gridLines: {
+                        drawOnChartArea: false
+                    }
+                }]
+            },
             title: {
                 display: true,
                 text: 'Daily Activity'

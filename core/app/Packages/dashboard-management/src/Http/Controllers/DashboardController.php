@@ -697,7 +697,7 @@ class DashboardController extends Controller {
 		array_push($datasets,$total_dataset);
 
 		$chart_data=array(
-			'type'=>'bar',
+			// 'type'=>'bar',
 			'labels'=>$label,
 			'datasets'=>$datasets
 		);
@@ -1386,7 +1386,7 @@ class DashboardController extends Controller {
 			'pointRadius'=> 5,
 			'pointHoverRadius'=> 10,
 			'pointHitRadius'=> 30,
-			'pointBorderWidth'=> 1,
+			'pointBorderWidth'=> 0.1,
 			'pointStyle'=> 'rectRounded'
 		);
 

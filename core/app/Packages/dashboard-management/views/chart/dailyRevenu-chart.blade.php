@@ -129,7 +129,8 @@
             legend: {
             "display": true,
             "position": 'right' 
-            },
+            }
+            ,
             scales: {
                 xAxes: [{
                     gridLines: {
@@ -137,15 +138,16 @@
                     }
                 }],
                 yAxes: [{
-                    stacked: true,
-                    ticks: {
-                        beginAtZero: true
-                    },
+                    stacked: false,
+                    // ticks: {
+                    //     beginAtZero: true
+                    // },
                     gridLines: {
                         drawOnChartArea: false
                     }
                 }]
-            },
+            }
+            ,
             title: {
                 display: true,
                 text: 'Daily Revenue'
