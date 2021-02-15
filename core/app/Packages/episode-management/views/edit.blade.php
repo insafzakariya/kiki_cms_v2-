@@ -229,7 +229,7 @@
                 contentType: "application/json",
                 delay: 250,
                 data: function (params) {
-                    return  'term='+params.term;
+                    return  'q='+params.term;
                      /*JSON.stringify({
                         term: params.term
                     });*/
