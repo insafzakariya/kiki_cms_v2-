@@ -1,0 +1,62 @@
+select cast(si.createdDate  AS DATE ) as created_date ,count(distinct si.viewer_id ) as active_users, count(distinct si2.viewer_id ) as retained_users
+from subscription_invoice si left join subscription_invoice si2 on si.viewer_id =si2.viewer_id 
+where si .createdDate = si2.createdDate - INTERVAL 1 DAY and si.createdDate between '2021-01-01' and '2021-01-05' group by created_date
+
+================================================
+SELECT Year(si.createdDate ),
+       Month(si.createdDate ),
+       count(distinct (si.viewer_id) )
+       FROM subscription_invoice si 
+       WHERE year(si.createdDate )=2020 and si.viewer_id in (
+        SELECT DISTINCT si2.viewer_id 
+	      FROM            subscription_invoice si2 
+	      WHERE           month(si2.createdDate )=2
+	      AND             year(si2.createdDate )=2020
+       )
+       GROUP BY 1,2
+
+==============================GIVEN MONTH =======================================
+SELECT Year(si.createddate),
+       Month(si.createddate),
+       Count(DISTINCT ( si.viewer_id )) retention_users
+FROM   subscription_invoice si
+WHERE  Year(si.createddate) >= 2020 and Month(si.createddate) 
+       AND si.success = 1
+       AND si.amount > 0
+       AND si.viewer_id IN (SELECT DISTINCT si2.viewer_id
+                            FROM   subscription_invoice si2
+                            WHERE  Month(si2.createddate) = 2
+                                   AND Year(si2.createddate) = 2020
+                                   AND si2.success = 1
+                                   AND si2.amount > 0)
+GROUP  BY 1,
+          2  
+
+===================================DATE RANGE MONTH WISE=====================================================
+SELECT Year(si.createddate),
+       Month(si.createddate),
+       Count(DISTINCT ( si.viewer_id )) retention_users
+FROM   subscription_invoice si
+WHERE  si.createddate between '2020-03-01' and '2020-08-31' 
+       AND si.success = 1
+       AND si.amount > 0
+       AND si.viewer_id IN (SELECT DISTINCT si2.viewer_id
+                            FROM   subscription_invoice si2
+                            WHERE  Month(si2.createddate) = 2
+                                   AND Year(si2.createddate) = 2020
+                                   AND si2.success = 1
+                                   AND si2.amount > 0)
+GROUP  BY 1,
+          2  
+
+==============================================DATE RANGE DATE WISE=========================================================
+SELECT Cast(si.createddate as Date) Created_date,
+       Count(DISTINCT ( si.viewer_id )) retention_users
+FROM   subscription_invoice si
+WHERE  si.createddate between '2020-05-01' and '2020-12-31' 
+       AND si.success = 1
+       AND si.amount > 0
+       AND si.viewer_id IN (SELECT DISTINCT si2.viewer_id FROM   subscription_invoice si2
+                            WHERE  cast(si2.createddate as DATE)  = '2020-11-10' AND si2.success = 1
+                                   AND si2.amount > 0)
+GROUP  BY 1 

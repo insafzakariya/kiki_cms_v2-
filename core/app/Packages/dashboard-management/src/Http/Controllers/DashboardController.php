@@ -1405,6 +1405,15 @@ class DashboardController extends Controller {
 		return $chart_data;
 	}
 
+	public function cohort()
+	{
+		return view('DashboardManage::chart.cohort-chart');
+	}
+	public function cohortData()
+	{
+		# code...
+	}
+
 
 	
 	

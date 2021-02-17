@@ -54,6 +54,12 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'dashboard', 'namespace' => 
     Route::get('data/dailyactivity', [
         'as' => 'report', 'uses' => 'DashboardController@dailyActivityData'
     ]);
+    Route::get('/cohort', [
+        'as' => 'report', 'uses' => 'DashboardController@cohort'
+    ]);
+    Route::get('data/cohort', [
+        'as' => 'report', 'uses' => 'DashboardController@cohortData'
+    ]);
 
     
 
