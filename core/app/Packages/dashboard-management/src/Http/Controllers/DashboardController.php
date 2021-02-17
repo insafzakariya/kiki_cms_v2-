@@ -366,7 +366,7 @@ class DashboardController extends Controller {
 		$label=[];
 		$result = CarbonPeriod::create($start_date, '1 day', $end_date_initial);
 		foreach ($result as $dt) {
-			array_push($label,$dt->format("Y-m-d"));
+			array_push($label,$dt->format("d-D-M-Y"));
 			array_push($data_array['days'],$dt->format("Y-m-d"));
 
 			array_push($data_array['TOTAL'],0);
@@ -572,7 +572,7 @@ class DashboardController extends Controller {
 		$label=[];
 		$result = CarbonPeriod::create($start_date, '1 day', $end_date_initial);
 		foreach ($result as $dt) {
-			array_push($label,$dt->format("Y-m-d"));
+			array_push($label,$dt->format("d-D-M-Y"));
 			array_push($data_array['days'],$dt->format("Y-m-d"));
 
 			array_push($data_array['TOTAL'],0);
@@ -772,7 +772,7 @@ class DashboardController extends Controller {
 		$label=[];
 		$result = CarbonPeriod::create($start_date, '1 day', $end_date_initial);
 		foreach ($result as $dt) {
-			array_push($label,$dt->format("Y-m-d"));
+			array_push($label,$dt->format("d-D-M-Y"));
 			array_push($data_array['days'],$dt->format("Y-m-d"));
 
 
@@ -1302,7 +1302,7 @@ class DashboardController extends Controller {
 		$label=[];
 		$result = CarbonPeriod::create($start_date, '1 day', $end_date_initial);
 		foreach ($result as $dt) {
-			array_push($label,$dt->format("Y-m-d"));
+			array_push($label,$dt->format("d-D-M-Y"));
 			array_push($data_array['days'],$dt->format("Y-m-d"));
 
 			array_push($data_array['TOTAL'],0);
@@ -1313,8 +1313,9 @@ class DashboardController extends Controller {
 	
 		$datasets=array();
 
-		$transaction_data_list = DB::select("select va.action_type as type,count(distinct (va.viewer_id) ) as user_count,cast(va.action_time as date)  as create_date from viewer_actions va where (va.action_type =3 or va.action_type =8 ) and va.action_time between cast("."'".$start_date."'"." as date) and 
-		cast("."'".$end_date."'"." as date)  group by create_date,type");
+		// $transaction_data_list = DB::select("select va.action_type as type,count(distinct (va.viewer_id) ) as user_count,cast(va.action_time as date)  as create_date from viewer_actions va where (va.action_type =3 or va.action_type =8 ) and va.action_time between cast("."'".$start_date."'"." as date) and 
+		// cast("."'".$end_date."'"." as date)  group by create_date,type");
+		
 		$transaction_data_list = DB::select(" SELECT   va.action_type AS type,
 			Count(DISTINCT ( va.viewer_id )) AS user_count,
 			Cast(va.action_time AS DATE)     AS create_date
