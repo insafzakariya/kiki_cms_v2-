@@ -60,3 +60,13 @@ WHERE  si.createddate between '2020-05-01' and '2020-12-31'
                             WHERE  cast(si2.createddate as DATE)  = '2020-11-10' AND si2.success = 1
                                    AND si2.amount > 0)
 GROUP  BY 1 
+
+=====================================Visit_log =========================
+SELECT   viewer_id , 
+         TIMESTAMPDIFF(month ,'2015-01-01', createdDate ) AS visit_month 
+FROM     subscription_invoice 
+GROUP BY 1, 
+         2 
+ORDER BY 1, 
+         2
+================================

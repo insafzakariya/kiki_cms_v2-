@@ -1409,9 +1409,125 @@ class DashboardController extends Controller {
 	{
 		return view('DashboardManage::chart.cohort-chart');
 	}
-	public function cohortData()
+	public function cohortData(Request $request)
 	{
-		# code...
+		/*
+		$from_date='2020-10-01';
+		$end_date='2021-02-31';
+		$main_array=array();
+	
+			$privious_transaction_data_list = DB::select("SELECT Year(si.createddate),
+		Month(si.createddate),
+		Count(DISTINCT ( si.viewer_id )) retention_users
+		FROM   subscription_invoice si
+		WHERE  si.createddate between "."'".$from_date."'"." and "."'".$end_date."'"." 
+				AND si.success = 1
+				AND si.amount > 0
+				AND si.viewer_id IN (SELECT DISTINCT si2.viewer_id
+									FROM   subscription_invoice si2
+									WHERE  Month(si2.createddate) = 10
+											AND Year(si2.createddate) = 2020
+											AND si2.success = 1
+											AND si2.amount > 0)
+		GROUP  BY 1,
+				2");
+				array_push($main_array,$privious_transaction_data_list);
+		
+		return $main_array;
+		*/
+
+		// $start_month= implode('/', array_reverse(explode('/', $request->get('start_date'))));
+		
+		// $start_date=str_replace('/','-', $start_month.'-01');
+		// $end_date=date("Y-m-t", strtotime($start_date));
+
+		// $prev_month_ts = strtotime($start_date.' -1 month');
+		// $prev_month_start_date = date('Y-m-d', $prev_month_ts);
+		// $prev_month_end_date = date("Y-m-t", strtotime($prev_month_start_date));
+		// $prev_month_end_date = date('Y-m-d', strtotime($prev_month_end_date . ' +1 day'));
+		
+
+		$start_date=$request->get('start_date');
+		// $start_date='2021-01-01';
+		$end_date_initial=$request->get('end_date');
+		// $end_date_initial='2021-01-05';
+		$end_date = date('Y-m-d', strtotime($end_date_initial . ' +1 day'));
+
+		$data_array=array(
+			'days'=>array(),
+
+			'TOTAL'=>array(),
+			'TOTAL_bar_colour'=>array(),
+			'TOTAL_border_bar_colour'=>array(),			
+		);
+
+		$label=[];
+		$result = CarbonPeriod::create($start_date, '1 day', $end_date_initial);
+		foreach ($result as $dt) {
+			array_push($label,$dt->format("d-D-M-Y"));
+			array_push($data_array['days'],$dt->format("Y-m-d"));
+
+
+			array_push($data_array['TOTAL'],0);
+			array_push($data_array['TOTAL_bar_colour'],Config::get('chart.service_provider.overall.rgba'));
+			array_push($data_array['TOTAL_border_bar_colour'],Config::get('chart.service_provider.overall.rgba'));
+
+		}
+	
+		$datasets=array();
+		//Transaction Data Retreview
+		//  "select count(viewer_id)  as subscriber_count, amount as package,type,
+		// cast(createDate as date)  as create_date from subscription_data 
+		// where createDate between cast("."'".$start_date."'"." as date) and 
+		// cast("."'".$end_date."'"." as date)  and subscribe = 1 and status = 1 
+		// group by create_date, package,type";
+		// echo "JJJ";
+		// $transaction_data_list = DB::select("select count(viewer_id)  as subscriber_count, amount as package,type,
+		//  cast(createDate as date)  as create_date from subscription_data 
+		//  where createDate between cast("."'".$start_date."'"." as date) and 
+		//  cast("."'".$end_date."'"." as date)  and subscribe = 1 and status = 1 and amount >0
+		//  group by create_date, package,type");
+		$transaction_data_list = DB::select("SELECT Cast(si.createddate as Date) Created_date,
+		Count(DISTINCT ( si.viewer_id )) retention_users
+		FROM   subscription_invoice si
+		WHERE  si.createddate between "."'".$start_date."'"." and "."'".$end_date."'"."
+				AND si.success = 1
+				AND si.amount > 0
+				AND si.viewer_id IN (SELECT DISTINCT si2.viewer_id FROM   subscription_invoice si2
+									WHERE  cast(si2.createddate as DATE)  = "."'".$start_date."'"." AND si2.success = 1
+											AND si2.amount > 0)
+		GROUP  BY 1 ");
+
+		foreach($transaction_data_list AS $data){
+			$key = array_search ($data->Created_date, $data_array['days']);
+			// $data_array[$data->type.'_'.$data->package][$key]=$data->subscriber_count;
+			$data_array['TOTAL'][$key]=$data_array['TOTAL'][$key]+$data->retention_users;
+			// $data_array['overall'][$key]=($data_array['overall'][$key]+$dSubscribe->subscriber_count);
+		}
+		 $total_dataset=array(
+			"label"=>"TOTAL",
+			"data"=> $data_array['TOTAL'],
+			'backgroundColor'=>$data_array['TOTAL_bar_colour'],
+			"borderColor"=>$data_array['TOTAL_border_bar_colour'],
+			"borderWidth"=>1,
+			"hidden"=> false,
+		);
+
+		
+
+		//Assign to Dataset Array
+		array_push($datasets,$total_dataset);
+
+		$chart_data=array(
+			'type'=>'bar',
+			'labels'=>$label,
+			'datasets'=>$datasets
+		);
+
+		return $chart_data;
+
+
+		
 	}
 
 

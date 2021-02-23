@@ -1,8 +1,7 @@
 @extends('layouts.back.master') @section('current_title','WELLCOME tO SAMBOLE ADMIN WEB PORTAL')
 @section('css')
 <link href="{{asset('assets/back/monthpicker/monthpicker.css')}}" rel="stylesheet" type="text/css">
-<link href="{{asset('assets/back/cohort/css/retention-graph.css')}}" rel="stylesheet" type="text/css">
-<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+<link rel="stylesheet" href="{{asset('assets/back/flatpicker/flatpickr.min.css')}}" />
 <style type="text/css">
 .clr-yellow div {
     background-color: #f8ac59;
@@ -56,17 +55,7 @@
 @section('current_path')
 @stop
 @section('page_header')
-<!-- <div class="col-lg-5">
-    <h2>Dashboard-Admin</h2>
-    <ol class="breadcrumb">
-        <li>
-            <a href="{{url('/')}}">Home</a>
-        </li>
-        <li class="active">
-            <strong>Dashboard</strong>
-        </li>
-    </ol>
-</div> -->
+
 
 @stop
 @section('content')
@@ -77,8 +66,9 @@
                 <div class="modal"><!-- Place at bottom of page --></div>
 
                     <div class="col-sm-10">
-                    <div id="demo">
-                     </div>
+                    <input type="date" id="start_date" name="start_date" class="">
+                    <button onclick="findData();">Search</button>
+                    <canvas id="dailytransaction_chart" width="200" height="100"></canvas>
                     </div>
                 
                 </div>
@@ -91,54 +81,147 @@
 <script src="{{asset('assets/back/chartjs/Chart.min.js')}}"></script>
 <script src="{{asset('assets/back/chartjs/utils.js')}}"></script>
 <script src="{{asset('assets/back/monthpicker/monthpicker.min.js')}}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.js" type="text/javascript"></script>
-<script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
-
-<script src="{{asset('assets/back/cohort/js/retention-graph.js')}}"></script>
+<script src="{{asset('assets/back/flatpicker/flatpicker')}}"></script>
 
 
-<script>
-    var options = {
-        data : {
-            days : {
-                "22-05-2016": [200, 10, 20, 30, 40, 10, 20, 20],
-                "23-05-2016": [300, 200, 150, 50, 20, 20, 90],
-                "24-05-2016": [200, 110, 150, 50, 10, 20,100,100],
-                "25-05-2016": [100, 10, 10, 50, 20],
-                "26-05-2016": [300, 200, 150, 50],
-                "27-05-2016": [200, 110, 40],
-                "28-05-2016": [100, 50],
-                "29-05-2016": [200]
-            },
-            weeks : {
-                "week1": [200, 100, 60, 20, 5],
-                "week2": [300, 200, 100, 50],
-                "week3": [200, 100, 40],
-                "week4": [200, 100]
-            },
-            months : {
-                "month1": [200, 10, 20, 30],
-                "month2": [300, 200, 150],
-                "month3": [200, 110]
+
+<script type="text/javascript">
+    var current_date = new Date();
+    var end_date=formatDate(current_date);
+    var start_date=formatDate(current_date.setDate(current_date.getDate() - 7));
+     $("#start_date").flatpickr(
+            {
+                enableTime: false,
+                dateFormat: "Y-m-d",
+                mode: "range",
+                defaultDate: [start_date, end_date],
+                onChange: function(dates) {
+                    const dateArr = dates.map(date => this.formatDate(date, "Y-m-d"));
+                    if (dateArr.length == 2) {
+                        start_date = dateArr[0];
+                        end_date = dateArr[1];
+                        console.log(start_date);
+
+                        // interact with selected dates here
+                    }
+                }
             }
-        },
-        //startDate : "22-05-2016",
-        //endDate : "25-05-2016",
-        inputDateFormat : "DD-MM-YYYY", //if not iso date given
-        dateDisplayFormat : "MMM DD YYYY",
-        title : "Retention Analysis",
-        cellClickEvent : function(date, day){
-            alert("date=" + date + "&day="+ day);
-        },
-        enableInactive: true,
-        dayClickEvent : function(day, startDate, endDate){
-            alert(day + "start" + startDate + "end" + endDate);
-        },
-        enableDateRange:true,
-        showAbsolute : true,
-        toggleValues : true
-    };
-    $("#demo").retention(options);
+        );
+
+    var ctx = document.getElementById('dailytransaction_chart');
+    var dailytransaction_chart = new Chart(ctx, {
+        type: 'bar',
+        data:[],
+        options: {
+            "hover": {
+              "animationDuration": 0
+            },
+            "legendCallback": function() {
+                charValueOnTop();
+            },
+            "animation": {
+                "duration": 1,
+                "onComplete": function() {
+                    charValueOnTop();
+                }
+           
+            },
+            legend: {
+            "display": true,
+            "position": 'right' 
+            },
+            scales: {
+                xAxes: [{
+                    gridLines: {
+                        drawOnChartArea: false
+                    },
+                    ticks: {
+                     beginAtZero: true
+                    }
+                }],
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: false
+                    },
+                    gridLines: {
+                        drawOnChartArea: false
+                    }
+                }]
+            },
+            title: {
+                display: true,
+                text: 'Day Wise Retention'
+            }
+            
+        }
+    });
+
+    //Date Format
+    function formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+
+        if (month.length < 2) 
+            month = '0' + month;
+        if (day.length < 2) 
+            day = '0' + day;
+
+        return [year, month, day].join('-');
+    }
+    
+
+    load_dailytransaction_chart(dailytransaction_chart);
+    //Find Data
+    function findData(){
+        load_dailytransaction_chart(dailytransaction_chart);
+    }
+    //Load Data to Subscribe Chart
+    function load_dailytransaction_chart(dailytransaction_chart){
+        console.log(start_date);
+        $.ajax({
+            method: "GET",
+            url: '{{url('dashboard/data/cohort')}}',
+            data: {start_date,end_date},
+        }).done(function( chart_data ) {
+            dailytransaction_chart.data= chart_data;
+            dailytransaction_chart.update(); 
+            // charValueOnTop();
+            console.log(chart_data);
+            
+        });
+       
+
+    }
+
+    function charValueOnTop(){
+        var chartInstance = dailytransaction_chart,
+        ctx = chartInstance.ctx;
+
+        ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'bottom';
+
+        chartInstance.data.datasets.forEach(function(dataset, i) {
+        var meta = chartInstance.controller.getDatasetMeta(i);
+        console.log(meta.hidden);
+            if(meta.hidden !=true){
+                meta.data.forEach(function(bar, index) {
+                    var data = dataset.data[index];
+                
+                    console.log(dataset.hidden);
+                    if(!dataset.hidden){
+                        ctx.fillText(data, bar._model.x, bar._model.y - 5);
+                    }
+            
+                });
+            }
+        
+        });
+    }
+    
+    
 </script>
 
 @stop
