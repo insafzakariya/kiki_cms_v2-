@@ -1529,6 +1529,143 @@ class DashboardController extends Controller {
 
 		
 	}
+	public function dailyunsubscribe()
+	{
+		return view('DashboardManage::chart.dailyunsubscribe-chart');
+	}
+	public function dailyunsubscribeData(Request $request)
+	{
+		$start_date=$request->get('start_date');
+		$end_date_initial=$request->get('end_date');
+		$end_date = date('Y-m-d', strtotime($end_date_initial . ' +1 day'));
+
+		$data_array=array(
+			'days'=>array(),
+
+			'Dialog'=>array(),
+			'dialog_bar_colour'=>array(),
+			'dialog_border_bar_colour'=>array(),
+
+			'Hutch'=>array(),
+			'hutch_bar_colour'=>array(),
+			'hutch_border_bar_colour'=>array(),
+
+			'Apple'=>array(),
+			'apple_bar_colour'=>array(),
+			'apple_border_bar_colour'=>array(),
+
+			'Mobitel'=>array(),
+			'mobitel_bar_colour'=>array(),
+			'mobitel_border_bar_colour'=>array(),
+
+			'overall'=>array(),
+			'overall_bar_colour'=>array(),
+			'overall_border_bar_colour'=>array()
+
+			
+		);
+
+		$label=[];
+		$result = CarbonPeriod::create($start_date, '1 day', $end_date_initial);
+		foreach ($result as $dt) {
+			array_push($label,$dt->format("d-D-M-Y"));
+			array_push($data_array['days'],$dt->format("Y-m-d"));
+
+
+			array_push($data_array['Dialog'],0);
+			array_push($data_array['dialog_bar_colour'],Config::get('chart.service_provider.dialog.rgba'));
+			array_push($data_array['dialog_border_bar_colour'],Config::get('chart.service_provider.dialog.rgba'));
+			
+			array_push($data_array['Hutch'],0);
+			array_push($data_array['hutch_bar_colour'],Config::get('chart.service_provider.hutch.rgba'));
+			array_push($data_array['hutch_border_bar_colour'],Config::get('chart.service_provider.hutch.rgba'));
+			
+			array_push($data_array['Apple'],0);
+			array_push($data_array['apple_bar_colour'],Config::get('chart.service_provider.apple.rgba'));
+			array_push($data_array['apple_border_bar_colour'],Config::get('chart.service_provider.apple.rgba'));
+
+			array_push($data_array['Mobitel'],0);
+			array_push($data_array['mobitel_bar_colour'],Config::get('chart.service_provider.mobitel.rgba'));
+			array_push($data_array['mobitel_border_bar_colour'],Config::get('chart.service_provider.mobitel.rgba'));
+			
+			array_push($data_array['overall'],0);
+			array_push($data_array['overall_bar_colour'],Config::get('chart.service_provider.overall.rgba'));
+			array_push($data_array['overall_border_bar_colour'],Config::get('chart.service_provider.overall.rgba'));
+		}
+	
+		$datasets=array();
+		
+		$transaction_data_list = DB::select("select count(id) as unsubscriber_count, serviceProvider, cast(createdDateTime as date) as creadt
+		from viewer_unsubcription where subcriptionType = 'UNSUBSCRIBE' and createdDateTime between cast("."'".$start_date."'"."  as date) and cast("."'".$end_date."'"." as date)
+		group by creadt, serviceProvider");
+
+		foreach($transaction_data_list AS $data){
+			$key = array_search ($data->creadt, $data_array['days']);
+			$data_array[$data->serviceProvider][$key]=$data->unsubscriber_count;
+			$data_array['overall'][$key]=$data_array['overall'][$key]+$data->unsubscriber_count;
+			// $data_array['overall'][$key]=($data_array['overall'][$key]+$dSubscribe->subscriber_count);
+		}
+		$dialog_dataset=array(
+			"label"=>"dialog",
+			"data"=> $data_array['Dialog'],
+			'backgroundColor'=>$data_array['dialog_bar_colour'],
+			"borderColor"=>$data_array['dialog_border_bar_colour'],
+			"borderWidth"=>1,
+			"hidden"=> false,
+		);
+		$hutch_dataset=array(
+			"label"=>"Hutch",
+			"data"=> $data_array['Hutch'],
+			'backgroundColor'=>$data_array['hutch_bar_colour'],
+			"borderColor"=>$data_array['hutch_border_bar_colour'],
+			"borderWidth"=>1,
+			"hidden"=> false,
+		);
+		$apple_dataset=array(
+			"label"=>"Apple",
+			"data"=> $data_array['Apple'],
+			'backgroundColor'=>$data_array['apple_bar_colour'],
+			"borderColor"=>$data_array['apple_border_bar_colour'],
+			"borderWidth"=>1,
+			"hidden"=> false,
+		);
+		$mobitel_dataset=array(
+			"label"=>"Mobitel",
+			"data"=> $data_array['Mobitel'],
+			'backgroundColor'=>$data_array['mobitel_bar_colour'],
+			"borderColor"=>$data_array['mobitel_border_bar_colour'],
+			"borderWidth"=>1,
+			"hidden"=> false,
+		);
+		$overall_dataset=array(
+			"label"=>"Overall",
+			"data"=> $data_array['overall'],
+			'backgroundColor'=>$data_array['overall_bar_colour'],
+			"borderColor"=>$data_array['overall_border_bar_colour'],
+			"borderWidth"=>1,
+			"hidden"=> false,
+		);
+
+
+		//Assign to Dataset Array
+		array_push($datasets,$overall_dataset);
+		array_push($datasets,$dialog_dataset);
+		array_push($datasets,$hutch_dataset);
+		array_push($datasets,$apple_dataset);
+		array_push($datasets,$mobitel_dataset);
+		
+
+		$chart_data=array(
+			'type'=>'bar',
+			'labels'=>$label,
+			'datasets'=>$datasets
+		);
+
+		return $chart_data;
+
+
+		
+	}
 
 
 	

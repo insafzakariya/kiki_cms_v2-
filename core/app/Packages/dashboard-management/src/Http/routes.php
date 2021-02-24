@@ -60,6 +60,12 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'dashboard', 'namespace' => 
     Route::get('data/cohort', [
         'as' => 'report', 'uses' => 'DashboardController@cohortData'
     ]);
+    Route::get('/dailyunsubscribe', [
+        'as' => 'report', 'uses' => 'DashboardController@dailyunsubscribe'
+    ]);
+    Route::get('data/dailyunsubscribe', [
+        'as' => 'report', 'uses' => 'DashboardController@dailyunSubscribeData'
+    ]);
 
     
 
