@@ -47,7 +47,7 @@ class Policy extends Model{
             ->get();
     }
     static function  getChannelContentPoliciesByFilterIds($used_content_policy_ids){
-        return SELF::where('policyType', 1)
+        return SELF::where('policyType', 2)
             ->where('validFrom', '<=', date("Y-m-d"))
             ->where('validTo', '>=', date("Y-m-d"))
             ->whereStatus(1)
