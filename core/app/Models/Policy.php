@@ -22,7 +22,7 @@ class Policy extends Model{
             ->get();
     }
     static function  getChannelContentPolicies(){
-        return SELF::where('policyType', 1)
+        return SELF::where('policyType', 2)
             ->where('validFrom', '<=', date("Y-m-d"))
             ->where('validTo', '>=', date("Y-m-d"))
             ->whereStatus(1)
