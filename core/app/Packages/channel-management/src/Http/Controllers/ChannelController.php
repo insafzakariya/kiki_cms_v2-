@@ -250,7 +250,9 @@ class ChannelController extends Controller
     }
     public function listView()
     {
-        return view('ChannelManage::list');
+         $channels=Channel::orderBy('channel_order', 'ASC')->where('status','!=',0)->get();
+        return view('ChannelManage::list',compact('channels'));
+    
     }
     public function listJson()
     {
@@ -315,12 +317,22 @@ class ChannelController extends Controller
     
         $channel = Channel::find($id);
         if ($channel) {
-            $channel->status = 2;
+            $channel->status = 0;
             $channel->save();
             
             return response()->json(['status' => 'success']);
         }
         return response()->json(['status' => 'invalid_id']);
+    }
+
+    public function updateOrder(Request $request)
+    {
+        foreach ($request->order as $order) {
+            Channel::where('channelId',$order['id'])->update(['channel_order' => $order['position']]);
+            
+        }
+        
+        return response('Update Successfully.', 200);
     }
  
    

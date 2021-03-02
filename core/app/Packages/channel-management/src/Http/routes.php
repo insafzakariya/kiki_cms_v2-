@@ -27,6 +27,9 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'channel', 'namespace' => 'C
     Route::post('delete', [
         'as' => 'channel.list', 'uses' => 'ChannelController@deleteChannel'
     ]);
+    Route::post('/sortabledatatable', [
+        'as' => 'channel.list', 'uses' => 'ChannelController@updateOrder'
+    ]);
 
 
     

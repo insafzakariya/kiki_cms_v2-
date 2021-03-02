@@ -1,4 +1,4 @@
-@extends('layouts.back.master') @section('current_title','Lyricist/VIEW')
+@extends('layouts.back.master') @section('current_title','Channel Management/view')
 @section('css')
     <style type="text/css">
         #floating-button{
@@ -63,29 +63,69 @@
     </div>
 @stop
 @section('content')
-   
-        <div id="floating-button" data-toggle="tooltip" data-placement="left" data-original-title="Create" onclick="location.href = '{{url('channel/add')}}';">
-            <p class="plus">+</p>
-        </div>
-    
+  
+    @if (session('programme-error-details'))
+    <div class="alert alert-danger">
+        {{ session('programme-error-details') }}
+    </div>
+    @endif
+    @if (session('programme-details'))
+    <div class="alert alert-success">
+        {{ session('programme-details') }}
+    </div>
+    @endif
     <div class="row">
         <div class="col-lg-12 margins">
             <div class="ibox-content">
+            <div class="col-sm-10 col-sm-offset-2" style="padding-bottom:10px"> 
+                  <button class="btn btn-primary pull-right" onclick="reorderSave()"  type="button" id="btn-bulk-policy-update">Save Reorder List</button>
+            </div>
                 <div class="panel-body">
-                    <table id="example1" class="table table-striped table-bordered table-hover" width="100%">
-                        <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Channel Name en</th>
-                            <th>Channel Name si</th>
-                            <th>Channel Name ta</th>
-                            <th>Kids</th>
-                            <th width="1%">Active/ Deactivate</th>
-                            <th width="1%">Edit</th>
-                            <th width="1%">Delete</th>
-                        </tr>
-                        </thead>
-                    </table>
+                <table id="table" class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Move</th>
+                      <th>Channel ID</th>
+                      <th>Channel Name En</th>
+                      <th>Channel Name SI</th>
+                      <th>Channel Name Ta</th>
+                      <th>Edit</th>
+                      <th>Active</th>
+                      <th>Delete</th>
+                      
+                    </tr>
+                  </thead>
+                  <tbody id="tablecontents">
+                    @foreach($channels as $channel)
+                    <tr class="row1" data-id="{{ $channel->channelId }}" id="row_{{ $channel->channelId }}">
+                      <td>
+                        <div style="color:rgb(124,77,255); padding-left: 10px; float: left; font-size: 20px; cursor: pointer;" title="change display order">
+                        <i class="fa fa-ellipsis-v"></i>
+                        <i class="fa fa-ellipsis-v"></i>
+                        </div>
+                      </td>
+                      <td>{{$channel->channelId }}</td>
+                      <td>{{$channel->channelName }}</td>
+                      <td>{{$channel->channelName_si }}</td>
+                      <td>{{$channel->channelName_ta }}</td>
+                      <td align="center"><a href="{{url('channel/'.$channel->channelId.'/edit')}}" class="blue" onclick="window.location.href=\''.url('channel/'.$channel->channelId.'/edit').'\'" data-toggle="tooltip" data-placement="top" title="View/ Edit Slider"><i class="fa fa-pencil"></i></a></td>
+                      <td align="center">
+                        @if($channel->status==1)
+                        <input type="checkbox" checked="true" name="checkfield{{ $channel->channelId}}" id="{{ $channel->channelId }}"  onchange="statusChange(this)"/>
+                        @elseif($channel->status==2)
+                        <input type="checkbox"  name="checkfield{{$channel->channelId }}" id="{{ $channel->channelId }}"  onchange="statusChange(this)"/>
+                        @endif
+                       
+                      </td>
+                      <td>
+                      <center><a href="#" class="blue" onclick="delete_channel(<?php echo $channel->channelId; ?>)" data-toggle="tooltip" data-placement="top" title="View/ Edit Channel"><i class="fa fa-trash"></i></a></center>
+                      </td>
+                    
+                     
+                    </tr>
+                    @endforeach
+                  </tbody>                  
+                </table>
                 </div>
             </div>
         </div>
@@ -94,101 +134,46 @@
 @section('js')
 
     <script type="text/javascript">
-        let table;
-        $(document).ready(function(){
-            table=$('#example1').DataTable( {
-                "ajax": '{{url('channel/list/json')}}',
-                "columns": [
-                    { "data": "channelId" },
-                    { "data": "channelName" },
-                    { "data": "channelName_si" },
-                    { "data": "channelName_ta" },
-                    { "data": "kids" },
-                    { "data": "status" },
-                    { "data": "edit" },
-                    { "data": "delete" }
-                ],
-                "columnDefs": [
-                    { "orderable": false, "targets": [4, 5] }
-                ],
-                processing: true,
-                serverSide: true,
-                dom: "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>tp",
-                "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
-                buttons: [
-                    {extend: 'copy',className: 'btn-sm'},
-                    {extend: 'csv',title: 'Menu List', className: 'btn-sm'},
-                    {extend: 'pdf', title: 'Menu List', className: 'btn-sm'},
-                    {extend: 'print',className: 'btn-sm'}
-                ],
-                "autoWidth": false,
-                "order": [[ 0, "desc" ]]
-            });
+      
 
-            table.on( 'draw.dt', function () {
-                $('.channel-status-toggle').click(function(e){
-                    e.preventDefault();
-                    id = $(this).data('id');
-                    state = $(this).data('status');
-                    changeStatus(id, state);
-
-
-                });
-                $('.channel-delete').click(function(e){
-                    e.preventDefault();
-                    id = $(this).data('id');
-                    deleteChannel(id);
-
-
-                });
-
-            });
-
-
-
+      function statusChange(checkboxElem) {
+        if (checkboxElem.checked) {
+            changeStatus(checkboxElem.id, 1);
+          
+        } else {
+            changeStatus(checkboxElem.id, 2);
+        }
+      }
+    function changeStatus(id, state) {
+        $.ajax({
+            method: "POST",
+            url: '{{url('channel/changeState')}}',
+            data:{ 'id' : id, 'state' : state  }
+        }).done(function( msg ) {
+            console.log("CHANGED");
+            
         });
-
-        function deleteChannel(id){
+     }
+     function delete_channel(id) {
             swal({
                 title: "Are you sure?",
-                text:"Delete the Channel",
+                text:"Delete Channel",
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#DD6B55",
                 confirmButtonText: "Yes, change it!"
 
             }).then(function (isConfirm) {
+            
                 if (isConfirm.value) {
                     $.ajax({
                         method: "POST",
                         url: '{{url('channel/delete')}}',
-                        data:{ 'id' : id }
+                        data:{ 'id' : id  }
                     }).done(function( msg ) {
-                        table.ajax.reload();
-                    });
-                } else {
-                    swal("Cancelled", "Cancelled the Channel Delete", "error");
-                }
-            });
-        }
-
-        function changeStatus(id, state) {
-            swal({
-                title: "Are you sure?",
-                text:"Change the status",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#DD6B55",
-                confirmButtonText: "Yes, change it!"
-
-            }).then(function (isConfirm) {
-                if (isConfirm.value) {
-                    $.ajax({
-                        method: "POST",
-                        url: '{{url('channel/changeState')}}',
-                        data:{ 'id' : id, 'state' : state  }
-                    }).done(function( msg ) {
-                        table.ajax.reload();
+                        console.log("CHANGED");
+                        $('#row_'+id).remove();
+                      
                     });
                 } else {
                     swal("Cancelled", "Cancelled the status change", "error");
@@ -196,6 +181,74 @@
             });
         }
 
+        function reorderSave() {
+        swal({
+                title: "Are you sure?",
+                text:"Save Order List",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, change it!"
 
-    </script>
+            }).then(function (isConfirm) {
+             
+                if (isConfirm.value) {
+                  sendOrderToServer();
+                } else {
+                    swal("Cancelled", "Cancelled the save change", "error");
+                }
+            });
+       }
+    
+       //Save Order Table
+       function sendOrderToServer() {
+
+          var order = [];
+          $('tr.row1').each(function(index,element) {
+            order.push({
+              id: $(this).attr('data-id'),
+              position: index+1
+            });
+          });
+
+          $.ajax({
+            type: "POST", 
+            dataType: "json", 
+            url: "{{ url('channel/sortabledatatable') }}",
+            data: {
+              order:order,
+              _token: '{{csrf_token()}}'
+            },
+            success: function(response) {
+                if (response.status == "success") {
+                  console.log(response);
+                } else {
+                  console.log(response);
+                }
+            }
+          });
+
+      }
+
+    $(function () {
+  
+      var table=$("#table").DataTable({
+          "bPaginate": false
+          });
+
+      $( "#tablecontents" ).sortable({
+        items: "tr",
+        cursor: 'move',
+        opacity: 0.6,
+        update: function() {
+            // sendOrderToServer();
+        }
+      });
+    });
+
+  
+
+ 
+
+</script>
 @stop
