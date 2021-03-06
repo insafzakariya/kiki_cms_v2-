@@ -165,6 +165,7 @@ return [
 		'ProgrammeManage\ProgrammeManageServiceProvider',
 		'EpisodeManage\EpisodeManageServiceProvider',
 		'ProgrammeSliderManage\ProgrammeSliderManageServiceProvider',
+		'KikiServiceManage\KikiServiceManageServiceProvider',
 		'PlaylistManage\PlaylistManageServiceProvider',
 		'ScratchCardManage\ScratchCardManageServiceProvider',
 		'TwiloManage\TwiloManageServiceProvider',

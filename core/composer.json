@@ -64,6 +64,7 @@
       "ProgrammeManage\\": "app/Packages/programme-management/src/",
       "EpisodeManage\\": "app/Packages/episode-management/src/",
       "ProgrammeSliderManage\\": "app/Packages/programme-slider-management/src/",
+      "KikiServiceManage\\": "app/Packages/kiki-service-management/src/",
       "TwiloManage\\": "app/Packages/twilo-management/src/",
       "ScratchCardManage\\": "app/Packages/scratch-card-management/src/"
     }
