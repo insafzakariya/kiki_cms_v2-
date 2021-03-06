@@ -46,7 +46,7 @@
                 	</div>
                     <div class="form-group"><label class="col-sm-2 control-label">Description</label>
                         <div class="col-sm-5">
-                            <textarea class="form-control" name="description">{{$kiki_service->description }}</textarea>
+                            <textarea class="form-control" name="description">{{$exsist_kiki_service->description }}</textarea>
                         </div>
                     </div>
                    
@@ -57,17 +57,17 @@
                         </div>
                     </div>
                     <div class="form-group"><label class="col-sm-2 control-label">Url</label>
-                    	<div class="col-sm-5"><input type="text" value="{{$kiki_service->url}}" class="form-control" name="url"></div>
+                    	<div class="col-sm-5"><input type="text" value="{{$exsist_kiki_service->url}}" class="form-control" name="url"></div>
                 	</div>
                     <div class="form-group"><label class="col-sm-2 control-label">Landing Url</label>
-                    	<div class="col-sm-5"><input type="text" value="{{$kiki_service->landing_url}}" class="form-control" name="landing_url"></div>
+                    	<div class="col-sm-5"><input type="text" value="{{$exsist_kiki_service->landing_url}}" class="form-control" name="landing_url"></div>
                 	</div>
 
                     <div class="form-group"><label class="col-sm-2 control-label">Referance</label>
-                    	<div class="col-sm-5"><input type="text" class="form-control" value="{{$kiki_service->referance}}" name="reference"></div>
+                    	<div class="col-sm-5"><input type="text" class="form-control" value="{{$exsist_kiki_service->referance}}" name="reference"></div>
                 	</div>
                     <div class="form-group"><label class="col-sm-2 control-label">Bridge Id</label>
-                    	<div class="col-sm-5"><input type="text" class="form-control" value="{{$kiki_service->bridgeid}}" name="bridge_id"></div>
+                    	<div class="col-sm-5"><input type="text" class="form-control" value="{{$exsist_kiki_service->bridgeid}}" name="bridge_id"></div>
                 	</div>
                 	<div class="hr-line-dashed"></div>
 	                <div class="form-group">
