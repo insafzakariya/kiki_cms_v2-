@@ -42,6 +42,15 @@ class KikiServiceController extends Controller
  
     public function store(Request $request)
     {
+        $full_screen=0;
+        $portrait=0;
+        if($request->full_screen=='on'){
+            $full_screen=1;
+        }
+        if($request->portrait=='on'){
+            $portrait=1;
+        }
+       
         $Kiki_service_max = KikiService::where('status', 1)->max('rslt_order');
         $kikiService=KikiService::create([
             'name'=>$request->name,
@@ -52,7 +61,9 @@ class KikiServiceController extends Controller
             'referance'=>$request->reference,
             'bridgeid'=>$request->bridge_id,
             'status'=>1,
-            'rslt_order'=>$Kiki_service_max + 1
+            'rslt_order'=>$Kiki_service_max + 1,
+            'portrait'=>$portrait,
+            'full_screen'=>$full_screen,
         ]);
 
         if($kikiService){
@@ -128,7 +139,14 @@ class KikiServiceController extends Controller
     public function edit(Request $request,$id )
     {
         //   return $request->all();
-      
+        $full_screen=0;
+        $portrait=0;
+        if($request->full_screen=='on'){
+            $full_screen=1;
+        }
+        if($request->portrait=='on'){
+            $portrait=1;
+        }
         $exsist_kiki_service=KikiService::find($id);
 
         $exsist_kiki_service->name=$request->name;
@@ -138,6 +156,8 @@ class KikiServiceController extends Controller
         $exsist_kiki_service->landing_url=$request->landing_url;
         $exsist_kiki_service->referance=$request->reference;
         $exsist_kiki_service->bridgeid=$request->bridge_id;
+        $exsist_kiki_service->full_screen=$full_screen;
+        $exsist_kiki_service->portrait=$portrait;
        
         if($exsist_kiki_service){
         

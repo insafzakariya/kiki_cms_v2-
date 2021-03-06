@@ -64,6 +64,17 @@
                     <div class="form-group"><label class="col-sm-2 control-label">Bridge Id</label>
                     	<div class="col-sm-5"><input type="text" class="form-control" name="bridge_id"></div>
                 	</div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label required"></label>
+                        <div class="col-sm-2 form-check">
+                        <input type="checkbox" class="form-check-input" name="full_screen" id="full_screen_checkbox">
+                        <label class="form-check-label"  for="trailer_checkbox">Full Screen</label>
+                        </div>
+                        <div class="col-sm-2 form-check">
+                        <input type="checkbox" class="form-check-input" name="portrait" id="portrait_checkbox">
+                        <label class="form-check-label"  for="trailer_checkbox">Portrait</label>
+                        </div>
+                    </div>
                 	<div class="hr-line-dashed"></div>
 	                <div class="form-group">
 	                    <div class="col-sm-8 col-sm-offset-2">

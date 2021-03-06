@@ -25,6 +25,8 @@ class KikiService extends Model{
         'landing_url',
         'referance',
         'bridgeid',
+        'full_screen',
+        'portrait',
        
     ];
 
