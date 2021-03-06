@@ -26,7 +26,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'service', 'namespace' => 'K
         'as' => 'programme-slider.list', 'uses' => 'ProgrammeController@listJson'
     ]);
     Route::post('changeState', [
-        'as' => 'service..edit', 'uses' => 'KikiServiceController@changeStatus'
+        'as' => 'service.edit', 'uses' => 'KikiServiceController@changeStatus'
     ]);
     Route::post('deleteservice', [
         'as' => 'service.list', 'uses' => 'KikiServiceController@deleteSlider'
