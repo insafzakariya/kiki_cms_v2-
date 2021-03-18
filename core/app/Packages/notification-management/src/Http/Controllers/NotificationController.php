@@ -27,6 +27,7 @@ use NotificationManage\Models\Program;
 use NotificationManage\Models\Episode;
 use GuzzleHttp\Client as GuzzleClient;
 use App\Http\Controllers\ImageController;
+use KikiServiceManage\Models\KikiService;
 
 
 
@@ -178,6 +179,18 @@ class NotificationController extends Controller
         }
 
         return $episode;
+
+    }
+    public function searchservice(Request $request){
+
+        $search = $request->get('term');
+        $service = [];
+        if($search){
+            $service =  KikiService::where('name', 'like', '%' . $search . '%')->where('status', 1)->limit(20)->orderBy('name', 'asc')->get();
+        }
+
+        return $service;
+
 
     }
     
@@ -335,6 +348,10 @@ class NotificationController extends Controller
             if($typeDesc === "GENERAL"){
                 $type="2";
                 $contentType="";
+            }
+            if($typeDesc === "SERVICE"){
+                $type="2";
+                $contentType="serviceid";
             }
             
             $showimage = [];

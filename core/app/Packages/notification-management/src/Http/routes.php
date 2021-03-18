@@ -42,6 +42,9 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'namespace' => 'Not
     Route::post('notification/notification-add', [
         'as' => 'notification.index', 'uses' => 'NotificationController@addNotification'
     ]);
+    Route::get('notification/searchservice', [
+        'as' => 'notification.index', 'uses' => 'NotificationController@searchservice'
+    ]);
 
     // Route::post('notification/notification-add', 'NotificationController@addNotification');
     

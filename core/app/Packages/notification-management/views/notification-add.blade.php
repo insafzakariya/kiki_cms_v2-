@@ -99,6 +99,7 @@
                                 <option value="GENERAL" selected >General</option>
                                 <option value="MUSIC" >Music</option>
                                 <option value="VIDEO" >Video</option>
+                                <option value="SERVICE" >Service</option>
                             </select>
                         </div>
                     </div>
@@ -158,6 +159,18 @@
                             </div>
                         </div>
 
+                    </div>
+
+                    <div id="div-service" >
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Service</label>
+                            <div class="col-sm-7">
+                                <select id="service" name="service" class="form-control select-simple">
+                                    
+                                </select>
+                            </div>
+                        </div>
+                        
                     </div>
                     
 
@@ -435,6 +448,13 @@
                 //   alert(contentid.value);
                   
                 }
+                if(section.value === 'SERVICE'){
+                  contenttype='SERVICE';
+                //   alert(contenttype.value);
+                  contentid=document.getElementById('service');
+                //   alert(contentid.value);
+                  
+                }
                 
                 let ddate=document.getElementById('notificatio-date');
 
@@ -586,6 +606,7 @@
             $("#div-video").addClass('hide');
             $("#div-music").addClass('hide');
             $("#div-album").addClass('hide');
+            $("#div-service").addClass('hide');
             $("#div-playlist").addClass('hide');
             $( "#language" ).prop( "disabled", true );
 
@@ -619,14 +640,22 @@
                 case 'GENERAL':
                     $("#div-video").addClass('hide');
                     $("#div-music").addClass('hide');
+                    $("#div-service").addClass('hide');
                     break;
                 case 'MUSIC':
                     $("#div-video").addClass('hide');
                     $("#div-music").removeClass('hide');
+                    $("#div-service").addClass('hide');
                     break;
                 case 'VIDEO':
+                    $("#div-service").addClass('hide');
                     $("#div-video").removeClass('hide');
                     $("#div-music").addClass('hide');
+                    break;
+                case 'SERVICE':
+                    $("#div-service").removeClass('hide');
+                    $("#div-music").addClass('hide');
+                    $("#div-video").addClass('hide');
                     break;
             
                 default:
@@ -977,6 +1006,40 @@
                 delay: 250,
                 data: function (params) {
                     return  'term='+params.term; /*JSON.stringify({
+                        term: params.term
+                    });*/
+                },
+                processResults: function (data) {
+                    return {
+                        results: $.map(data, function (item, i) {
+                            return {
+                                text: item.name,
+                                id: item.id
+                            }
+                        })
+                    };
+                },
+                cache: true
+            },
+        });
+
+        let url7 = '{{url('admin/notification/searchservice')}}';
+        $('#service').select2({
+            placeholder: "Please select a service",
+            tokenSeparators: [','],
+            tags: true,
+            minimumInputLength: 1,
+            multiple: false,
+            ajax: {
+                type: "GET",
+                url: url7,
+                dataType: 'json',
+                contentType: "application/json",
+                delay: 250,
+                data: function (params) {
+                    return  'term='+params.term;
+                
+                     /*JSON.stringify({
                         term: params.term
                     });*/
                 },
